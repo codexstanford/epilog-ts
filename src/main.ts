@@ -1,21 +1,21 @@
-import { Symbol, Variable, CompoundTerm, Term } from "./classes/Term.js";
+import { Symbol, Variable, CompoundTerm, Term } from "./epilog-ts/classes/Term.js";
 
-import { Constructor } from "./classes/Constructor.js";
+import { Constructor } from "./epilog-ts/classes/Constructor.js";
 
-import { Predicate } from "./classes/Predicate.js";
+import { Predicate } from "./epilog-ts/classes/Predicate.js";
 
-import { Atom } from "./classes/Atom.js";
+import { Atom } from "./epilog-ts/classes/Atom.js";
 
-import { Dataset } from "./classes/Dataset.js";
+import { Dataset } from "./epilog-ts/classes/Dataset.js";
 
-import { Literal } from "./classes/Literal.js";
+import { Literal } from "./epilog-ts/classes/Literal.js";
 
-import { Rule } from "./classes/Rule.js";
+import { Rule } from "./epilog-ts/classes/Rule.js";
 
-import { Ruleset } from "./classes/Ruleset.js";
+import { Ruleset } from "./epilog-ts/classes/Ruleset.js";
 
-import { CQ, ConjunctiveQuery, Query } from "./classes/Query.js";
-import { CLP, ClosedLogicProgram } from "./classes/ClosedLogicProgram.js";
+import { CQ, ConjunctiveQuery, Query } from "./epilog-ts/classes/Query.js";
+import { CLP, ClosedLogicProgram } from "./epilog-ts/classes/ClosedLogicProgram.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("TS is working, my guy.");
