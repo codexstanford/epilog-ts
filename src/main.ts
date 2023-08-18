@@ -46,4 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(newDataset.toString());
     let newDataset2 : Dataset = new Dataset([newAtom, newAtom3, newAtom4])
     console.log(newDataset2.toString());
+
+    console.log(readdata(newDataset2.toEpilogString()));
 });

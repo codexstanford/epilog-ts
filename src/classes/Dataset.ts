@@ -45,6 +45,19 @@ class Dataset {
 
         return str;
     }
+
+    toEpilogString() : string {
+        // Currently mostly a duplicate of toString, but duplicating code to decouple the two
+        let str = "";
+
+        for (let fact of this.factList) {
+            str += fact.toString() + " ";
+        }
+
+        str = str.slice(0, -1);
+
+        return str;
+    }
 }
 
 
