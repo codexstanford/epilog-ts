@@ -1,4 +1,4 @@
-import { Atom, ErrorAtom } from "./Atom.js"
+import { Atom, ERROR_ATOM } from "./Atom.js"
 import { Predicate } from "./Predicate.js";
 
 class Dataset {
@@ -26,7 +26,7 @@ class Dataset {
             nonGroundStr += "]";
 
             console.error("Datasets must only contain ground atoms, but non-ground atoms provided:", nonGroundStr);
-            this.factList = [ErrorAtom];
+            this.factList = [ERROR_ATOM];
             return;
         }
 

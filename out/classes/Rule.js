@@ -1,3 +1,4 @@
+import { ERROR_ATOM } from "./Atom.js";
 class Rule {
     constructor(head, body) {
         this.head = head;
@@ -27,5 +28,6 @@ class Rule {
         return true;
     }
 }
-export { Rule };
+const ERROR_RULE = new Rule(ERROR_ATOM, [ERROR_ATOM]);
+export { Rule, ERROR_RULE };
 //# sourceMappingURL=Rule.js.map

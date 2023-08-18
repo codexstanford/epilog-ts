@@ -1,8 +1,8 @@
-import { Atom } from "./Atom.js";
+import { Atom, ERROR_ATOM } from "./Atom.js";
 
 import { Literal } from "./Literal.js";
 
-
+// Note that Subgoals have isNegated() methods defined
 type Subgoal = Atom | Literal;
 
 class Rule {
@@ -46,4 +46,10 @@ class Rule {
     }
 }
 
-export { Rule }
+const ERROR_RULE = new Rule(ERROR_ATOM, [ERROR_ATOM]);
+
+export { 
+    Rule,
+
+    ERROR_RULE
+ }

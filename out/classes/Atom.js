@@ -24,7 +24,10 @@ class Atom {
         }
         return true;
     }
+    isNegated() {
+        return false;
+    }
 }
-const ErrorAtom = new Atom(new Predicate("error"), []);
-export { Atom, ErrorAtom };
+const ERROR_ATOM = new Atom(new Predicate("error"), []);
+export { Atom, ERROR_ATOM };
 //# sourceMappingURL=Atom.js.map

@@ -5,6 +5,9 @@ import { Atom } from "./classes/Atom.js";
 import { Dataset } from "./classes/Dataset.js";
 import { Literal } from "./classes/Literal.js";
 import { Rule } from "./classes/Rule.js";
+import { Ruleset } from "./classes/Ruleset.js";
+import { ConjunctiveQuery } from "./classes/Query.js";
+import { ClosedLogicProgram } from "./classes/ClosedLogicProgram.js";
 document.addEventListener("DOMContentLoaded", function () {
     console.log("TS is working, my guy.");
     console.log(read("p(a,X)"));
@@ -54,5 +57,12 @@ document.addEventListener("DOMContentLoaded", function () {
     let rule3 = new Rule(newAtom3, [newAtom]);
     console.log(rule3.toString());
     console.log(rule3.isGround());
+    let ruleset = new Ruleset([rule, rule2, rule3]);
+    console.log(ruleset.toString());
+    console.log("Ruleset as Epilog:", readdata(ruleset.toEpilogString()));
+    let cq1 = new ConjunctiveQuery(new Predicate("g"), new Rule(head, [subgoal1, subgoal2]));
+    console.log(cq1.toString());
+    let clp1 = new ClosedLogicProgram(newDataset2, ruleset);
+    console.log(clp1.toString());
 });
 //# sourceMappingURL=main.js.map

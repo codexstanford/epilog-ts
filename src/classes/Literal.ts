@@ -1,4 +1,4 @@
-import { Atom } from "./Atom";
+import { Atom } from "./Atom.js";
 
 class Literal {
     readonly atom: Atom;

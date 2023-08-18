@@ -1,4 +1,4 @@
-import { ErrorAtom } from "./Atom.js";
+import { ERROR_ATOM } from "./Atom.js";
 class Dataset {
     constructor(factList) {
         // A dataset must only contain ground atoms
@@ -16,7 +16,7 @@ class Dataset {
             nonGroundStr = nonGroundStr.slice(0, -1);
             nonGroundStr += "]";
             console.error("Datasets must only contain ground atoms, but non-ground atoms provided:", nonGroundStr);
-            this.factList = [ErrorAtom];
+            this.factList = [ERROR_ATOM];
             return;
         }
         this.factList = factList;

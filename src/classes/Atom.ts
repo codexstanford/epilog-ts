@@ -35,12 +35,16 @@ class Atom {
         }
         return true;
     }
+
+    isNegated() : boolean {
+        return false;
+    }
 }
 
-const ErrorAtom = new Atom(new Predicate("error"), []);
+const ERROR_ATOM = new Atom(new Predicate("error"), []);
 
 export { 
     Atom,
 
-    ErrorAtom
+    ERROR_ATOM
 }
