@@ -6,6 +6,8 @@ import { Predicate } from "./classes/Predicate.js";
 
 import { Atom } from "./classes/Atom.js";
 
+import { Dataset } from "./classes/Dataset.js";
+
 document.addEventListener("DOMContentLoaded", function () {
     console.log("TS is working, my guy.");
     console.log(read("p(a,X)"));
@@ -29,13 +31,19 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(compoundTerm2.isGround());
 
     let compoundTerm3 : CompoundTerm = new CompoundTerm(newConstructor, []);
-    console.log(compoundTerm3.isGround());
+    console.log(compoundTerm3.toString() + " " +  compoundTerm3.isGround());
 
     let newAtom : Atom = new Atom(newPred, []);
     let newAtom2 : Atom = new Atom(newPred2, [newSym, newVar]);
     let newAtom3 : Atom = new Atom(newPred2, [newSym2]);
+    let newAtom4 : Atom = new Atom(newPred2, [newSym2]);
 
     console.log(newAtom.toString(), " ", newAtom.isGround());
     console.log(newAtom2.toString(), " ", newAtom2.isGround());
     console.log(newAtom3.toString(), " ", newAtom3.isGround());
+
+    let newDataset : Dataset = new Dataset([newAtom, newAtom2, newAtom3, newAtom3, newAtom4])
+    console.log(newDataset.toString());
+    let newDataset2 : Dataset = new Dataset([newAtom, newAtom3, newAtom4])
+    console.log(newDataset2.toString());
 });

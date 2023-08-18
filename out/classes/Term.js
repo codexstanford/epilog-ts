@@ -41,8 +41,10 @@ class CompoundTerm {
         for (let arg of this.args) {
             str += arg.toString() + ", ";
         }
-        // Remove extra comma and space
-        str = str.slice(0, -2);
+        // Remove extra comma and space, if args exist
+        if (this.args.length > 0) {
+            str = str.slice(0, -2);
+        }
         str += ")";
         return str;
     }

@@ -1,6 +1,6 @@
-import { Predicate } from "./Predicate";
+import { Predicate } from "./Predicate.js";
 
-import { Term } from "./Term";
+import { Term } from "./Term.js";
 
 
 class Atom {
@@ -19,8 +19,10 @@ class Atom {
             str += arg.toString() + ", ";
         }
 
-        // Remove extra comma and space
-        str = str.slice(0, -2);
+        // Remove extra comma and space, if args exist
+        if (this.args.length > 0) {
+            str = str.slice(0, -2);
+        }
         str += ")";
         return str;
     }
@@ -35,4 +37,10 @@ class Atom {
     }
 }
 
-export { Atom }
+const ErrorAtom = new Atom(new Predicate("error"), []);
+
+export { 
+    Atom,
+
+    ErrorAtom
+}

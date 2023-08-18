@@ -1,3 +1,4 @@
+import { Predicate } from "./Predicate.js";
 class Atom {
     constructor(pred, args) {
         this.pred = pred;
@@ -8,8 +9,10 @@ class Atom {
         for (let arg of this.args) {
             str += arg.toString() + ", ";
         }
-        // Remove extra comma and space
-        str = str.slice(0, -2);
+        // Remove extra comma and space, if args exist
+        if (this.args.length > 0) {
+            str = str.slice(0, -2);
+        }
         str += ")";
         return str;
     }
@@ -22,5 +25,6 @@ class Atom {
         return true;
     }
 }
-export { Atom };
+const ErrorAtom = new Atom(new Predicate("error"), []);
+export { Atom, ErrorAtom };
 //# sourceMappingURL=Atom.js.map

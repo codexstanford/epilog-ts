@@ -2,6 +2,7 @@ import { Symbol, Variable, CompoundTerm } from "./classes/Term.js";
 import { Constructor } from "./classes/Constructor.js";
 import { Predicate } from "./classes/Predicate.js";
 import { Atom } from "./classes/Atom.js";
+import { Dataset } from "./classes/Dataset.js";
 document.addEventListener("DOMContentLoaded", function () {
     console.log("TS is working, my guy.");
     console.log(read("p(a,X)"));
@@ -19,12 +20,17 @@ document.addEventListener("DOMContentLoaded", function () {
     let compoundTerm2 = new CompoundTerm(newConstructor, [newSym, newVar]);
     console.log(compoundTerm2.isGround());
     let compoundTerm3 = new CompoundTerm(newConstructor, []);
-    console.log(compoundTerm3.isGround());
+    console.log(compoundTerm3.toString() + " " + compoundTerm3.isGround());
     let newAtom = new Atom(newPred, []);
     let newAtom2 = new Atom(newPred2, [newSym, newVar]);
     let newAtom3 = new Atom(newPred2, [newSym2]);
+    let newAtom4 = new Atom(newPred2, [newSym2]);
     console.log(newAtom.toString(), " ", newAtom.isGround());
     console.log(newAtom2.toString(), " ", newAtom2.isGround());
     console.log(newAtom3.toString(), " ", newAtom3.isGround());
+    let newDataset = new Dataset([newAtom, newAtom2, newAtom3, newAtom3, newAtom4]);
+    console.log(newDataset.toString());
+    let newDataset2 = new Dataset([newAtom, newAtom3, newAtom4]);
+    console.log(newDataset2.toString());
 });
 //# sourceMappingURL=main.js.map
