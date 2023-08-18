@@ -11,6 +11,9 @@ class Symbol {
     toString() {
         return this.name;
     }
+    isGround() {
+        return true;
+    }
 }
 class Variable {
     constructor(name) {
@@ -24,14 +27,17 @@ class Variable {
     toString() {
         return this.name;
     }
+    isGround() {
+        return false;
+    }
 }
 class CompoundTerm {
-    constructor(constrSym, args) {
-        this.constrSym = constrSym;
+    constructor(constr, args) {
+        this.constr = constr;
         this.args = args;
     }
     toString() {
-        let str = this.constrSym.toString() + "(";
+        let str = this.constr.toString() + "(";
         for (let arg of this.args) {
             str += arg.toString() + ", ";
         }
@@ -39,6 +45,15 @@ class CompoundTerm {
         str = str.slice(0, -2);
         str += ")";
         return str;
+    }
+    isGround() {
+        // Ground iff all arguments are ground
+        for (let arg of this.args) {
+            if (!arg.isGround()) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 export { Symbol, Variable, CompoundTerm };

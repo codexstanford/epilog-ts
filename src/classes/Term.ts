@@ -20,6 +20,10 @@ class Symbol {
     toString() : string {
         return this.name;
     }
+
+    isGround() : boolean {
+        return true;
+    }
  }
 
 class Variable {
@@ -38,19 +42,23 @@ class Variable {
     toString() : string {
         return this.name;
     }
+
+    isGround() : boolean {
+        return false;
+    }
 }
 
 class CompoundTerm {
-    readonly constrSym : Constructor;
+    readonly constr : Constructor;
     readonly args : Term[];
 
-    constructor(constrSym: Constructor, args: Term[]) {
-        this.constrSym = constrSym;
+    constructor(constr: Constructor, args: Term[]) {
+        this.constr = constr;
         this.args = args;
     }
 
     toString() : string {
-        let str = this.constrSym.toString() + "(";
+        let str = this.constr.toString() + "(";
 
         for (let arg of this.args) {
             str += arg.toString() + ", ";
@@ -60,6 +68,17 @@ class CompoundTerm {
         str = str.slice(0, -2);
         str += ")";
         return str;
+    }
+
+    isGround() : boolean {
+        // Ground iff all arguments are ground
+
+        for (let arg of this.args) {
+            if (!arg.isGround()) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 

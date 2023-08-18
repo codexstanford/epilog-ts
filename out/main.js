@@ -1,16 +1,30 @@
 import { Symbol, Variable, CompoundTerm } from "./classes/Term.js";
 import { Constructor } from "./classes/Constructor.js";
+import { Predicate } from "./classes/Predicate.js";
+import { Atom } from "./classes/Atom.js";
 document.addEventListener("DOMContentLoaded", function () {
     console.log("TS is working, my guy.");
     console.log(read("p(a,X)"));
     let newVar = new Variable("_");
     console.log(newVar.name);
-    let newSym = new Symbol("\"suspicious pred\"");
+    let newPred = new Predicate("\"suspicious pred\"");
+    let newPred2 = new Predicate("r1");
+    let newSym = new Symbol("\"suspicious symbol\"");
     console.log(newSym.toString());
     let newSym2 = new Symbol("test_");
     console.log(newSym2.toString());
     let newConstructor = new Constructor("f");
-    let compoundTerm = new CompoundTerm(newConstructor, [newSym, newSym2]);
-    console.log(compoundTerm.toString());
+    let compoundTerm1 = new CompoundTerm(newConstructor, [newSym, newSym2]);
+    console.log(compoundTerm1.isGround());
+    let compoundTerm2 = new CompoundTerm(newConstructor, [newSym, newVar]);
+    console.log(compoundTerm2.isGround());
+    let compoundTerm3 = new CompoundTerm(newConstructor, []);
+    console.log(compoundTerm3.isGround());
+    let newAtom = new Atom(newPred, []);
+    let newAtom2 = new Atom(newPred2, [newSym, newVar]);
+    let newAtom3 = new Atom(newPred2, [newSym2]);
+    console.log(newAtom.toString(), " ", newAtom.isGround());
+    console.log(newAtom2.toString(), " ", newAtom2.isGround());
+    console.log(newAtom3.toString(), " ", newAtom3.isGround());
 });
 //# sourceMappingURL=main.js.map
