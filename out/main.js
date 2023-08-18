@@ -3,6 +3,8 @@ import { Constructor } from "./classes/Constructor.js";
 import { Predicate } from "./classes/Predicate.js";
 import { Atom } from "./classes/Atom.js";
 import { Dataset } from "./classes/Dataset.js";
+import { Literal } from "./classes/Literal.js";
+import { Rule } from "./classes/Rule.js";
 document.addEventListener("DOMContentLoaded", function () {
     console.log("TS is working, my guy.");
     console.log(read("p(a,X)"));
@@ -33,5 +35,24 @@ document.addEventListener("DOMContentLoaded", function () {
     let newDataset2 = new Dataset([newAtom, newAtom3, newAtom4]);
     console.log(newDataset2.toString());
     console.log(readdata(newDataset2.toEpilogString()));
+    let newLiteral = new Literal(newAtom, true);
+    console.log(newLiteral.toString());
+    let newLiteral2 = new Literal(newAtom2, true);
+    console.log(newLiteral2.toString());
+    let newLiteral3 = new Literal(newAtom2, false);
+    console.log(newLiteral3.toString());
+    let head = new Atom(new Predicate("g"), [new Variable("X"), new Variable("Z")]);
+    let subgoal1 = new Atom(new Predicate("p"), [new Variable("X"), new Variable("Y")]);
+    let subgoal2 = new Atom(new Predicate("p"), [new Variable("Y"), new Variable("Z")]);
+    let subgoal3 = new Literal(new Atom(new Predicate("p"), [new Variable("X"), new Variable("Z")]), true);
+    let rule = new Rule(head, [subgoal1, subgoal2, subgoal3]);
+    console.log(rule.toString());
+    console.log(rule.isGround());
+    let rule2 = new Rule(subgoal1, []);
+    console.log(rule2.toString());
+    console.log(rule2.isGround());
+    let rule3 = new Rule(newAtom3, [newAtom]);
+    console.log(rule3.toString());
+    console.log(rule3.isGround());
 });
 //# sourceMappingURL=main.js.map

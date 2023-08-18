@@ -8,6 +8,10 @@ import { Atom } from "./classes/Atom.js";
 
 import { Dataset } from "./classes/Dataset.js";
 
+import { Literal } from "./classes/Literal.js";
+
+import { Rule } from "./classes/Rule.js";
+
 document.addEventListener("DOMContentLoaded", function () {
     console.log("TS is working, my guy.");
     console.log(read("p(a,X)"));
@@ -37,15 +41,38 @@ document.addEventListener("DOMContentLoaded", function () {
     let newAtom2 : Atom = new Atom(newPred2, [newSym, newVar]);
     let newAtom3 : Atom = new Atom(newPred2, [newSym2]);
     let newAtom4 : Atom = new Atom(newPred2, [newSym2]);
-
+    
     console.log(newAtom.toString(), " ", newAtom.isGround());
     console.log(newAtom2.toString(), " ", newAtom2.isGround());
     console.log(newAtom3.toString(), " ", newAtom3.isGround());
-
+    
     let newDataset : Dataset = new Dataset([newAtom, newAtom2, newAtom3, newAtom3, newAtom4])
     console.log(newDataset.toString());
     let newDataset2 : Dataset = new Dataset([newAtom, newAtom3, newAtom4])
     console.log(newDataset2.toString());
-
+    
     console.log(readdata(newDataset2.toEpilogString()));
+    
+    let newLiteral = new Literal(newAtom, true);
+    console.log(newLiteral.toString());
+    let newLiteral2 = new Literal(newAtom2, true);
+    console.log(newLiteral2.toString());
+    let newLiteral3 = new Literal(newAtom2, false);
+    console.log(newLiteral3.toString());
+    
+    let head : Atom = new Atom(new Predicate("g"), [new Variable("X"), new Variable("Z")]);
+    let subgoal1 : Atom = new Atom(new Predicate("p"), [new Variable("X"), new Variable("Y")]);
+    let subgoal2 : Atom = new Atom(new Predicate("p"), [new Variable("Y"), new Variable("Z")]);
+    let subgoal3 : Literal = new Literal(new Atom(new Predicate("p"), [new Variable("X"), new Variable("Z")]), true);
+    let rule : Rule = new Rule(head, [subgoal1, subgoal2, subgoal3]);
+    console.log(rule.toString());
+    console.log(rule.isGround());
+
+    let rule2 : Rule = new Rule(subgoal1, []);
+    console.log(rule2.toString());
+    console.log(rule2.isGround());
+
+    let rule3 : Rule = new Rule(newAtom3,[newAtom]);
+    console.log(rule3.toString());
+    console.log(rule3.isGround());
 });

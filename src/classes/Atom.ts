@@ -27,7 +27,7 @@ class Atom {
         return str;
     }
 
-    isGround() : boolean{
+    isGround() : boolean {
         for (let arg of this.args) {
             if (!arg.isGround()) {
                 return false;
