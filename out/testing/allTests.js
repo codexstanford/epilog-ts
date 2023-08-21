@@ -1,4 +1,5 @@
 import { runTest, FailPriorityLevel } from "./testing.js";
+import { runTests as runTests_EpilogTS_Classes } from "../epilog-ts/tests/class-tests.js";
 // Test the testing function
 function runMetaTests() {
     // Should print via console.error
@@ -43,11 +44,17 @@ function runMetaTests() {
     });
 }
 function runAllTests() {
-    const DO_META_TESTS = true;
+    const DO_META_TESTS = false;
     if (DO_META_TESTS) {
         console.log("============= START Testing the testing functions ============= ");
         runMetaTests();
         console.log("============= END Testing the testing functions ============= ");
+    }
+    const DO_EPILOG_TS_CLASS_TESTS = true;
+    if (DO_EPILOG_TS_CLASS_TESTS) {
+        console.log("============= START Testing Epilog-ts classes ============= ");
+        runTests_EpilogTS_Classes();
+        console.log("============= END Testing Epilog-ts classes ============= ");
     }
 }
 export { runAllTests };
