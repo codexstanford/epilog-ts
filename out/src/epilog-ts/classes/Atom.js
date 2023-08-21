@@ -1,24 +1,14 @@
 import { Predicate } from "./Predicate.js";
-
-import { Term, Variable } from "./Term.js";
-
-
 class Atom {
-    readonly pred: Predicate;
-    readonly args: Term[];
-
-    constructor(pred: Predicate, args: Term[]) {
+    constructor(pred, args) {
         this.pred = pred;
         this.args = args;
     }
-
-    toString() : string {
+    toString() {
         let str = this.pred.toString() + "(";
-
         for (let arg of this.args) {
             str += arg.toString() + ", ";
         }
-
         // Remove extra comma and space, if args exist
         if (this.args.length > 0) {
             str = str.slice(0, -2);
@@ -26,8 +16,7 @@ class Atom {
         str += ")";
         return str;
     }
-
-    isGround() : boolean {
+    isGround() {
         for (let arg of this.args) {
             if (!arg.isGround()) {
                 return false;
@@ -35,23 +24,10 @@ class Atom {
         }
         return true;
     }
-
-    isNegated() : boolean {
+    isNegated() {
         return false;
     }
-
-    /* TODO
-    getVars() : Set<Variable> {
-        return new Set();
-    }
-    */
-
 }
-
 const ERROR_ATOM = new Atom(new Predicate("error"), []);
-
-export { 
-    Atom,
-
-    ERROR_ATOM
-}
+export { Atom, ERROR_ATOM };
+//# sourceMappingURL=Atom.js.map

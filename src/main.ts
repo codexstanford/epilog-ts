@@ -1,24 +1,11 @@
-import { Symbol, Variable, CompoundTerm, Term } from "./epilog-ts/classes/Term.js";
 
-import { Constructor } from "./epilog-ts/classes/Constructor.js";
-
-import { Predicate } from "./epilog-ts/classes/Predicate.js";
-
-import { Atom } from "./epilog-ts/classes/Atom.js";
-
-import { Dataset } from "./epilog-ts/classes/Dataset.js";
-
-import { Literal } from "./epilog-ts/classes/Literal.js";
-
-import { Rule } from "./epilog-ts/classes/Rule.js";
-
-import { Ruleset } from "./epilog-ts/classes/Ruleset.js";
-
-import { CQ, ConjunctiveQuery, Query } from "./epilog-ts/classes/Query.js";
-import { CLP, ClosedLogicProgram } from "./epilog-ts/classes/ClosedLogicProgram.js";
+import { runAllTests } from "./testing/allTests.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("TS is working, my guy.");
+
+    runAllTests();
+
+    /*console.log("TS is working, my guy.");
     console.log(read("p(a,X)"));
 
     let newVar : Variable = new Variable("_");
@@ -89,5 +76,5 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(cq1.toString());
 
     let clp1 : CLP = new ClosedLogicProgram(newDataset2, ruleset);
-    console.log(clp1.toString());
+    console.log(clp1.toString());*/
 });

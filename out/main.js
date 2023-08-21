@@ -1,68 +1,77 @@
-import { Symbol, Variable, CompoundTerm } from "./epilog-ts/classes/Term.js";
-import { Constructor } from "./epilog-ts/classes/Constructor.js";
-import { Predicate } from "./epilog-ts/classes/Predicate.js";
-import { Atom } from "./epilog-ts/classes/Atom.js";
-import { Dataset } from "./epilog-ts/classes/Dataset.js";
-import { Literal } from "./epilog-ts/classes/Literal.js";
-import { Rule } from "./epilog-ts/classes/Rule.js";
-import { Ruleset } from "./epilog-ts/classes/Ruleset.js";
-import { ConjunctiveQuery } from "./epilog-ts/classes/Query.js";
-import { ClosedLogicProgram } from "./epilog-ts/classes/ClosedLogicProgram.js";
+import { runAllTests } from "./testing/allTests.js";
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("TS is working, my guy.");
+    runAllTests();
+    /*console.log("TS is working, my guy.");
     console.log(read("p(a,X)"));
-    let newVar = new Variable("_");
+
+    let newVar : Variable = new Variable("_");
     console.log(newVar.name);
-    let newPred = new Predicate("\"suspicious pred\"");
-    let newPred2 = new Predicate("r1");
-    let newSym = new Symbol("\"suspicious symbol\"");
+
+    let newPred : Predicate = new Predicate("\"suspicious pred\"");
+    let newPred2 : Predicate = new Predicate("r1");
+    let newSym : Symbol = new Symbol("\"suspicious symbol\"");
     console.log(newSym.toString());
-    let newSym2 = new Symbol("test_");
+    let newSym2 : Symbol = new Symbol("test_");
     console.log(newSym2.toString());
+
     let newConstructor = new Constructor("f");
-    let compoundTerm1 = new CompoundTerm(newConstructor, [newSym, newSym2]);
+
+    let compoundTerm1 : CompoundTerm = new CompoundTerm(newConstructor, [newSym, newSym2]);
     console.log(compoundTerm1.isGround());
-    let compoundTerm2 = new CompoundTerm(newConstructor, [newSym, newVar]);
+
+    let compoundTerm2 : CompoundTerm = new CompoundTerm(newConstructor, [newSym, newVar]);
     console.log(compoundTerm2.isGround());
-    let compoundTerm3 = new CompoundTerm(newConstructor, []);
-    console.log(compoundTerm3.toString() + " " + compoundTerm3.isGround());
-    let newAtom = new Atom(newPred, []);
-    let newAtom2 = new Atom(newPred2, [newSym, newVar]);
-    let newAtom3 = new Atom(newPred2, [newSym2]);
-    let newAtom4 = new Atom(newPred2, [newSym2]);
+
+    let compoundTerm3 : CompoundTerm = new CompoundTerm(newConstructor, []);
+    console.log(compoundTerm3.toString() + " " +  compoundTerm3.isGround());
+
+    let newAtom : Atom = new Atom(newPred, []);
+    let newAtom2 : Atom = new Atom(newPred2, [newSym, newVar]);
+    let newAtom3 : Atom = new Atom(newPred2, [newSym2]);
+    let newAtom4 : Atom = new Atom(newPred2, [newSym2]);
+    
     console.log(newAtom.toString(), " ", newAtom.isGround());
     console.log(newAtom2.toString(), " ", newAtom2.isGround());
     console.log(newAtom3.toString(), " ", newAtom3.isGround());
-    let newDataset = new Dataset([newAtom, newAtom2, newAtom3, newAtom3, newAtom4]);
+    
+    let newDataset : Dataset = new Dataset([newAtom, newAtom2, newAtom3, newAtom3, newAtom4])
     console.log(newDataset.toString());
-    let newDataset2 = new Dataset([newAtom, newAtom3, newAtom4]);
+    let newDataset2 : Dataset = new Dataset([newAtom, newAtom3, newAtom4])
     console.log(newDataset2.toString());
+    
     console.log(readdata(newDataset2.toEpilogString()));
+    
     let newLiteral = new Literal(newAtom, true);
     console.log(newLiteral.toString());
     let newLiteral2 = new Literal(newAtom2, true);
     console.log(newLiteral2.toString());
     let newLiteral3 = new Literal(newAtom2, false);
     console.log(newLiteral3.toString());
-    let head = new Atom(new Predicate("g"), [new Variable("X"), new Variable("Z")]);
-    let subgoal1 = new Atom(new Predicate("p"), [new Variable("X"), new Variable("Y")]);
-    let subgoal2 = new Atom(new Predicate("p"), [new Variable("Y"), new Variable("Z")]);
-    let subgoal3 = new Literal(new Atom(new Predicate("p"), [new Variable("X"), new Variable("Z")]), true);
-    let rule = new Rule(head, [subgoal1, subgoal2, subgoal3]);
+    
+    let head : Atom = new Atom(new Predicate("g"), [new Variable("X"), new Variable("Z")]);
+    let subgoal1 : Atom = new Atom(new Predicate("p"), [new Variable("X"), new Variable("Y")]);
+    let subgoal2 : Atom = new Atom(new Predicate("p"), [new Variable("Y"), new Variable("Z")]);
+    let subgoal3 : Literal = new Literal(new Atom(new Predicate("p"), [new Variable("X"), new Variable("Z")]), true);
+    let rule : Rule = new Rule(head, [subgoal1, subgoal2, subgoal3]);
     console.log(rule.toString());
     console.log(rule.isGround());
-    let rule2 = new Rule(subgoal1, []);
+
+    let rule2 : Rule = new Rule(subgoal1, []);
     console.log(rule2.toString());
     console.log(rule2.isGround());
-    let rule3 = new Rule(newAtom3, [newAtom]);
+
+    let rule3 : Rule = new Rule(newAtom3,[newAtom]);
     console.log(rule3.toString());
     console.log(rule3.isGround());
-    let ruleset = new Ruleset([rule, rule2, rule3]);
+
+    let ruleset = new Ruleset([rule, rule2, rule3])
     console.log(ruleset.toString());
-    console.log("Ruleset as Epilog:", readdata(ruleset.toEpilogString()));
-    let cq1 = new ConjunctiveQuery(new Predicate("g"), new Rule(head, [subgoal1, subgoal2]));
+    console.log("Ruleset as Epilog:",readdata(ruleset.toEpilogString()));
+
+    let cq1 : CQ = new ConjunctiveQuery(new Predicate("g"), new Rule(head, [subgoal1, subgoal2]));
     console.log(cq1.toString());
-    let clp1 = new ClosedLogicProgram(newDataset2, ruleset);
-    console.log(clp1.toString());
+
+    let clp1 : CLP = new ClosedLogicProgram(newDataset2, ruleset);
+    console.log(clp1.toString());*/
 });
 //# sourceMappingURL=main.js.map
