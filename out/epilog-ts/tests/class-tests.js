@@ -68,6 +68,7 @@ function runTests() {
     console.log(clp1.toString());*/
 }
 function runSymbolTests() {
+    console.log("    ===== Symbols ====");
     /*let newSym : Symbol = new Symbol("\"suspicious symbol\"");
     console.log(newSym.toString());
     let newSym2 : Symbol = new Symbol("test_");
@@ -77,7 +78,7 @@ function runVariableTests() {
     console.log("    ===== Variables ====");
     runTest("Var-success-anonymous", () => {
         let newVar = new Variable("_");
-        return newVar.name === "";
+        return newVar.name === "_";
     }, {});
     runTest("Var-success-caps", () => {
         let newVar = new Variable("X23");

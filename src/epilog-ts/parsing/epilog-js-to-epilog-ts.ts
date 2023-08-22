@@ -6,6 +6,7 @@ import { Atom, ERROR_ATOM } from "../classes/Atom.js";
 
 import { isEpilogConstant, isEpilogVariable } from "../utils/string-utils.js";
 import { Literal, ERROR_LITERAL } from "../classes/Literal.js";
+import { ERROR_RULE, Rule } from "../classes/Rule.js";
 
 
 namespace EpilogJSToTS {
@@ -24,12 +25,13 @@ namespace EpilogJSToTS {
     type EpilogJSTerm = EpilogJSSymbol | EpilogJSVariable | EpilogJSCompoundTerm;
 
 
-    type EpilogJSReadError = string;
+    type EpilogJSReadError = "error";
     // Either the error atom, or a list where the first element is a predicate, followed by 0 or more terms
-    type EpilogJSAtom = EpilogJSReadError | [EpilogJSPredicate, ...EpilogJSTerm[]];
+    type EpilogJSAtom = EpilogJSReadError | [EpilogJSPredicate, ...EpilogJSTerm[]] | EpilogJSPredicate;
 
     type EpilogJSLiteral =  EpilogJSReadError| EpilogJSAtom | ["not", EpilogJSAtom];
 
+    type EpilogJSRule = EpilogJSReadError | EpilogJSPredicate | ["rule", EpilogJSAtom, ...EpilogJSLiteral[]] |  EpilogJSAtom;
 
     function parseCompoundTerm(epilogJSCompoundTerm: EpilogJSCompoundTerm) : CompoundTerm {
 
@@ -47,7 +49,7 @@ namespace EpilogJSToTS {
     }
 
     function parseTerm(epilogJSTerm: EpilogJSTerm) : Term {
-        // Is a comound term
+        // Is a compound term
         if (typeof epilogJSTerm === "object" ) {
             return parseCompoundTerm(epilogJSTerm);
         }
@@ -71,6 +73,12 @@ namespace EpilogJSToTS {
             return ERROR_ATOM;
         }
 
+        // Handle when it is just a 0-ary predicate without parens
+        if (typeof epilogJSAtom === "string") {
+            let pred = new Predicate(epilogJSAtom);
+            return new Atom(pred, []);
+        }
+
         // Must be a well-formed atom now, which is a list
         let pred = new Predicate(epilogJSAtom[0]);
         let argList: Term[] = [];
@@ -83,9 +91,6 @@ namespace EpilogJSToTS {
         }
 
         let newAtom = new Atom(pred, argList);
-
-        //console.log("epilog.js atom:",epilogJSAtom);
-        //console.log("Epilog-ts atom:",newAtom.toString());
 
         return newAtom;
     }
@@ -105,6 +110,36 @@ namespace EpilogJSToTS {
         
     }
     
+
+    export function parseRule(epilogJSRule: EpilogJSRule) : Rule {
+
+        // Handle error case
+        if (typeof epilogJSRule === "string" && epilogJSRule === "error") {
+            return ERROR_RULE;
+        }
+
+        // Handle when it is just a 0-ary predicate without parens
+        if (typeof epilogJSRule === "string") {
+            return new Rule(parseAtom(epilogJSRule), []);
+        }
+
+        // Main case: explicitly specified as a rule
+            // Note: Assumes that "rule" is not a predicate constant 
+        if (epilogJSRule[0] === "rule") {
+            let head = parseAtom(epilogJSRule[1]);
+
+            let body : Literal[] = [];
+
+            for (let i = 2; i < epilogJSRule.length; i++) {
+                body.push(parseLiteral(epilogJSRule[i]));
+            }
+
+            return new Rule(head, body);
+        }
+
+        // Case where no subgoals are provided - just an atom
+        return new Rule(parseAtom(epilogJSRule), []);
+    }
 
 }
 

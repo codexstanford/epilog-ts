@@ -91,6 +91,7 @@ function runTests() : void {
 }
 
 function runSymbolTests() : void {
+    console.log("    ===== Symbols ====")
     /*let newSym : Symbol = new Symbol("\"suspicious symbol\"");
     console.log(newSym.toString());
     let newSym2 : Symbol = new Symbol("test_");
@@ -103,7 +104,7 @@ function runVariableTests() : void {
 
     runTest("Var-success-anonymous", () => {
         let newVar : Variable = new Variable("_");
-        return newVar.name === "";
+        return newVar.name === "_";
     },{});
 
     runTest("Var-success-caps", () => {
