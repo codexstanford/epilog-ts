@@ -1,4 +1,4 @@
-import { Atom } from "./Atom.js";
+import { Atom, ERROR_ATOM } from "./Atom.js";
 
 class Literal {
     readonly atom: Atom;
@@ -27,4 +27,10 @@ class Literal {
     
 }
 
-export { Literal }
+const ERROR_LITERAL = new Literal(ERROR_ATOM, false);
+
+export { 
+    Literal,
+
+    ERROR_LITERAL
+}

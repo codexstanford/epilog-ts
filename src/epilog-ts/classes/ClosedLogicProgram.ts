@@ -16,8 +16,6 @@ class ClosedLogicProgram {
     toString() : string {
         return "Dataset: " + this.dataset.toString() + "\n" + "Ruleset: " + this.ruleset.toString();
     }
-
-    // TODO: Query evaluation
 }
 
 export {

@@ -1,3 +1,4 @@
+import { ERROR_ATOM } from "./Atom.js";
 class Literal {
     constructor(atom, negated) {
         this.atom = atom;
@@ -16,5 +17,6 @@ class Literal {
         return this.negated;
     }
 }
-export { Literal };
+const ERROR_LITERAL = new Literal(ERROR_ATOM, false);
+export { Literal, ERROR_LITERAL };
 //# sourceMappingURL=Literal.js.map

@@ -40,11 +40,6 @@ class Atom {
         return false;
     }
 
-    /* TODO
-    getVars() : Set<Variable> {
-        return new Set();
-    }
-    */
 
 }
 

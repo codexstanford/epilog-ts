@@ -84,9 +84,13 @@ class CompoundTerm {
     }
 }
 
+const ERROR_TERM = new Symbol("error");
+
 export {
     Symbol, 
     Variable, 
     CompoundTerm, 
-    Term
+    Term,
+
+    ERROR_TERM
 }

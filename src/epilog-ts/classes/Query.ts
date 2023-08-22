@@ -32,7 +32,6 @@ class ConjunctiveQuery implements Query {
 
         this.rule = rule;
 
-
         // Warn if the query predicate doesn't match the rule head
         if (this.queryPred.toString() !== this.rule.head.pred.toString()) {
             console.warn("Query predicate", this.queryPred.toString(), "doesn't appear in query:",this.rule.toString());

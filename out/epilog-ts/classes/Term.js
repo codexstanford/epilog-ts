@@ -58,5 +58,6 @@ class CompoundTerm {
         return true;
     }
 }
-export { Symbol, Variable, CompoundTerm };
+const ERROR_TERM = new Symbol("error");
+export { Symbol, Variable, CompoundTerm, ERROR_TERM };
 //# sourceMappingURL=Term.js.map
