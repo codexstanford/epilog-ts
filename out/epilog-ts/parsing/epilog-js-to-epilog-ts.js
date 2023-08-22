@@ -2,9 +2,10 @@ import { Symbol, Variable, CompoundTerm, ERROR_TERM } from "../classes/Term.js";
 import { Constructor } from "../classes/Constructor.js";
 import { Predicate } from "../classes/Predicate.js";
 import { Atom, ERROR_ATOM } from "../classes/Atom.js";
-import { isEpilogConstant, isEpilogVariable } from "../utils/string-utils.js";
 import { Literal, ERROR_LITERAL } from "../classes/Literal.js";
 import { ERROR_RULE, Rule } from "../classes/Rule.js";
+import { Dataset } from "../classes/Dataset.js";
+import { isEpilogConstant, isEpilogVariable } from "../utils/string-utils.js";
 var EpilogJSToTS;
 (function (EpilogJSToTS) {
     function parseCompoundTerm(epilogJSCompoundTerm) {
@@ -87,6 +88,14 @@ var EpilogJSToTS;
         return new Rule(parseAtom(epilogJSRule), []);
     }
     EpilogJSToTS.parseRule = parseRule;
+    function parseDataset(epilogJSDataset) {
+        let factList = [];
+        for (let fact of epilogJSDataset) {
+            factList.push(parseAtom(fact));
+        }
+        return new Dataset(factList);
+    }
+    EpilogJSToTS.parseDataset = parseDataset;
 })(EpilogJSToTS || (EpilogJSToTS = {}));
 export { EpilogJSToTS };
 //# sourceMappingURL=epilog-js-to-epilog-ts.js.map

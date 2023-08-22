@@ -5,6 +5,8 @@ import { ERROR_ATOM } from "../classes/Atom.js";
 import { ERROR_LITERAL } from "../classes/Literal.js";
 import { ERROR_RULE } from "../classes/Rule.js";
 
+import { STRESS_TEST_DATASET_INPUT, STRESS_TEST_DATASET_OUTPUT } from "./stress-inputs-outputs.js";
+
 // Unit tests for epilog-ts/parsing files
 function runTests() : void {
     runEpilogJSToTSTests();
@@ -13,10 +15,11 @@ function runTests() : void {
 function runEpilogJSToTSTests() : void {
     runEpilogJSToTS_AtomAndLiteralTests();
     runEpilogJSToTS_RuleTests();
+    runEpilogJSToTS_DatasetTests();
 }
 
 // Atom and term parsing
-function runEpilogJSToTS_AtomAndLiteralTests() {
+function runEpilogJSToTS_AtomAndLiteralTests() : void {
     console.log("    ===== Simple Atoms ====")
 
     runTest("JStoTS-atom-errorstring-error", () => {
@@ -148,7 +151,7 @@ function runEpilogJSToTS_AtomAndLiteralTests() {
     },{});
 }
 
-function runEpilogJSToTS_RuleTests() {
+function runEpilogJSToTS_RuleTests() : void {
     console.log("    ===== Rules ====");
 
     runTest("JStoTS-rule-errorstring-error", () => {
@@ -191,6 +194,52 @@ function runEpilogJSToTS_RuleTests() {
         return EpilogJSToTS.parseRule(epilogJSRule).toString() === "ans(W) :- r1(X) & some_bool()";
     },{});
 
+}
+
+function runEpilogJSToTS_DatasetTests() : void {
+    console.log("    ===== Datasets ====");
+
+    runTest("JStoTS-dataset-readdata-nonground-error", () => {
+        let strToRead : string = "p(a) g(X)";
+        let epilogJSDataset = readdata(strToRead);
+        return EpilogJSToTS.parseDataset(epilogJSDataset).toEpilogString() === "error()";
+    },{});
+
+    runTest("JStoTS-dataset-read-single-fact-success", () => {
+        let strToRead : string = "p(a)";
+        let epilogJSDataset = [read(strToRead)];
+        return EpilogJSToTS.parseDataset(epilogJSDataset).toEpilogString() === strToRead;
+    },{});
+
+    runTest("JStoTS-dataset-readdata-single-fact-success", () => {
+        let strToRead : string = "p(a)";
+        let epilogJSDataset = readdata(strToRead);
+        return EpilogJSToTS.parseDataset(epilogJSDataset).toEpilogString() === strToRead;
+    },{});
+
+    runTest("JStoTS-dataset-readdata-many-facts-success", () => {
+        let strToRead : string = "p(a) p(b)";
+        let epilogJSDataset = readdata(strToRead);
+        return EpilogJSToTS.parseDataset(epilogJSDataset).toEpilogString() === strToRead;
+    },{});
+
+    runTest("JStoTS-dataset-readdata-many-facts-with-boolean-pred-success", () => {
+        let strToRead : string = "p(a) p(b) true g(c)";
+        let epilogJSDataset = readdata(strToRead);
+        return EpilogJSToTS.parseDataset(epilogJSDataset).toEpilogString() === "p(a) p(b) true() g(c)";
+    },{});
+
+    runTest("JStoTS-dataset-readdata-listarg-success", () => {
+        let strToRead : string = "p([a, b, c])";
+        let epilogJSDataset = readdata(strToRead);
+        return EpilogJSToTS.parseDataset(epilogJSDataset).toEpilogString() === "p(cons(a, cons(b, cons(c, nil))))";
+    },{});
+
+    runTest("JStoTS-dataset-stresstest-success", () => {
+        let strToRead : string = STRESS_TEST_DATASET_INPUT;
+        let epilogJSDataset = readdata(strToRead);
+        return EpilogJSToTS.parseDataset(epilogJSDataset).toEpilogString() === STRESS_TEST_DATASET_OUTPUT;
+    },{});
 }
 
 export {

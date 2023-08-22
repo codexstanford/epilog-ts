@@ -3,10 +3,11 @@ import { Constructor } from "../classes/Constructor.js";
 import { Predicate } from "../classes/Predicate.js";
 
 import { Atom, ERROR_ATOM } from "../classes/Atom.js";
-
-import { isEpilogConstant, isEpilogVariable } from "../utils/string-utils.js";
 import { Literal, ERROR_LITERAL } from "../classes/Literal.js";
 import { ERROR_RULE, Rule } from "../classes/Rule.js";
+import { Dataset } from "../classes/Dataset.js";
+
+import { isEpilogConstant, isEpilogVariable } from "../utils/string-utils.js";
 
 
 namespace EpilogJSToTS {
@@ -32,6 +33,8 @@ namespace EpilogJSToTS {
     type EpilogJSLiteral =  EpilogJSReadError| EpilogJSAtom | ["not", EpilogJSAtom];
 
     type EpilogJSRule = EpilogJSReadError | EpilogJSPredicate | ["rule", EpilogJSAtom, ...EpilogJSLiteral[]] |  EpilogJSAtom;
+
+    type EpilogJSDataset = EpilogJSAtom[];
 
     function parseCompoundTerm(epilogJSCompoundTerm: EpilogJSCompoundTerm) : CompoundTerm {
 
@@ -95,7 +98,6 @@ namespace EpilogJSToTS {
         return newAtom;
     }
 
-
     export function parseLiteral(epilogJSLiteral: EpilogJSLiteral) : Literal {
         // Handle error case
         if (typeof epilogJSLiteral === "string" && epilogJSLiteral === "error") {
@@ -110,7 +112,6 @@ namespace EpilogJSToTS {
         
     }
     
-
     export function parseRule(epilogJSRule: EpilogJSRule) : Rule {
 
         // Handle error case
@@ -139,6 +140,17 @@ namespace EpilogJSToTS {
 
         // Case where no subgoals are provided - just an atom
         return new Rule(parseAtom(epilogJSRule), []);
+    }
+
+    export function parseDataset(epilogJSDataset: EpilogJSDataset) : Dataset {
+
+        let factList: Atom[] = [];
+
+        for (let fact of epilogJSDataset) {
+            factList.push(parseAtom(fact));
+        }
+
+        return new Dataset(factList);
     }
 
 }
