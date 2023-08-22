@@ -99,6 +99,8 @@ function runSymbolTests() : void {
 
 function runVariableTests() : void {
 
+    console.log("    ===== Variables ====")
+
     runTest("Var-success-anonymous", () => {
         let newVar : Variable = new Variable("_");
         return newVar.name === "";

@@ -74,6 +74,7 @@ function runSymbolTests() {
     console.log(newSym2.toString());*/
 }
 function runVariableTests() {
+    console.log("    ===== Variables ====");
     runTest("Var-success-anonymous", () => {
         let newVar = new Variable("_");
         return newVar.name === "";

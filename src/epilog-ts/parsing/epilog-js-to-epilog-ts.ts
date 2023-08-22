@@ -24,11 +24,12 @@ namespace EpilogJSToTS {
     type EpilogJSTerm = EpilogJSSymbol | EpilogJSVariable | EpilogJSCompoundTerm;
 
 
-    type EpilogJSErrorAtom = string;
+    type EpilogJSReadError = string;
     // Either the error atom, or a list where the first element is a predicate, followed by 0 or more terms
-    type EpilogJSAtom = EpilogJSErrorAtom | [EpilogJSPredicate, ...EpilogJSTerm[]];
+    type EpilogJSAtom = EpilogJSReadError | [EpilogJSPredicate, ...EpilogJSTerm[]];
 
-    type EpilogJSLiteral = EpilogJSAtom | ["not", EpilogJSAtom];
+    type EpilogJSLiteral =  EpilogJSReadError| EpilogJSAtom | ["not", EpilogJSAtom];
+
 
     function parseCompoundTerm(epilogJSCompoundTerm: EpilogJSCompoundTerm) : CompoundTerm {
 

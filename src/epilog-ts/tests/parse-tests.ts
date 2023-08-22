@@ -15,6 +15,8 @@ function runEpilogJSToTSTests() : void {
 
 // Atom and term parsing
 function runEpilogJSToTS_AtomAndLiteralTests() {
+    console.log("    ===== Simple Atoms ====")
+
     runTest("JStoTS-noargs-success", () => {
         let strToRead : string = "noargs()";
         let epilogJSAtom = read(strToRead);
@@ -55,6 +57,8 @@ function runEpilogJSToTS_AtomAndLiteralTests() {
         return EpilogJSToTS.parseAtom(epilogJSAtom).toString() === strToRead;
     },{});
     
+    console.log("    ===== Atoms with Lists ====")
+
     // List parsing
     runTest("JStoTS-list-empty-success", () => {
         let strToRead : string = "args([])";
@@ -83,6 +87,8 @@ function runEpilogJSToTS_AtomAndLiteralTests() {
 
     // Variable parsing
 
+    console.log("    ===== Atoms with Vars ====")
+
     runTest("JStoTS-single-variable-success", () => {
         let strToRead : string = "args(X)";
         let epilogJSAtom = read(strToRead);
@@ -109,6 +115,7 @@ function runEpilogJSToTS_AtomAndLiteralTests() {
     
 
     // Literal parsing
+    console.log("    ===== Literals ====")
 
     runTest("JStoTS-literal-errorstring-error", () => {
         return EpilogJSToTS.parseLiteral("error") === ERROR_LITERAL;

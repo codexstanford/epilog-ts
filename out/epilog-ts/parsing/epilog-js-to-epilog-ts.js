@@ -60,6 +60,7 @@ var EpilogJSToTS;
         return new Literal(parseAtom(epilogJSLiteral), false);
     }
     EpilogJSToTS.parseLiteral = parseLiteral;
+    //function parseRule(epilogJSRule)
 })(EpilogJSToTS || (EpilogJSToTS = {}));
 export { EpilogJSToTS };
 //# sourceMappingURL=epilog-js-to-epilog-ts.js.map
