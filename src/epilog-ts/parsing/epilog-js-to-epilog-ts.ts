@@ -8,6 +8,7 @@ import { ERROR_RULE, Rule } from "../classes/Rule.js";
 import { Dataset } from "../classes/Dataset.js";
 
 import { isEpilogConstant, isEpilogVariable } from "../utils/string-utils.js";
+import { Ruleset } from "../classes/Ruleset.js";
 
 
 namespace EpilogJSToTS {
@@ -32,9 +33,15 @@ namespace EpilogJSToTS {
 
     type EpilogJSLiteral =  EpilogJSReadError| EpilogJSAtom | ["not", EpilogJSAtom];
 
-    type EpilogJSRule = EpilogJSReadError | EpilogJSPredicate | ["rule", EpilogJSAtom, ...EpilogJSLiteral[]] |  EpilogJSAtom;
+    type EpilogJSRule = EpilogJSReadError | EpilogJSPredicate | ["rule", EpilogJSAtom, ...EpilogJSLiteral[]] | EpilogJSAtom;
 
     type EpilogJSDataset = EpilogJSAtom[];
+
+    type EpilogJSRuleset_Clean = EpilogJSRule[];
+
+    // Assuming something about the structure of definitions here, but for now only care that "definition" is the first element
+    type EpilogJSDefinition = ["definition", EpilogJSAtom, ...EpilogJSAtom[]];
+    type EpilogJSRuleset = EpilogJSRuleset_Clean | Array<EpilogJSRule | EpilogJSDefinition>;
 
     function parseCompoundTerm(epilogJSCompoundTerm: EpilogJSCompoundTerm) : CompoundTerm {
 
@@ -151,6 +158,46 @@ namespace EpilogJSToTS {
         }
 
         return new Dataset(factList);
+    }
+
+    // Removes definitions from the ruleset
+        // Note: assumes no body-free rule with head predicate "definition" (unless the predicate is a boolean predicate without parens)
+    function cleanEpilogJSRuleset(epilogJSRuleset: EpilogJSRuleset) : EpilogJSRuleset_Clean {
+        let cleanRuleset : EpilogJSRuleset_Clean = [];
+
+        for (let elem of epilogJSRuleset) {
+            // Is fine if a string
+            if (typeof elem === "string") {
+                cleanRuleset.push(elem);
+                continue;
+            }
+            
+            // If not a string, must be a list.
+                // If so, exclude if begins with "definition"
+            if (elem[0] === "definition") {
+                continue;
+            }
+
+            // Must be a rule
+            cleanRuleset.push(elem);
+        }
+
+        return cleanRuleset;
+    }
+
+    export function parseRuleset(epilogJSRuleset: EpilogJSRuleset) : Ruleset {
+
+        // Remove definitions
+            // Note: assumes no body-free rule with head predicate "definition" 
+        let cleanRuleset : EpilogJSRuleset_Clean = cleanEpilogJSRuleset(epilogJSRuleset);
+
+        let ruleList : Rule[] = [];
+
+        for (let rule of cleanRuleset) {
+            ruleList.push(parseRule(rule));
+        }
+
+        return new Ruleset(ruleList);
     }
 
 }

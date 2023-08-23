@@ -3,7 +3,7 @@ import { runTest } from "../../testing/testing.js";
 import { ERROR_ATOM } from "../classes/Atom.js";
 import { ERROR_LITERAL } from "../classes/Literal.js";
 import { ERROR_RULE } from "../classes/Rule.js";
-import { STRESS_TEST_DATASET_INPUT, STRESS_TEST_DATASET_OUTPUT } from "./stress-inputs-outputs.js";
+import { STRESS_TEST_DATASET_INPUT, STRESS_TEST_DATASET_OUTPUT, STRESS_TEST_RULESET_INPUT, STRESS_TEST_RULESET_OUTPUT } from "./stress-inputs-outputs.js";
 // Unit tests for epilog-ts/parsing files
 function runTests() {
     runEpilogJSToTSTests();
@@ -12,6 +12,7 @@ function runEpilogJSToTSTests() {
     runEpilogJSToTS_AtomAndLiteralTests();
     runEpilogJSToTS_RuleTests();
     runEpilogJSToTS_DatasetTests();
+    runEpilogJSToTS_RulesetTests();
 }
 // Atom and term parsing
 function runEpilogJSToTS_AtomAndLiteralTests() {
@@ -191,6 +192,60 @@ function runEpilogJSToTS_DatasetTests() {
         let strToRead = STRESS_TEST_DATASET_INPUT;
         let epilogJSDataset = readdata(strToRead);
         return EpilogJSToTS.parseDataset(epilogJSDataset).toEpilogString() === STRESS_TEST_DATASET_OUTPUT;
+    }, {});
+}
+function runEpilogJSToTS_RulesetTests() {
+    console.log("    ===== Rulesets ====");
+    runTest("JStoTS-ruleset-read-single-rule-success", () => {
+        let strToRead = "r1() :- goal1 & goal2() & goal3(X,Y) & ~goal4(X)";
+        let epilogJSRuleset = [read(strToRead)];
+        //console.log(EpilogJSToTS.parseRuleset(epilogJSRuleset).toEpilogString());
+        return EpilogJSToTS.parseRuleset(epilogJSRuleset).toEpilogString() === "r1() :- goal1() & goal2() & goal3(X, Y) & ~goal4(X)";
+    }, {});
+    runTest("JStoTS-ruleset-readdata-single-rule-success", () => {
+        let strToRead = "r1() :- goal1 & goal2() & goal3(X,Y) & ~goal4(X)";
+        let epilogJSRuleset = readdata(strToRead);
+        return EpilogJSToTS.parseRuleset(epilogJSRuleset).toEpilogString() === "r1() :- goal1() & goal2() & goal3(X, Y) & ~goal4(X)";
+    }, {});
+    runTest("JStoTS-ruleset-readdata-many-rules-success", () => {
+        let strToRead = "r1() :- goal1 & goal2() & goal3(X, Y) & ~goal4(X) r2(Z) :- goal2(Z) bool_pred another_bool_pred ans(W) bool_head :- still_has_goal(X)";
+        let epilogJSRuleset = readdata(strToRead);
+        return EpilogJSToTS.parseRuleset(epilogJSRuleset).toEpilogString() === "r1() :- goal1() & goal2() & goal3(X, Y) & ~goal4(X)\nr2(Z) :- goal2(Z)\nbool_pred()\nanother_bool_pred()\nans(W)\nbool_head() :- still_has_goal(X)";
+    }, {});
+    // With definitions
+    runTest("JStoTS-ruleset-readdata-with-single-definition-success", () => {
+        let strToRead = 'parsedate(DATE) := map(readstring,tail(matches(stringify(DATE),"(....)_(..)_(..)")))';
+        let epilogJSRuleset = readdata(strToRead);
+        return EpilogJSToTS.parseRuleset(epilogJSRuleset).toEpilogString() === "";
+    }, {});
+    runTest("JStoTS-ruleset-readdata-with-many-definitions-success", () => {
+        let strToRead = "r1() :- goal1 & goal2() & goal3(X,Y) & ~goal4(X) parsedate(DATE) := map(readstring,tail(matches(stringify(DATE),\"(....)_(..)_(..)\"))) head(X!L) := X tail(X!L) := L";
+        let epilogJSRuleset = readdata(strToRead);
+        return EpilogJSToTS.parseRuleset(epilogJSRuleset).toEpilogString() === "r1() :- goal1() & goal2() & goal3(X, Y) & ~goal4(X)";
+    }, {});
+    runTest("JStoTS-ruleset-readdata-with-definition-preds-1-success", () => {
+        let strToRead = 'definition()';
+        let epilogJSRuleset = readdata(strToRead);
+        return EpilogJSToTS.parseRuleset(epilogJSRuleset).toEpilogString() === "";
+    }, {});
+    runTest("JStoTS-ruleset-readdata-with-definition-preds-2-success", () => {
+        let strToRead = 'definition';
+        let epilogJSRuleset = readdata(strToRead);
+        return EpilogJSToTS.parseRuleset(epilogJSRuleset).toEpilogString() === "definition()";
+    }, {});
+    runTest("JStoTS-ruleset-readdata-with-definition-preds-3-success", () => {
+        // The first and third rules are parsed, the second is ignored
+        let strToRead = 'definition definition() definition(X) :- p1(X)';
+        let epilogJSRuleset = readdata(strToRead);
+        return EpilogJSToTS.parseRuleset(epilogJSRuleset).toEpilogString() === "definition()\ndefinition(X) :- p1(X)";
+    }, {});
+    // Stresstest
+    runTest("JStoTS-ruleset-readdata-stresstest-success", () => {
+        let strToRead = STRESS_TEST_RULESET_INPUT;
+        let epilogJSRuleset = readdata(strToRead);
+        //console.log(EpilogJSToTS.parseRuleset(epilogJSRuleset).toEpilogString());
+        //console.log(STRESS_TEST_RULESET_OUTPUT);
+        return EpilogJSToTS.parseRuleset(epilogJSRuleset).toEpilogString() === STRESS_TEST_RULESET_OUTPUT;
     }, {});
 }
 export { runTests };

@@ -6,6 +6,7 @@ import { Literal, ERROR_LITERAL } from "../classes/Literal.js";
 import { ERROR_RULE, Rule } from "../classes/Rule.js";
 import { Dataset } from "../classes/Dataset.js";
 import { isEpilogConstant, isEpilogVariable } from "../utils/string-utils.js";
+import { Ruleset } from "../classes/Ruleset.js";
 var EpilogJSToTS;
 (function (EpilogJSToTS) {
     function parseCompoundTerm(epilogJSCompoundTerm) {
@@ -96,6 +97,37 @@ var EpilogJSToTS;
         return new Dataset(factList);
     }
     EpilogJSToTS.parseDataset = parseDataset;
+    // Removes definitions from the ruleset
+    // Note: assumes no body-free rule with head predicate "definition" (unless the predicate is a boolean predicate without parens)
+    function cleanEpilogJSRuleset(epilogJSRuleset) {
+        let cleanRuleset = [];
+        for (let elem of epilogJSRuleset) {
+            // Is fine if a string
+            if (typeof elem === "string") {
+                cleanRuleset.push(elem);
+                continue;
+            }
+            // If not a string, must be a list.
+            // If so, exclude if begins with "definition"
+            if (elem[0] === "definition") {
+                continue;
+            }
+            // Must be a rule
+            cleanRuleset.push(elem);
+        }
+        return cleanRuleset;
+    }
+    function parseRuleset(epilogJSRuleset) {
+        // Remove definitions
+        // Note: assumes no body-free rule with head predicate "definition" 
+        let cleanRuleset = cleanEpilogJSRuleset(epilogJSRuleset);
+        let ruleList = [];
+        for (let rule of cleanRuleset) {
+            ruleList.push(parseRule(rule));
+        }
+        return new Ruleset(ruleList);
+    }
+    EpilogJSToTS.parseRuleset = parseRuleset;
 })(EpilogJSToTS || (EpilogJSToTS = {}));
 export { EpilogJSToTS };
 //# sourceMappingURL=epilog-js-to-epilog-ts.js.map
