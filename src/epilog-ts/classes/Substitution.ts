@@ -1,11 +1,13 @@
 import { isEpilogVariable } from "../utils/string-utils.js";
 
+import { ERROR_TERM, Term } from "./Term.js";
+
 
 
 class Substitution {
-    private varMap: Map<string, string>;
+    private varMap: Map<string, Term>;
 
-    constructor(varMap: Map<string, string> = new Map()) {
+    constructor(varMap: Map<string, Term> = new Map()) {
 
         // Ensure domain only consists of variables
         for (let varName of varMap.keys()) {
@@ -42,16 +44,17 @@ class Substitution {
         return str;
     }
 
-    getSub(varName: string) : string {
+    // Should check whether a sub exists with hasSub() before calling getSub(), unless it is known to exist.
+    getSub(varName: string) : Term {
         if (!this.varMap.has(varName)) {
             console.error("Tried to access a substitution for an element not in the Substitution's domain:",varName);
-            return "error";
+            return ERROR_TERM;
         }
 
         return this.varMap.get(varName);
     }
 
-    setSub(varName: string, varSub: string) : void {
+    setSub(varName: string, varSub: Term) : void {
         if (varName === "_") {
             console.error("Substitution can only substitute named variables, but proposed domain element is anonymous.");
             return;
@@ -63,6 +66,10 @@ class Substitution {
         }
 
         this.varMap.set(varName, varSub);
+    }
+
+    hasSub(varName: string) : boolean {
+        return this.varMap.has(varName);
     }
 }
 

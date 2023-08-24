@@ -1,4 +1,5 @@
 import { Atom, ERROR_ATOM } from "./Atom.js";
+import { Substitution } from "./Substitution.js";
 
 class Literal {
     readonly atom: Atom;
@@ -27,6 +28,11 @@ class Literal {
 
     getVars() : Set<string> {
         return this.atom.getVars();
+    }
+
+    // Builds a new Literal to which the substitution has been applied
+    static applySub(sub: Substitution, literal: Literal) : Literal {
+        return new Literal(Atom.applySub(sub, literal.atom), literal.isNegated());
     }
     
 }

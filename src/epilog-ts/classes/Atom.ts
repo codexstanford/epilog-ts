@@ -1,6 +1,7 @@
 import { Predicate } from "./Predicate.js";
+import { Substitution } from "./Substitution.js";
 
-import { Term, Variable } from "./Term.js";
+import { Term, Symbol, Variable, CompoundTerm } from "./Term.js";
 
 
 class Atom {
@@ -51,6 +52,30 @@ class Atom {
         let varSet : Set<string> = new Set(varList);
         return varSet;
 
+    }
+
+    // Builds a new Atom to which the substitution has been applied
+    static applySub(sub: Substitution, atom: Atom) : Atom {
+        let subbedTermList : Term[] = []; 
+
+        for (let arg of atom.args) {
+            if (arg instanceof Symbol) {
+                subbedTermList.push(Symbol.applySub(sub, arg));
+                continue;
+            }
+
+            if (arg instanceof Variable) {
+                subbedTermList.push(Variable.applySub(sub, arg));
+                continue;
+            }
+
+            if (arg instanceof CompoundTerm) {
+                subbedTermList.push(CompoundTerm.applySub(sub, arg));
+                continue;
+            }
+        }
+        
+        return new Atom(new Predicate(atom.pred.name), subbedTermList);
     }
 
 

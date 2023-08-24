@@ -1,6 +1,7 @@
 import { Constructor } from "./Constructor.js";
 
 import { isEpilogVariable, isEpilogConstant } from "../utils/string-utils.js";
+import { Substitution } from "./Substitution.js";
 
 type Term = Symbol | Variable | CompoundTerm;
 
@@ -27,6 +28,15 @@ class Symbol {
 
     getVars() : Set<string> {
         return new Set();
+    }
+
+    clone() : Symbol {
+        return new Symbol(this.name)
+    }
+
+    // Returns a copy of the Symbol, unmodifed
+    static applySub(sub: Substitution, sym: Symbol) : Symbol {
+        return sym.clone();
     }
  }
 
@@ -67,6 +77,19 @@ class Variable {
         }
 
         return new Set([this.name]);
+    }
+
+    clone() : Variable {
+        return new Variable(this.name)
+    }
+
+    // The only object to which a substitution can be directly applied
+    static applySub(sub: Substitution, variable: Variable) : Term {
+        if (sub.hasSub(variable.name)) {
+            return sub.getSub(variable.name).clone();
+        }
+        
+        return variable.clone();
     }
 }
 
@@ -115,6 +138,43 @@ class CompoundTerm {
         
         let varSet : Set<string> = new Set(varList);
         return varSet;
+    }
+
+    // Make a copy of the Constructor, and clone the args 
+    clone() : CompoundTerm {
+        
+        let clonedArgs : Term[] = [];
+
+        for (let arg of this.args) {
+            clonedArgs.push(arg.clone());
+        }
+
+        return new CompoundTerm(new Constructor(this.constr.name), clonedArgs);
+    }
+
+    // Builds a new CompoundTerm to which the substitution has been applied
+    static applySub(sub: Substitution, compoundTerm: CompoundTerm) : CompoundTerm {
+
+        let subbedTermList : Term[] = [];
+
+        for (let arg of compoundTerm.args) {
+            if (arg instanceof Symbol) {
+                subbedTermList.push(Symbol.applySub(sub, arg));
+                continue;
+            }
+
+            if (arg instanceof Variable) {
+                subbedTermList.push(Variable.applySub(sub, arg));
+                continue;
+            }
+
+            if (arg instanceof CompoundTerm) {
+                subbedTermList.push(CompoundTerm.applySub(sub, arg));
+                continue;
+            }
+        }
+        
+        return new CompoundTerm(new Constructor(compoundTerm.constr.name), subbedTermList);
     }
 }
 

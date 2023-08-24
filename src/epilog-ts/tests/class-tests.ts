@@ -110,56 +110,73 @@ function runSubstitutionTests() : void {
     },{});
 
     runTest("Subst-single-sub-success", () => {
-        let newSub = new Substitution(new Map([['V', '2']]));
+        let newSub = new Substitution(new Map([['V', new Symbol('2')]]));
         return newSub.toString() === "{\n\tV ⟶ 2\n}";
     },{});
 
+    runTest("Subst-single-sub-var-1-success", () => {
+        let newSub = new Substitution(new Map([['V', new Variable('X')]]));
+        return newSub.toString() === "{\n\tV ⟶ X\n}";
+    },{});
+
+    runTest("Subst-single-sub-var-2-success", () => {
+        let newSub = new Substitution(new Map([['V', new Variable('V')]]));
+        return newSub.toString() === "{\n\tV ⟶ V\n}";
+    },{});
+
+    runTest("Subst-single-sub-compoundterm-success", () => {
+        let newSub = new Substitution(new Map([['V', new CompoundTerm(new Constructor('f'), [new Variable('X'), new Symbol('t')])]]));
+        return newSub.toString() === "{\n\tV ⟶ f(X, t)\n}";
+    },{});
+
     runTest("Subst-multiple-subs-success", () => {
-        let newSub = new Substitution(new Map([['V', '2'], ['X23', 'c23']]));
+        let newSub = new Substitution(new Map([['V', new Symbol('2')], ['X23', new Symbol('c23')]]));
         return newSub.toString() === "{\n\tV ⟶ 2, \n\tX23 ⟶ c23\n}";
     },{});
 
     runTest("Subst-nonvar-domain-elem-failure", () => {
-        let newSub = new Substitution(new Map([['not_a_var', '2'], ['X23', 'c23']]));
+        let newSub = new Substitution(new Map([['not_a_var', new Symbol('2')], ['X23', new Symbol('c23')]]));
         return newSub.toString() === "{\n\n}";
     },{});
 
     runTest("Subst-anonymous-var-failure", () => {
-        let newSub = new Substitution(new Map([['V', 'string'], ['_', 'c23']]));
+        let newSub = new Substitution(new Map([['V', new Symbol('string')], ['_', new Symbol('c23')]]));
         return newSub.toString() === "{\n\n}";
     },{});
 
     runTest("Subst-get-success", () => {
-        let newSub = new Substitution(new Map([['V', '2'], ['X23', 'c23']]));
-        return newSub.getSub('V') === '2' && newSub.getSub('X23') === 'c23';
+        let newSub = new Substitution(new Map([['V', new Symbol('2')], ['X23', new Symbol('c23')]]));
+        return newSub.getSub('V').toString() === '2' && newSub.getSub('X23').toString() === 'c23';
     },{});
 
     runTest("Subst-get-failure", () => {
-        let newSub = new Substitution(new Map([['V', '2'], ['X23', 'c23']]));
-        return newSub.getSub('Absentvar') === 'error';
+        let newSub = new Substitution(new Map([['V', new Symbol('2')], ['X23', new Symbol('c23')]]));
+        return newSub.getSub('Absentvar').toString() === 'error';
     },{});
 
     runTest("Subst-set-success", () => {
-        let newSub = new Substitution(new Map([['V', '2'], ['X23', 'c23']]));
-        newSub.setSub('V', 'string');
-        newSub.setSub('Newvar', '"symbol that is a string"');
-        return newSub.getSub('V') !== '2' &&
-            newSub.getSub('V') === 'string' &&
-            newSub.getSub('Newvar') === '"symbol that is a string"' &&
-            newSub.getSub('X23') === 'c23';
+        let newSub = new Substitution(new Map([['V', new Symbol('2')], ['X23', new Symbol('c23')]]));
+        newSub.setSub('V', new Symbol('string'));
+        newSub.setSub('Newvar', new Symbol('"symbol that is a string"'));
+        return newSub.getSub('V').toString() !== '2' &&
+            newSub.getSub('V').toString() === 'string' &&
+            newSub.getSub('Newvar').toString() === '"symbol that is a string"' &&
+            newSub.getSub('X23').toString() === 'c23';
     },{});
 
     runTest("Subst-set-failure", () => {
-        let newSub = new Substitution(new Map([['V', '2'], ['X23', 'c23']]));
-        newSub.setSub('_', 'string');
-        newSub.setSub('_Newvar', '"symbol that is a string"');
-        newSub.setSub('newvar', '"symbol that is a string"');
-        return newSub.getSub('V') === '2' &&
-            newSub.getSub('_') === 'error' &&
-            newSub.getSub('_Newvar') === 'error' &&
-            newSub.getSub('newvar') === 'error' &&
-            newSub.getSub('X23') === 'c23';
+        let newSub = new Substitution(new Map([['V', new Symbol('2')], ['X23', new Symbol('c23')]]));
+        newSub.setSub('_', new Symbol('string'));
+        newSub.setSub('_Newvar', new Symbol('"symbol that is a string"'));
+        newSub.setSub('newvar', new Symbol('"symbol that is a string"'));
+        return newSub.getSub('V').toString() === '2' &&
+            newSub.getSub('_').toString() === 'error' &&
+            newSub.getSub('_Newvar').toString() === 'error' &&
+            newSub.getSub('newvar').toString() === 'error' &&
+            newSub.getSub('X23').toString() === 'c23';
     },{});
+
+    // Applying substitutions
 }
 
 function runSymbolTests() : void {
