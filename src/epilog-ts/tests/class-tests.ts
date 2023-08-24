@@ -443,6 +443,21 @@ function runConstructorTests() : void {
     },{});
 
 
+    runTest("Constructor-underscore-1-failure", () => {
+        let newConstr : Constructor = new Constructor("_");
+        return newConstr.name === "error";
+    },{});
+
+    runTest("Constructor-underscore-2-failure", () => {
+        let newConstr : Constructor = new Constructor("___");
+        return newConstr.name === "error";
+    },{});
+
+    runTest("Constructor-underscore-3-failure", () => {
+        let newConstr : Constructor = new Constructor("__3");
+        return newConstr.name === "error";
+    },{});
+
     runTest("Constructor-string-failure", () => {
         let newConstr : Constructor = new Constructor("3\"test");
         return newConstr.name === "error";
