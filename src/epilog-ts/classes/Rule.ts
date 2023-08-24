@@ -44,6 +44,17 @@ class Rule {
 
         return true;
     }
+
+    getVars() : Set<string> {
+        let varList : string[] = [...this.head.getVars()];
+
+        for (let subgoal of this.body) {
+            varList = varList.concat([...subgoal.getVars()]);
+        }
+        
+        let varSet : Set<string> = new Set(varList);
+        return varSet;
+    }
 }
 
 const ERROR_RULE = new Rule(ERROR_ATOM, [ERROR_ATOM]);

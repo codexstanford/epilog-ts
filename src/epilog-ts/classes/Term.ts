@@ -24,6 +24,10 @@ class Symbol {
     isGround() : boolean {
         return true;
     }
+
+    getVars() : Set<string> {
+        return new Set();
+    }
  }
 
 class Variable {
@@ -45,6 +49,24 @@ class Variable {
 
     isGround() : boolean {
         return false;
+    }
+
+    isAnonymous() : boolean {
+        return this.name === "_";
+    }
+
+    getVars() : Set<string> {
+        
+        // If an error, return the empty set
+        if (this.name === "error") {
+            return new Set();
+        }
+        
+        if (this.isAnonymous()) {
+            console.warn("Called getVars() on an anonymous variable. As currently implemented, all anonymous variables will alias to the same name.");
+        }
+
+        return new Set([this.name]);
     }
 }
 
@@ -81,6 +103,18 @@ class CompoundTerm {
             }
         }
         return true;
+    }
+
+    getVars() : Set<string> {
+
+        let varList : string[] = [];
+
+        for (let arg of this.args) {
+            varList = varList.concat([...arg.getVars()]);
+        }
+        
+        let varSet : Set<string> = new Set(varList);
+        return varSet;
     }
 }
 

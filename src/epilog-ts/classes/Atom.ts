@@ -40,6 +40,19 @@ class Atom {
         return false;
     }
 
+    getVars() : Set<string> {
+
+        let varList : string[] = [];
+
+        for (let arg of this.args) {
+            varList = varList.concat([...arg.getVars()]);
+        }
+        
+        let varSet : Set<string> = new Set(varList);
+        return varSet;
+
+    }
+
 
 }
 

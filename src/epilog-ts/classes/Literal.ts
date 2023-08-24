@@ -24,6 +24,10 @@ class Literal {
     isNegated() : boolean {
         return this.negated;
     }
+
+    getVars() : Set<string> {
+        return this.atom.getVars();
+    }
     
 }
 
