@@ -1,8 +1,14 @@
-import { Variable } from "../classes/Term.js";
+import { Symbol, Variable, CompoundTerm } from "../classes/Term.js";
+import { Constructor } from "../classes/Constructor.js";
+import { Substitution } from "../classes/Substitution.js";
 import { runTest } from "../../testing/testing.js";
 // Unit tests for epilog-ts/classes files
 function runTests() {
+    runSubstitutionTests();
+    runSymbolTests();
     runVariableTests();
+    runConstructorTests();
+    runCompoundTermTests();
     /*
     let newPred : Predicate = new Predicate("\"suspicious pred\"");
     let newPred2 : Predicate = new Predicate("r1");
@@ -67,45 +73,325 @@ function runTests() {
     let clp1 : CLP = new ClosedLogicProgram(newDataset2, ruleset);
     console.log(clp1.toString());*/
 }
+function runSubstitutionTests() {
+    console.log("    ===== Substitutions ====");
+    runTest("Subst-empty-success", () => {
+        let newSub = new Substitution();
+        return newSub.toString() === "{\n\n}";
+    }, {});
+    runTest("Subst-single-sub-success", () => {
+        let newSub = new Substitution(new Map([['V', new Symbol('2')]]));
+        return newSub.toString() === "{\n\tV ⟶ 2\n}";
+    }, {});
+    runTest("Subst-single-sub-var-1-success", () => {
+        let newSub = new Substitution(new Map([['V', new Variable('X')]]));
+        return newSub.toString() === "{\n\tV ⟶ X\n}";
+    }, {});
+    runTest("Subst-single-sub-var-2-success", () => {
+        let newSub = new Substitution(new Map([['V', new Variable('V')]]));
+        return newSub.toString() === "{\n\tV ⟶ V\n}";
+    }, {});
+    runTest("Subst-single-sub-compoundterm-success", () => {
+        let newSub = new Substitution(new Map([['V', new CompoundTerm(new Constructor('f'), [new Variable('X'), new Symbol('t')])]]));
+        return newSub.toString() === "{\n\tV ⟶ f(X, t)\n}";
+    }, {});
+    runTest("Subst-multiple-subs-success", () => {
+        let newSub = new Substitution(new Map([['V', new Symbol('2')], ['X23', new Symbol('c23')]]));
+        return newSub.toString() === "{\n\tV ⟶ 2, \n\tX23 ⟶ c23\n}";
+    }, {});
+    runTest("Subst-nonvar-domain-elem-failure", () => {
+        let newSub = new Substitution(new Map([['not_a_var', new Symbol('2')], ['X23', new Symbol('c23')]]));
+        return newSub.toString() === "{\n\n}";
+    }, {});
+    runTest("Subst-anonymous-var-failure", () => {
+        let newSub = new Substitution(new Map([['V', new Symbol('string')], ['_', new Symbol('c23')]]));
+        return newSub.toString() === "{\n\n}";
+    }, {});
+    runTest("Subst-get-success", () => {
+        let newSub = new Substitution(new Map([['V', new Symbol('2')], ['X23', new Symbol('c23')]]));
+        return newSub.getSub('V').toString() === '2' && newSub.getSub('X23').toString() === 'c23';
+    }, {});
+    runTest("Subst-get-failure", () => {
+        let newSub = new Substitution(new Map([['V', new Symbol('2')], ['X23', new Symbol('c23')]]));
+        return newSub.getSub('Absentvar').toString() === 'error';
+    }, {});
+    runTest("Subst-set-success", () => {
+        let newSub = new Substitution(new Map([['V', new Symbol('2')], ['X23', new Symbol('c23')]]));
+        newSub.setSub('V', new Symbol('string'));
+        newSub.setSub('Newvar', new Symbol('"symbol that is a string"'));
+        return newSub.getSub('V').toString() !== '2' &&
+            newSub.getSub('V').toString() === 'string' &&
+            newSub.getSub('Newvar').toString() === '"symbol that is a string"' &&
+            newSub.getSub('X23').toString() === 'c23';
+    }, {});
+    runTest("Subst-set-failure", () => {
+        let newSub = new Substitution(new Map([['V', new Symbol('2')], ['X23', new Symbol('c23')]]));
+        newSub.setSub('_', new Symbol('string'));
+        newSub.setSub('_Newvar', new Symbol('"symbol that is a string"'));
+        newSub.setSub('newvar', new Symbol('"symbol that is a string"'));
+        return newSub.getSub('V').toString() === '2' &&
+            newSub.getSub('_').toString() === 'error' &&
+            newSub.getSub('_Newvar').toString() === 'error' &&
+            newSub.getSub('newvar').toString() === 'error' &&
+            newSub.getSub('X23').toString() === 'c23';
+    }, {});
+    // Applying substitutions
+    /*console.log(cq.toString());
+console.log(frozenCQ.toString());
+
+console.log(frozenCQ.rule.head.args[0] === freezingSub.getSub('X'));*/
+}
 function runSymbolTests() {
     console.log("    ===== Symbols ====");
-    /*let newSym : Symbol = new Symbol("\"suspicious symbol\"");
-    console.log(newSym.toString());
-    let newSym2 : Symbol = new Symbol("test_");
-    console.log(newSym2.toString());*/
+    runTest("Symbol-string-success", () => {
+        let newSym = new Symbol("\"suspicious symbol\"");
+        return newSym.name === "\"suspicious symbol\"";
+    }, {});
+    runTest("Symbol-letter-success", () => {
+        let newSym = new Symbol("bob");
+        return newSym.name === "bob";
+    }, {});
+    runTest("Symbol-underscore-success", () => {
+        let newSym = new Symbol("test_");
+        return newSym.name === "test_";
+    }, {});
+    runTest("Symbol-number-success", () => {
+        let newSym = new Symbol("314159");
+        return newSym.name === "314159";
+    }, {});
+    runTest("Symbol-period-success", () => {
+        let newSym = new Symbol("3.14159");
+        return newSym.name === "3.14159";
+    }, {});
+    runTest("Symbol-complex-success", () => {
+        let newSym = new Symbol("3._1aslk9._");
+        return newSym.name === "3._1aslk9._";
+    }, {});
+    runTest("Symbol-underscore-1-failure", () => {
+        let newSym = new Symbol("_");
+        return newSym.name === "error";
+    }, {});
+    runTest("Symbol-underscore-2-failure", () => {
+        let newSym = new Symbol("___");
+        return newSym.name === "error";
+    }, {});
+    runTest("Symbol-underscore-3-failure", () => {
+        let newSym = new Symbol("__3");
+        return newSym.name === "error";
+    }, {});
+    runTest("Symbol-string-failure", () => {
+        let newSym = new Symbol("3\"test");
+        return newSym.name === "error";
+    }, {});
+    runTest("Symbol-variable-1-failure", () => {
+        let newSym = new Symbol("X");
+        return newSym.name === "error";
+    }, {});
+    runTest("Symbol-variable-2-failure", () => {
+        let newSym = new Symbol("Hospital");
+        return newSym.name === "error";
+    }, {});
+    runTest("Symbol-getVars-validSym", () => {
+        let newSym = new Symbol("3._1aslk9._");
+        return newSym.getVars().size === 0;
+    }, {});
+    runTest("Symbol-getVars-invalidSym", () => {
+        let newSym = new Symbol("Hospital");
+        return newSym.getVars().size === 0;
+    }, {});
 }
 function runVariableTests() {
     console.log("    ===== Variables ====");
-    runTest("Var-success-anonymous", () => {
+    runTest("Var-anonymous-success", () => {
         let newVar = new Variable("_");
-        return newVar.name === "_";
+        return newVar.name === "_" && newVar.isAnonymous();
     }, {});
-    runTest("Var-success-caps", () => {
+    runTest("Var-caps-success", () => {
         let newVar = new Variable("X23");
-        return newVar.name === "X23";
+        return newVar.name === "X23" && !newVar.isAnonymous();
     }, {});
-    runTest("Var-failure-underscores", () => {
+    runTest("Var-underscores-failure", () => {
         let newVar = new Variable("__");
-        return newVar.name === "error";
+        return newVar.name === "error" && !newVar.isAnonymous();
     }, {});
-    runTest("Var-failure-digits", () => {
+    runTest("Var-digits-failure", () => {
         let newVar = new Variable("23X");
-        return newVar.name === "error";
+        return newVar.name === "error" && !newVar.isAnonymous();
     }, {});
-    runTest("Var-failure-lowercase", () => {
+    runTest("Var-lowercase-failure", () => {
         let newVar = new Variable("x23");
-        return newVar.name === "error";
+        return newVar.name === "error" && !newVar.isAnonymous();
     }, {});
-    runTest("Var-failure-period", () => {
+    runTest("Var-period-failure", () => {
         let newVar = new Variable(".");
-        return newVar.name === "error";
+        return newVar.name === "error" && !newVar.isAnonymous();
+    }, {});
+    runTest("Var-getVars-anonymous", () => {
+        let newVar = new Variable("_");
+        return newVar.getVars().size === 1 && newVar.getVars().has("_") && newVar.isAnonymous();
+    }, {});
+    runTest("Var-getVars-caps", () => {
+        let newVar = new Variable("X23");
+        return newVar.getVars().size === 1 && newVar.getVars().has("X23") && !newVar.isAnonymous();
+    }, {});
+    runTest("Var-getVars-invalidVar", () => {
+        let newVar = new Variable("__");
+        return newVar.getVars().size === 0 && !newVar.isAnonymous();
     }, {});
 }
 function runCompoundTermTests() {
+    console.log("    ===== CompoundTerms ====");
+    runTest("CompoundTerm-empty-success", () => {
+        let newConstructor = new Constructor("f");
+        let compoundTerm = new CompoundTerm(newConstructor, []);
+        return compoundTerm.toString() === "f()";
+    }, {});
+    runTest("CompoundTerm-anonymousVar-success", () => {
+        let newConstructor = new Constructor("f");
+        let newVar = new Variable("_");
+        let compoundTerm = new CompoundTerm(newConstructor, [newVar]);
+        return compoundTerm.toString() === "f(_)";
+    }, {});
+    runTest("CompoundTerm-namedVar-success", () => {
+        let newConstructor = new Constructor("f");
+        let newVar = new Variable("X");
+        let compoundTerm = new CompoundTerm(newConstructor, [newVar]);
+        return compoundTerm.toString() === "f(X)";
+    }, {});
+    runTest("CompoundTerm-symbol-success", () => {
+        let newConstructor = new Constructor("f");
+        let newSym = new Symbol("bob");
+        let compoundTerm = new CompoundTerm(newConstructor, [newSym]);
+        return compoundTerm.toString() === "f(bob)";
+    }, {});
+    runTest("CompoundTerm-many-args-success", () => {
+        let newConstructor = new Constructor("g");
+        let newSym = new Symbol("bob");
+        let newVar1 = new Variable("X");
+        let newVar2 = new Variable("_");
+        let compoundTerm = new CompoundTerm(newConstructor, [newSym, newVar1, newVar2]);
+        return compoundTerm.toString() === "g(bob, X, _)";
+    }, {});
+    runTest("CompoundTerm-nested-success", () => {
+        let newConstructor1 = new Constructor("builder");
+        let newConstructor2 = new Constructor("f");
+        let newConstructor3 = new Constructor("g");
+        let newConstructor4 = new Constructor("cons");
+        let newSym1 = new Symbol("major_test");
+        let newSym2 = new Symbol("nil");
+        let newVar1 = new Variable("X");
+        let newVar2 = new Variable("_");
+        //args(f(g(X)), minor_test, [Y])
+        let compoundTerm1 = new CompoundTerm(newConstructor3, [newVar1]); // g(X)
+        let compoundTerm2 = new CompoundTerm(newConstructor2, [compoundTerm1]); // f(g(X))
+        let compoundTerm3 = new CompoundTerm(newConstructor4, [newVar2, newSym2]); // cons(_, nil)
+        let compoundTerm4 = new CompoundTerm(newConstructor1, [compoundTerm2, newSym1, compoundTerm3]); // builder(f(g(X)), major_test, cons(_, nil))
+        return compoundTerm4.toString() === "builder(f(g(X)), major_test, cons(_, nil))";
+    }, {});
+    runTest("CompoundTerm-getVars-novars-empty", () => {
+        let newConstructor = new Constructor("f");
+        let compoundTerm = new CompoundTerm(newConstructor, []);
+        return compoundTerm.getVars().size === 0;
+    }, {});
+    runTest("CompoundTerm-getVars-namedVar", () => {
+        let newConstructor = new Constructor("f");
+        let newVar = new Variable("X");
+        let compoundTerm = new CompoundTerm(newConstructor, [newVar]);
+        return compoundTerm.getVars().size === 1 && compoundTerm.getVars().has("X");
+    }, {});
+    runTest("CompoundTerm-getVars-anonymousVar", () => {
+        let newConstructor = new Constructor("f");
+        let newVar = new Variable("_");
+        let compoundTerm = new CompoundTerm(newConstructor, [newVar]);
+        return compoundTerm.getVars().size === 1 && compoundTerm.getVars().has("_");
+    }, {});
+    runTest("CompoundTerm-getVars-novars-symbol", () => {
+        let newConstructor = new Constructor("f");
+        let newSym = new Symbol("bob");
+        let compoundTerm = new CompoundTerm(newConstructor, [newSym]);
+        return compoundTerm.getVars().size === 0;
+    }, {});
+    runTest("CompoundTerm-getVars-many-args", () => {
+        let newConstructor = new Constructor("g");
+        let newSym = new Symbol("bob");
+        let newVar1 = new Variable("X");
+        let newVar2 = new Variable("_");
+        let compoundTerm = new CompoundTerm(newConstructor, [newSym, newVar1, newVar2]);
+        return compoundTerm.getVars().size === 2 && compoundTerm.getVars().has("X") && compoundTerm.getVars().has("_");
+    }, {});
+    runTest("CompoundTerm-getVars-many-underscores", () => {
+        let newConstructor = new Constructor("g");
+        let newSym = new Symbol("bob");
+        let newVar1 = new Variable("_");
+        let newVar2 = new Variable("_");
+        let compoundTerm = new CompoundTerm(newConstructor, [newSym, newVar1, newVar2]);
+        return compoundTerm.getVars().size === 1 && compoundTerm.getVars().has("_");
+    }, {});
+    runTest("CompoundTerm-getVars-many-namedVars", () => {
+        let newConstructor = new Constructor("h");
+        let newSym = new Symbol("bob");
+        let newVar1 = new Variable("X");
+        let newVar2 = new Variable("Y");
+        let newVar3 = new Variable("Z");
+        let compoundTerm = new CompoundTerm(newConstructor, [newSym, newVar1, newVar2, newVar3]);
+        return compoundTerm.getVars().size === 3 &&
+            compoundTerm.getVars().has("X") &&
+            compoundTerm.getVars().has("Y") &&
+            compoundTerm.getVars().has("Z");
+    }, {});
 }
 function runTermTests() {
 }
 function runConstructorTests() {
+    console.log("    ===== Constructors ====");
+    runTest("Constructor-string-success", () => {
+        let newConstr = new Constructor("\"suspicious symbol\"");
+        return newConstr.name === "\"suspicious symbol\"";
+    }, {});
+    runTest("Constructor-letter-success", () => {
+        let newConstr = new Constructor("bob");
+        return newConstr.name === "bob";
+    }, {});
+    runTest("Constructor-underscore-success", () => {
+        let newConstr = new Constructor("test_");
+        return newConstr.name === "test_";
+    }, {});
+    runTest("Constructor-number-success", () => {
+        let newConstr = new Constructor("314159");
+        return newConstr.name === "314159";
+    }, {});
+    runTest("Constructor-period-success", () => {
+        let newConstr = new Constructor("3.14159");
+        return newConstr.name === "3.14159";
+    }, {});
+    runTest("Constructor-complex-success", () => {
+        let newConstr = new Constructor("3._1aslk9._");
+        return newConstr.name === "3._1aslk9._";
+    }, {});
+    runTest("Constructor-underscore-1-failure", () => {
+        let newConstr = new Constructor("_");
+        return newConstr.name === "error";
+    }, {});
+    runTest("Constructor-underscore-2-failure", () => {
+        let newConstr = new Constructor("___");
+        return newConstr.name === "error";
+    }, {});
+    runTest("Constructor-underscore-3-failure", () => {
+        let newConstr = new Constructor("__3");
+        return newConstr.name === "error";
+    }, {});
+    runTest("Constructor-string-failure", () => {
+        let newConstr = new Constructor("3\"test");
+        return newConstr.name === "error";
+    }, {});
+    runTest("Constructor-variable-1-failure", () => {
+        let newConstr = new Constructor("X");
+        return newConstr.name === "error";
+    }, {});
+    runTest("Constructor-variable-2-failure", () => {
+        let newConstr = new Constructor("Hospital");
+        return newConstr.name === "error";
+    }, {});
 }
 function runPredicateTests() {
 }
@@ -116,6 +402,8 @@ function runDatasetTests() {
 function runLiteralTests() {
 }
 function runRuleTests() {
+    //console.log(StrToTS.parseRule("ans(W) :- test(W) & test2(c, X)").getVars());
+    //console.log(StrToTS.parseRule("g(X,Z) :- p(X,Y) & p(Y,Z)").getVars());
 }
 function runRulesetTests() {
 }

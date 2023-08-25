@@ -32,6 +32,22 @@ class Rule {
         return str;
     }
 
+    bodyToString() : string {
+        if (this.body.length === 0) {
+            return "";
+        }
+
+        let str = "";
+
+        for (let subgoal of this.body) {
+            str += subgoal.toString() + " & ";
+        } 
+
+        str = str.slice(0, -3);
+
+        return str;
+    }
+
     isGround() : boolean {
         if (!this.head.isGround()) {
             return false;

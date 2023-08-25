@@ -155,6 +155,11 @@ function runEpilogJSToTS_RuleTests() {
         let epilogJSRule = read(strToRead);
         return EpilogJSToTS.parseRule(epilogJSRule).toString() === "ans(W) :- r1(X) & some_bool()";
     }, {});
+    /*runTest("JStoTS-rule-anonymousVar-success", () => {
+        let strToRead : string = "ans(W) :- r1(X) & q(_,X)";
+        let epilogJSRule = read(strToRead);
+        return EpilogJSToTS.parseRule(epilogJSRule).toString() === "ans(W) :- r1(X) & some_bool()";
+    },{});*/
 }
 function runEpilogJSToTS_DatasetTests() {
     console.log("    ===== Datasets ====");

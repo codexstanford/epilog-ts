@@ -29,7 +29,7 @@ namespace EpilogJSToTS {
 
     type EpilogJSReadError = "error";
     // Either the error atom, or a list where the first element is a predicate, followed by 0 or more terms
-    type EpilogJSAtom = EpilogJSReadError | [EpilogJSPredicate, ...EpilogJSTerm[]] | EpilogJSPredicate;
+    export type EpilogJSAtom = EpilogJSReadError | [EpilogJSPredicate, ...EpilogJSTerm[]] | EpilogJSPredicate;
 
     type EpilogJSLiteral =  EpilogJSReadError| EpilogJSAtom | ["not", EpilogJSAtom];
 

@@ -1,4 +1,9 @@
 import { ERROR_RULE } from "./Rule.js";
+// Classification functions
+function isCQ(q) {
+    // Note: temporary test, as we should also check the properties of the rules of the query, in case its class is too conservative
+    return q instanceof ConjunctiveQuery;
+}
 class ConjunctiveQuery {
     get rules() {
         return [this.rule];
@@ -24,5 +29,5 @@ class ConjunctiveQuery {
         return this.rule.toString();
     }
 }
-export { ConjunctiveQuery, };
+export { ConjunctiveQuery, isCQ, };
 //# sourceMappingURL=Query.js.map

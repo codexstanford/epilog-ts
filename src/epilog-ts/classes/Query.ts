@@ -7,6 +7,16 @@ interface Query {
     readonly rules: Rule[];
 }
 
+// Classification functions
+
+function isCQ(q: Query) : q is ConjunctiveQuery {
+    // Note: temporary test, as we should also check the properties of the rules of the query, in case its class is too conservative
+    return q instanceof ConjunctiveQuery;
+}
+
+
+// Classes
+
 type CQ = ConjunctiveQuery;
 
 class ConjunctiveQuery implements Query {
@@ -43,10 +53,11 @@ class ConjunctiveQuery implements Query {
     }
 }
 
-
 export { 
     Query,
 
+    
     CQ,
     ConjunctiveQuery,
+    isCQ,
 }

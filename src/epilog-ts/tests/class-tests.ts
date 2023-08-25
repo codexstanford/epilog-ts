@@ -102,7 +102,7 @@ function runTests() : void {
 
 function runSubstitutionTests() : void {
 
-    console.log("    ===== Variables ====")
+    console.log("    ===== Substitutions ====")
 
     runTest("Subst-empty-success", () => {
         let newSub = new Substitution();
@@ -177,6 +177,10 @@ function runSubstitutionTests() : void {
     },{});
 
     // Applying substitutions
+        /*console.log(cq.toString());
+    console.log(frozenCQ.toString());
+
+    console.log(frozenCQ.rule.head.args[0] === freezingSub.getSub('X'));*/
 }
 
 function runSymbolTests() : void {

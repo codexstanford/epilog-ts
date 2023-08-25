@@ -1,4 +1,5 @@
 import { Predicate } from "./Predicate.js";
+import { Symbol, Variable, CompoundTerm } from "./Term.js";
 class Atom {
     constructor(pred, args) {
         this.pred = pred;
@@ -26,6 +27,33 @@ class Atom {
     }
     isNegated() {
         return false;
+    }
+    getVars() {
+        let varList = [];
+        for (let arg of this.args) {
+            varList = varList.concat([...arg.getVars()]);
+        }
+        let varSet = new Set(varList);
+        return varSet;
+    }
+    // Builds a new Atom to which the substitution has been applied
+    static applySub(sub, atom) {
+        let subbedTermList = [];
+        for (let arg of atom.args) {
+            if (arg instanceof Symbol) {
+                subbedTermList.push(Symbol.applySub(sub, arg));
+                continue;
+            }
+            if (arg instanceof Variable) {
+                subbedTermList.push(Variable.applySub(sub, arg));
+                continue;
+            }
+            if (arg instanceof CompoundTerm) {
+                subbedTermList.push(CompoundTerm.applySub(sub, arg));
+                continue;
+            }
+        }
+        return new Atom(new Predicate(atom.pred.name), subbedTermList);
     }
 }
 const ERROR_ATOM = new Atom(new Predicate("error"), []);

@@ -1,6 +1,7 @@
 import { runTest, FailPriorityLevel } from "./testing.js";
 import { runTests as runTests_EpilogTS_Classes } from "../epilog-ts/tests/class-tests.js";
 import { runTests as runTests_EpilogTS_Parsing } from "../epilog-ts/tests/parse-tests.js";
+import { runTests as runTests_Containment_Testing } from "../tests/containment-testers.js";
 // Test the testing function
 function runMetaTests() {
     // Should print via console.error
@@ -62,6 +63,12 @@ function runAllTests() {
         console.log("============= START Testing epilog.js to Epilog-ts parsing ============= ");
         runTests_EpilogTS_Parsing();
         console.log("============= END Testing epilog.js to Epilog-ts parsing ============= ");
+    }
+    const DO_CONTAINMENT_TESTING_TESTS = true;
+    if (DO_CONTAINMENT_TESTING_TESTS) {
+        console.log("============= START Testing Containment Testers ============= ");
+        runTests_Containment_Testing();
+        console.log("============= END Testing Containment Testers ============= ");
     }
 }
 export { runAllTests };

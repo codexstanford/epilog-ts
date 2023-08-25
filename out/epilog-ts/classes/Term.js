@@ -1,3 +1,4 @@
+import { Constructor } from "./Constructor.js";
 import { isEpilogVariable, isEpilogConstant } from "../utils/string-utils.js";
 class Symbol {
     constructor(name) {
@@ -14,6 +15,16 @@ class Symbol {
     isGround() {
         return true;
     }
+    getVars() {
+        return new Set();
+    }
+    clone() {
+        return new Symbol(this.name);
+    }
+    // Returns a copy of the Symbol, unmodifed
+    static applySub(sub, sym) {
+        return sym.clone();
+    }
 }
 class Variable {
     constructor(name) {
@@ -29,6 +40,29 @@ class Variable {
     }
     isGround() {
         return false;
+    }
+    isAnonymous() {
+        return this.name === "_";
+    }
+    getVars() {
+        // If an error, return the empty set
+        if (this.name === "error") {
+            return new Set();
+        }
+        if (this.isAnonymous()) {
+            console.warn("Called getVars() on an anonymous variable. As currently implemented, all anonymous variables will alias to the same name.");
+        }
+        return new Set([this.name]);
+    }
+    clone() {
+        return new Variable(this.name);
+    }
+    // The only object to which a substitution can be directly applied
+    static applySub(sub, variable) {
+        if (sub.hasSub(variable.name)) {
+            return sub.getSub(variable.name).clone();
+        }
+        return variable.clone();
     }
 }
 class CompoundTerm {
@@ -56,6 +90,41 @@ class CompoundTerm {
             }
         }
         return true;
+    }
+    getVars() {
+        let varList = [];
+        for (let arg of this.args) {
+            varList = varList.concat([...arg.getVars()]);
+        }
+        let varSet = new Set(varList);
+        return varSet;
+    }
+    // Make a copy of the Constructor, and clone the args 
+    clone() {
+        let clonedArgs = [];
+        for (let arg of this.args) {
+            clonedArgs.push(arg.clone());
+        }
+        return new CompoundTerm(new Constructor(this.constr.name), clonedArgs);
+    }
+    // Builds a new CompoundTerm to which the substitution has been applied
+    static applySub(sub, compoundTerm) {
+        let subbedTermList = [];
+        for (let arg of compoundTerm.args) {
+            if (arg instanceof Symbol) {
+                subbedTermList.push(Symbol.applySub(sub, arg));
+                continue;
+            }
+            if (arg instanceof Variable) {
+                subbedTermList.push(Variable.applySub(sub, arg));
+                continue;
+            }
+            if (arg instanceof CompoundTerm) {
+                subbedTermList.push(CompoundTerm.applySub(sub, arg));
+                continue;
+            }
+        }
+        return new CompoundTerm(new Constructor(compoundTerm.constr.name), subbedTermList);
     }
 }
 const ERROR_TERM = new Symbol("error");
