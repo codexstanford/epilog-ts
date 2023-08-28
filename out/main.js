@@ -1,5 +1,32 @@
-import { runAllTests } from "./testing/allTests.js";
+import { Atom } from "./epilog-ts/classes/Atom.js";
+import { Literal } from "./epilog-ts/classes/Literal.js";
+import { Predicate } from "./epilog-ts/classes/Predicate.js";
+import { Variable } from "./epilog-ts/classes/Term.js";
+import { Biconditional } from "./first-order-logic/classes/Biconditional.js";
+import { Conjunction } from "./first-order-logic/classes/Conjunction.js";
+import { Disjunction } from "./first-order-logic/classes/Disjunction.js";
+import { Implication } from "./first-order-logic/classes/Implication.js";
+import { Negation } from "./first-order-logic/classes/Negation.js";
+import { QuantifiedFormula, Quantifier } from "./first-order-logic/classes/QuantifiedFormula.js";
 document.addEventListener("DOMContentLoaded", function () {
-    runAllTests();
+    //runAllTests();
+    let atom1 = new Atom(new Predicate("p"), []);
+    let atom2 = new Atom(new Predicate("q"), []);
+    let d1 = new Disjunction([new Literal(atom1, false), new Literal(atom2, true)]);
+    let d2 = new Conjunction([new Literal(atom1, true), new Literal(atom2, false)]);
+    let c = new Conjunction([d1, d2]);
+    let c2 = new Conjunction([]);
+    let d3 = new Disjunction([]);
+    let n1 = new Negation(c);
+    console.log(n1.toString());
+    let n2 = new Negation(new Literal(atom1, false));
+    let i = new Implication(n2, d2);
+    console.log(i.toString());
+    let b = new Biconditional(i, c);
+    console.log(b.toString());
+    let u = new QuantifiedFormula(Quantifier.Universal, new Variable("X"), b);
+    let e = new QuantifiedFormula(Quantifier.Existential, new Variable("_"), n1);
+    console.log(u.toString());
+    console.log(e.toString());
 });
 //# sourceMappingURL=main.js.map

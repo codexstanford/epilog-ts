@@ -9,7 +9,7 @@ function runTests() {
 }
 function runCQContainmentTesterTests() {
     console.log("    ===== CQ Containment Tester ====");
-    runTest("CQContainment-refl-true", () => {
+    runTest("CQContainment-reflexive-true", () => {
         let cqTester = new CQContainmentTester();
         let q1 = new ConjunctiveQuery(new Predicate("q"), StrToTS.parseRule("q(X,Y) :- a(X,Z) & b(Y) & c(hosp2)"));
         return cqTester.containedWithin(q1, q1);

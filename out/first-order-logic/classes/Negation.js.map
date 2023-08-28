@@ -1,0 +1,1 @@
+{"version":3,"file":"Negation.js","sourceRoot":"","sources":["../../../src/first-order-logic/classes/Negation.ts"],"names":[],"mappings":"AAEA,MAAM,QAAQ;IAIV,YAAY,MAAe;QACvB,IAAI,CAAC,MAAM,GAAG,MAAM,CAAC;IACzB,CAAC;IAED,QAAQ;QACJ,OAAO,GAAG,GAAG,IAAI,CAAC,MAAM,CAAC,QAAQ,EAAE,CAAC;IACxC,CAAC;CACJ;AAGD,OAAO,EACH,QAAQ,EACX,CAAA"}
