@@ -1,5 +1,5 @@
 import { EpilogJSToTS } from "../parsing/epilog-js-to-epilog-ts.js";
-import { runTest } from "../../testing/testing.js";
+import { printTestingMessage_Start, runTest } from "../../testing/testing.js";
 import { ERROR_ATOM } from "../classes/Atom.js";
 import { ERROR_LITERAL } from "../classes/Literal.js";
 import { ERROR_RULE } from "../classes/Rule.js";
@@ -16,7 +16,7 @@ function runEpilogJSToTSTests() {
 }
 // Atom and term parsing
 function runEpilogJSToTS_AtomAndLiteralTests() {
-    console.log("    ===== Simple Atoms ====");
+    printTestingMessage_Start("Simple Atoms");
     runTest("JStoTS-atom-errorstring-error", () => {
         return EpilogJSToTS.parseAtom("error") === ERROR_ATOM;
     }, {});
@@ -55,7 +55,7 @@ function runEpilogJSToTS_AtomAndLiteralTests() {
         let epilogJSAtom = read(strToRead);
         return EpilogJSToTS.parseAtom(epilogJSAtom).toString() === strToRead;
     }, {});
-    console.log("    ===== Atoms with Lists ====");
+    printTestingMessage_Start("Atoms with Lists");
     // List parsing
     runTest("JStoTS-atom-list-empty-success", () => {
         let strToRead = "args([])";
@@ -78,7 +78,7 @@ function runEpilogJSToTS_AtomAndLiteralTests() {
         return EpilogJSToTS.parseAtom(epilogJSAtom).toString() === "args(cons(f(complex(term)), cons(simple_term, cons(h(g(simple), simple), nil))))";
     }, {});
     // Variable parsing
-    console.log("    ===== Atoms with Vars ====");
+    printTestingMessage_Start("Atoms with Vars");
     runTest("JStoTS-atom-single-variable-success", () => {
         let strToRead = "args(X)";
         let epilogJSAtom = read(strToRead);
@@ -100,7 +100,7 @@ function runEpilogJSToTS_AtomAndLiteralTests() {
         return EpilogJSToTS.parseAtom(epilogJSAtom).toString() === "args(cons(f(complex(X)), cons(simple_term, cons(h(g(simple), C), nil))))";
     }, {});
     // Literal parsing
-    console.log("    ===== Literals ====");
+    printTestingMessage_Start("Literals");
     runTest("JStoTS-literal-errorstring-error", () => {
         return EpilogJSToTS.parseLiteral("error") === ERROR_LITERAL;
     }, {});
@@ -121,7 +121,7 @@ function runEpilogJSToTS_AtomAndLiteralTests() {
     }, {});
 }
 function runEpilogJSToTS_RuleTests() {
-    console.log("    ===== Rules ====");
+    printTestingMessage_Start("Rules");
     runTest("JStoTS-rule-errorstring-error", () => {
         return EpilogJSToTS.parseRule("error") === ERROR_RULE;
     }, {});
@@ -162,7 +162,7 @@ function runEpilogJSToTS_RuleTests() {
     },{});*/
 }
 function runEpilogJSToTS_DatasetTests() {
-    console.log("    ===== Datasets ====");
+    printTestingMessage_Start("Datasets");
     runTest("JStoTS-dataset-readdata-nonground-error", () => {
         let strToRead = "p(a) g(X)";
         let epilogJSDataset = readdata(strToRead);
@@ -200,7 +200,7 @@ function runEpilogJSToTS_DatasetTests() {
     }, {});
 }
 function runEpilogJSToTS_RulesetTests() {
-    console.log("    ===== Rulesets ====");
+    printTestingMessage_Start("Rulesets");
     runTest("JStoTS-ruleset-read-single-rule-success", () => {
         let strToRead = "r1() :- goal1 & goal2() & goal3(X,Y) & ~goal4(X)";
         let epilogJSRuleset = [read(strToRead)];

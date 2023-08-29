@@ -84,8 +84,13 @@ function runTest(
 
 }
 
+function printTestingMessage_Start(testSubjectCategory: string) {
+    console.log("    =====",testSubjectCategory,"====");
+}
+
 export {
     runTest,
-    
-    FailPriorityLevel
+    FailPriorityLevel,
+
+    printTestingMessage_Start
 }

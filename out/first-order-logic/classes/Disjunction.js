@@ -1,8 +1,5 @@
 class Disjunction {
     constructor(disjuncts) {
-        if (disjuncts.length === 0) {
-            console.warn("Warning: created the empty disjunction");
-        }
         this.disjuncts = disjuncts;
     }
     toString() {
@@ -16,6 +13,9 @@ class Disjunction {
         str = str.slice(0, -3);
         str += ")";
         return str;
+    }
+    isEmpty() {
+        return this.disjuncts.length === 0;
     }
 }
 export { Disjunction };

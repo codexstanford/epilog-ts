@@ -51,5 +51,8 @@ function runTest(testName, testFunc, { failPriority = FailPriorityLevel.Error, v
     }
     return testPassed;
 }
-export { runTest, FailPriorityLevel };
+function printTestingMessage_Start(testSubjectCategory) {
+    console.log("    =====", testSubjectCategory, "====");
+}
+export { runTest, FailPriorityLevel, printTestingMessage_Start };
 //# sourceMappingURL=testing.js.map

@@ -45,30 +45,36 @@ function runMetaTests() {
         verbose: false,
     });
 }
+const TEST_COLLECTION_LIST = [
+    {
+        testSubjectName: "the testing functions",
+        doRunTest: false,
+        testCollectionRunner: runMetaTests
+    },
+    {
+        testSubjectName: "Epilog-ts Classes",
+        doRunTest: true,
+        testCollectionRunner: runTests_EpilogTS_Classes
+    },
+    {
+        testSubjectName: "epilog.js to Epilog-ts parsing",
+        doRunTest: true,
+        testCollectionRunner: runTests_EpilogTS_Parsing
+    },
+    {
+        testSubjectName: "Containment Testers",
+        doRunTest: true,
+        testCollectionRunner: runTests_Containment_Testing
+    },
+];
 function runAllTests() {
-    const DO_META_TESTS = false;
-    if (DO_META_TESTS) {
-        console.log("============= START Testing the testing functions ============= ");
-        runMetaTests();
-        console.log("============= END Testing the testing functions ============= ");
-    }
-    const DO_EPILOG_TS_CLASS_TESTS = true;
-    if (DO_EPILOG_TS_CLASS_TESTS) {
-        console.log("============= START Testing Epilog-ts classes ============= ");
-        runTests_EpilogTS_Classes();
-        console.log("============= END Testing Epilog-ts classes ============= ");
-    }
-    const DO_EPILOG_JS_TO_TS_TESTS = true;
-    if (DO_EPILOG_JS_TO_TS_TESTS) {
-        console.log("============= START Testing epilog.js to Epilog-ts parsing ============= ");
-        runTests_EpilogTS_Parsing();
-        console.log("============= END Testing epilog.js to Epilog-ts parsing ============= ");
-    }
-    const DO_CONTAINMENT_TESTING_TESTS = true;
-    if (DO_CONTAINMENT_TESTING_TESTS) {
-        console.log("============= START Testing Containment Testers ============= ");
-        runTests_Containment_Testing();
-        console.log("============= END Testing Containment Testers ============= ");
+    for (const TEST_COLLECTION of TEST_COLLECTION_LIST) {
+        if (!TEST_COLLECTION.doRunTest) {
+            continue;
+        }
+        console.log("============= START Testing", TEST_COLLECTION.testSubjectName, "============= ");
+        TEST_COLLECTION.testCollectionRunner();
+        console.log("============= END Testing", TEST_COLLECTION.testSubjectName, "============= ");
     }
 }
 export { runAllTests };

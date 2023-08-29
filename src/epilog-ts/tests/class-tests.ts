@@ -19,7 +19,7 @@ import { CLP, ClosedLogicProgram } from "../classes/ClosedLogicProgram.js";
 
 import { Substitution } from "../classes/Substitution.js";
 
-import { runTest } from "../../testing/testing.js";
+import { printTestingMessage_Start, runTest } from "../../testing/testing.js";
 
 // Unit tests for epilog-ts/classes files
 function runTests() : void {
@@ -102,7 +102,7 @@ function runTests() : void {
 
 function runSubstitutionTests() : void {
 
-    console.log("    ===== Substitutions ====")
+    printTestingMessage_Start("Substitutions")
 
     runTest("Subst-empty-success", () => {
         let newSub = new Substitution();
@@ -184,7 +184,7 @@ function runSubstitutionTests() : void {
 }
 
 function runSymbolTests() : void {
-    console.log("    ===== Symbols ====")
+    printTestingMessage_Start("Symbols")
 
     runTest("Symbol-string-success", () => {
         let newSym : Symbol = new Symbol("\"suspicious symbol\"");
@@ -261,7 +261,7 @@ function runSymbolTests() : void {
 
 function runVariableTests() : void {
 
-    console.log("    ===== Variables ====")
+    printTestingMessage_Start("Variables")
 
     runTest("Var-anonymous-success", () => {
         let newVar : Variable = new Variable("_");
@@ -311,7 +311,7 @@ function runVariableTests() : void {
 
 function runCompoundTermTests() : void {
 
-    console.log("    ===== CompoundTerms ====");
+    printTestingMessage_Start("CompoundTerms")
 
     runTest("CompoundTerm-empty-success", () => {
         let newConstructor = new Constructor("f");
@@ -431,7 +431,7 @@ function runTermTests() : void {
 }
 
 function runConstructorTests() : void {
-    console.log("    ===== Constructors ====")
+    printTestingMessage_Start("Constructors")
 
     runTest("Constructor-string-success", () => {
         let newConstr : Constructor = new Constructor("\"suspicious symbol\"");

@@ -2,7 +2,7 @@ import { CQContainmentTester } from "../cq-containment.js";
 import { Predicate } from "../epilog-ts/classes/Predicate.js";
 import { CQ, ConjunctiveQuery } from "../epilog-ts/classes/Query.js";
 import { StrToTS } from "../epilog-ts/parsing/string-to-epilog-ts.js";
-import { runTest } from "../testing/testing.js";
+import { printTestingMessage_Start, runTest } from "../testing/testing.js";
 
 // Unit tests for containment testing files
 function runTests() : void {
@@ -13,7 +13,7 @@ function runTests() : void {
 
 function runCQContainmentTesterTests() {
 
-    console.log("    ===== CQ Containment Tester ====")
+    printTestingMessage_Start("CQ Containment Tester");
 
     runTest("CQContainment-reflexive-true", () => {
         let cqTester = new CQContainmentTester();

@@ -1,7 +1,7 @@
 import { Symbol, Variable, CompoundTerm } from "../classes/Term.js";
 import { Constructor } from "../classes/Constructor.js";
 import { Substitution } from "../classes/Substitution.js";
-import { runTest } from "../../testing/testing.js";
+import { printTestingMessage_Start, runTest } from "../../testing/testing.js";
 // Unit tests for epilog-ts/classes files
 function runTests() {
     runSubstitutionTests();
@@ -74,7 +74,7 @@ function runTests() {
     console.log(clp1.toString());*/
 }
 function runSubstitutionTests() {
-    console.log("    ===== Substitutions ====");
+    printTestingMessage_Start("Substitutions");
     runTest("Subst-empty-success", () => {
         let newSub = new Substitution();
         return newSub.toString() === "{\n\n}";
@@ -142,7 +142,7 @@ console.log(frozenCQ.toString());
 console.log(frozenCQ.rule.head.args[0] === freezingSub.getSub('X'));*/
 }
 function runSymbolTests() {
-    console.log("    ===== Symbols ====");
+    printTestingMessage_Start("Symbols");
     runTest("Symbol-string-success", () => {
         let newSym = new Symbol("\"suspicious symbol\"");
         return newSym.name === "\"suspicious symbol\"";
@@ -201,7 +201,7 @@ function runSymbolTests() {
     }, {});
 }
 function runVariableTests() {
-    console.log("    ===== Variables ====");
+    printTestingMessage_Start("Variables");
     runTest("Var-anonymous-success", () => {
         let newVar = new Variable("_");
         return newVar.name === "_" && newVar.isAnonymous();
@@ -240,7 +240,7 @@ function runVariableTests() {
     }, {});
 }
 function runCompoundTermTests() {
-    console.log("    ===== CompoundTerms ====");
+    printTestingMessage_Start("CompoundTerms");
     runTest("CompoundTerm-empty-success", () => {
         let newConstructor = new Constructor("f");
         let compoundTerm = new CompoundTerm(newConstructor, []);
@@ -343,7 +343,7 @@ function runCompoundTermTests() {
 function runTermTests() {
 }
 function runConstructorTests() {
-    console.log("    ===== Constructors ====");
+    printTestingMessage_Start("Constructors");
     runTest("Constructor-string-success", () => {
         let newConstr = new Constructor("\"suspicious symbol\"");
         return newConstr.name === "\"suspicious symbol\"";

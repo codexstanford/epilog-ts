@@ -1,6 +1,6 @@
 import { EpilogJSToTS } from "../parsing/epilog-js-to-epilog-ts.js";
 
-import { runTest } from "../../testing/testing.js";
+import { printTestingMessage_Start, runTest } from "../../testing/testing.js";
 import { ERROR_ATOM } from "../classes/Atom.js";
 import { ERROR_LITERAL } from "../classes/Literal.js";
 import { ERROR_RULE } from "../classes/Rule.js";
@@ -21,7 +21,7 @@ function runEpilogJSToTSTests() : void {
 
 // Atom and term parsing
 function runEpilogJSToTS_AtomAndLiteralTests() : void {
-    console.log("    ===== Simple Atoms ====")
+    printTestingMessage_Start("Simple Atoms")
 
     runTest("JStoTS-atom-errorstring-error", () => {
         return EpilogJSToTS.parseAtom("error") === ERROR_ATOM;
@@ -69,7 +69,7 @@ function runEpilogJSToTS_AtomAndLiteralTests() : void {
         return EpilogJSToTS.parseAtom(epilogJSAtom).toString() === strToRead;
     },{});
     
-    console.log("    ===== Atoms with Lists ====")
+    printTestingMessage_Start("Atoms with Lists");
 
     // List parsing
     runTest("JStoTS-atom-list-empty-success", () => {
@@ -99,7 +99,7 @@ function runEpilogJSToTS_AtomAndLiteralTests() : void {
 
     // Variable parsing
 
-    console.log("    ===== Atoms with Vars ====")
+    printTestingMessage_Start("Atoms with Vars")
 
     runTest("JStoTS-atom-single-variable-success", () => {
         let strToRead : string = "args(X)";
@@ -127,7 +127,7 @@ function runEpilogJSToTS_AtomAndLiteralTests() : void {
     
 
     // Literal parsing
-    console.log("    ===== Literals ====")
+    printTestingMessage_Start("Literals");
 
     runTest("JStoTS-literal-errorstring-error", () => {
         return EpilogJSToTS.parseLiteral("error") === ERROR_LITERAL;
@@ -153,7 +153,7 @@ function runEpilogJSToTS_AtomAndLiteralTests() : void {
 }
 
 function runEpilogJSToTS_RuleTests() : void {
-    console.log("    ===== Rules ====");
+    printTestingMessage_Start("Rules")
 
     runTest("JStoTS-rule-errorstring-error", () => {
         return EpilogJSToTS.parseRule("error") === ERROR_RULE;
@@ -204,7 +204,7 @@ function runEpilogJSToTS_RuleTests() : void {
 }
 
 function runEpilogJSToTS_DatasetTests() : void {
-    console.log("    ===== Datasets ====");
+    printTestingMessage_Start("Datasets")
 
     runTest("JStoTS-dataset-readdata-nonground-error", () => {
         let strToRead : string = "p(a) g(X)";
@@ -250,7 +250,7 @@ function runEpilogJSToTS_DatasetTests() : void {
 }
 
 function runEpilogJSToTS_RulesetTests() : void {
-    console.log("    ===== Rulesets ====");
+    printTestingMessage_Start("Rulesets");
     
     runTest("JStoTS-ruleset-read-single-rule-success", () => {
         let strToRead : string = "r1() :- goal1 & goal2() & goal3(X,Y) & ~goal4(X)";
