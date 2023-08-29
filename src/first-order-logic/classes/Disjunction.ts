@@ -8,11 +8,6 @@ class Disjunction {
     readonly disjuncts: Formula[];
 
     constructor(disjuncts: Formula[]) {
-
-        if (disjuncts.length === 0) {
-            console.warn("Warning: created the empty disjunction");
-        }
-
         this.disjuncts = disjuncts;
     }
 
@@ -32,6 +27,10 @@ class Disjunction {
 
         return str;
 
+    }
+
+    isEmpty() : boolean {
+        return this.disjuncts.length === 0;
     }
 }
 
