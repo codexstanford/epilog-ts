@@ -73,6 +73,25 @@ class Rule {
         return varSet;
     }
 
+    // Get the variables that are existentially quantified, i.e. those in the body and not the head
+    getExistentialVars() : Set<string> {
+        let existentialVarList : string[] = [];
+
+        let headVarSet: Set<string> = this.head.getVars();
+
+        for (let subgoal of this.body) {
+            for (let varName of subgoal.getVars()) {
+                if (headVarSet.has(varName)) {
+                    continue;
+                }
+                existentialVarList.push(varName);
+            }
+        }
+
+        let existentialVarSet: Set<string> = new Set(existentialVarList);
+        return existentialVarSet;
+    }
+
     // Builds a new Rule to which the substitution has been applied
     static applySub(sub: Substitution, rule: Rule) : Rule {
         

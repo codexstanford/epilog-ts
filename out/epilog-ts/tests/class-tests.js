@@ -107,6 +107,10 @@ function runSubstitutionTests() {
         let newSub = new Substitution(new Map([['V', new Symbol('string')], ['_', new Symbol('c23')]]));
         return newSub.toString() === "{\n\n}";
     }, {});
+    runTest("Subst-overlapping-domain-range-warning", () => {
+        let newSub = new Substitution(new Map([['V', new Symbol('X23')], ['X23', new Symbol('c23')]]));
+        return newSub.toString() === "{\n\tV ⟶ X23, \n\tX23 ⟶ c23\n}";
+    }, {});
     runTest("Subst-get-success", () => {
         let newSub = new Substitution(new Map([['V', new Symbol('2')], ['X23', new Symbol('c23')]]));
         return newSub.getSub('V').toString() === '2' && newSub.getSub('X23').toString() === 'c23';

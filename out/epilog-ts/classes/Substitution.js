@@ -16,6 +16,14 @@ class Substitution {
             }
         }
         this.varMap = varMap;
+        // Check whether there is an overlapping domain and range. Only reports the first overlap
+        const RANGE = this.getRange();
+        for (let domainElem of this.getDomain()) {
+            if (RANGE.has(domainElem)) {
+                console.warn("Substitution has overlapping domain and range. Both contain", domainElem);
+                break;
+            }
+        }
     }
     toString() {
         let str = "{\n";
@@ -50,6 +58,18 @@ class Substitution {
     }
     hasSub(varName) {
         return this.varMap.has(varName);
+    }
+    // Get the set of strings mapped from by the substitution
+    getDomain() {
+        return new Set(...this.varMap.keys());
+    }
+    // Get the set of strings corresponding to object mapped to by the substitution
+    getRange() {
+        let rangeSet = new Set();
+        for (let val of this.varMap.values()) {
+            rangeSet.add(val.toString());
+        }
+        return rangeSet;
     }
 }
 export { Substitution };
