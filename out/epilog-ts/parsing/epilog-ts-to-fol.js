@@ -18,15 +18,8 @@ var EpilogTSToFOL;
         }
         return new Literal(epilogTSSubgoal, false);
     }
-    // Note: Relation in head should only be defined by a single rule - not guaranteed to be correct if relation is defined via multiple rules  
-    function parseSingleRule(epilogTSRule) {
-        // Standardize the variables in the rule
-        let universalVars = epilogTSRule.head.getVars();
-        let existentialVars = epilogTSRule.getExistentialVars();
-        return ERROR_FORMULA;
-    }
     // Requires that all rules have the same head predicate
-    // Note: currently assumes arity agreement. Once Schema are added, this will be checked for explicitly.
+    // Note: currently assumes arity agreement. Once Schema are added, this will be explicitly checked.
     function parseRuleList(epilogTSRules) {
         if (epilogTSRules.length === 0) {
             return new Conjunction([]);
@@ -115,6 +108,26 @@ var EpilogTSToFOL;
         return finalFormula;
     }
     EpilogTSToFOL.parseRuleList = parseRuleList;
+    function parseRuleset(epilogTSRuleset) {
+        let viewPredicateToRules = new Map();
+        for (let rule of epilogTSRuleset.rules) {
+            let currRuleHeadPredName = rule.head.pred.name;
+            // Update the list of rules corresponding to the head predicate, if it exists
+            if (viewPredicateToRules.has(currRuleHeadPredName)) {
+                viewPredicateToRules.set(currRuleHeadPredName, [...viewPredicateToRules.get(currRuleHeadPredName), rule]);
+                continue;
+            }
+            // Otherwise, start with the list containing the current rule
+            viewPredicateToRules.set(currRuleHeadPredName, [rule]);
+        }
+        // Parse and conjoin each rule list
+        let viewFormulas = [];
+        for (let viewPred of viewPredicateToRules.values()) {
+            viewFormulas.push(parseRuleList(viewPred));
+        }
+        return new Conjunction(viewFormulas);
+    }
+    EpilogTSToFOL.parseRuleset = parseRuleset;
 })(EpilogTSToFOL || (EpilogTSToFOL = {}));
 export { EpilogTSToFOL };
 //# sourceMappingURL=epilog-ts-to-fol.js.map

@@ -23,21 +23,8 @@ namespace EpilogTSToFOL {
         return new Literal(epilogTSSubgoal, false);
     }
 
-    // Note: Relation in head should only be defined by a single rule - not guaranteed to be correct if relation is defined via multiple rules  
-    function parseSingleRule(epilogTSRule : Rule) : Formula {
-
-        // Standardize the variables in the rule
-
-        let universalVars : Set<string> = epilogTSRule.head.getVars();
-
-        let existentialVars : Set<string> = epilogTSRule.getExistentialVars();
-
-
-        return ERROR_FORMULA;
-    }
-
     // Requires that all rules have the same head predicate
-        // Note: currently assumes arity agreement. Once Schema are added, this will be checked for explicitly.
+        // Note: currently assumes arity agreement. Once Schema are added, this will be explicitly checked.
     export function parseRuleList(epilogTSRules: Rule[]) : Formula {
 
         if (epilogTSRules.length === 0) { 
@@ -148,6 +135,31 @@ namespace EpilogTSToFOL {
         }
 
         return finalFormula;
+    }
+
+    export function parseRuleset(epilogTSRuleset : Ruleset) : Formula {
+        let viewPredicateToRules : Map<string, Rule[]> = new Map();
+
+        for (let rule of epilogTSRuleset.rules) {
+            let currRuleHeadPredName : string = rule.head.pred.name;
+            // Update the list of rules corresponding to the head predicate, if it exists
+            if (viewPredicateToRules.has(currRuleHeadPredName)) {
+                viewPredicateToRules.set(currRuleHeadPredName, [...viewPredicateToRules.get(currRuleHeadPredName), rule]);
+                continue;
+            }
+
+            // Otherwise, start with the list containing the current rule
+            viewPredicateToRules.set(currRuleHeadPredName, [rule]);
+        }
+
+        // Parse and conjoin each rule list
+        let viewFormulas : Formula[] = [];
+
+        for (let viewPred of viewPredicateToRules.values()) {
+            viewFormulas.push(parseRuleList(viewPred));
+        }
+
+        return new Conjunction(viewFormulas);
     }
 
 }
