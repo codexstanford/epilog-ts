@@ -7,7 +7,7 @@ import { ERROR_RULE } from "../classes/Rule.js";
 
 import { STRESS_TEST_DATASET_INPUT, STRESS_TEST_DATASET_OUTPUT, STRESS_TEST_RULESET_INPUT, STRESS_TEST_RULESET_OUTPUT } from "./stress-inputs-outputs.js";
 
-// Unit tests for epilog-ts/parsing files
+// Unit tests for epilog-ts/parsing/epilog-js-to-epilog-ts
 function runTests() : void {
     runEpilogJSToTSTests();
 }

@@ -1,6 +1,6 @@
 import { runTest, FailPriorityLevel } from "./testing.js";
 import { runTests as runTests_EpilogTS_Classes } from "../epilog-ts/tests/class-tests.js";
-import { runTests as runTests_EpilogTS_Parsing } from "../epilog-ts/tests/parse-tests.js";
+import { runTests as runTests_EpilogTS_Parsing } from "../epilog-ts/tests/epilog-js-to-ts-parse-tests.js";
 import { runTests as runTests_Containment_Testing } from "../tests/containment-testers.js";
 import { runTests as runTests_Utils } from "../epilog-ts/tests/util-tests.js";
 import { runTests as runTests_FoL } from "../first-order-logic/tests/class-tests.js";
