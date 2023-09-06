@@ -2,6 +2,7 @@ import { runTest, FailPriorityLevel } from "./testing.js";
 import { runTests as runTests_EpilogTS_Classes } from "../epilog-ts/tests/class-tests.js";
 import { runTests as runTests_EpilogTS_Parsing } from "../epilog-ts/tests/parse-tests.js";
 import { runTests as runTests_Containment_Testing } from "../tests/containment-testers.js";
+import { runTests as runTests_Utils } from "../epilog-ts/tests/util-tests.js";
 // Test the testing function
 function runMetaTests() {
     // Should print via console.error
@@ -65,6 +66,11 @@ const TEST_COLLECTION_LIST = [
         testSubjectName: "Containment Testers",
         doRunTest: true,
         testCollectionRunner: runTests_Containment_Testing
+    },
+    {
+        testSubjectName: "Utils",
+        doRunTest: true,
+        testCollectionRunner: runTests_Utils
     },
 ];
 function runAllTests() {

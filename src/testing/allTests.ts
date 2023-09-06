@@ -6,6 +6,8 @@ import { runTests as runTests_EpilogTS_Parsing } from "../epilog-ts/tests/parse-
 
 import { runTests as runTests_Containment_Testing } from "../tests/containment-testers.js";
 
+import { runTests as runTests_Utils } from "../epilog-ts/tests/util-tests.js";
+
 // Test the testing function
 function runMetaTests() : void {
     // Should print via console.error
@@ -82,6 +84,11 @@ const TEST_COLLECTION_LIST : TestCollection[] = [
         testSubjectName: "Containment Testers",
         doRunTest: true,
         testCollectionRunner: runTests_Containment_Testing
+    },
+    {
+        testSubjectName: "Utils",
+        doRunTest: true,
+        testCollectionRunner: runTests_Utils
     },
 ];
 

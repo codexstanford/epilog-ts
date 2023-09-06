@@ -12,5 +12,15 @@ function runTests() : void {
 
 // A subcollection of tests, for a subset of the code tested by this file
 function runSubsetTests() : void {
+    printTestingMessage_Start("Subset")
 
+    runTest("Example-success", () => {
+        return true;
+    },{});
 }
+
+/* uncomment in implemented version
+export {
+    runTests
+}
+*/

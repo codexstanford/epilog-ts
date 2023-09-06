@@ -109,8 +109,6 @@ function runSubstitutionTests() {
     }, {});
     runTest("Subst-overlapping-domain-range-warning", () => {
         let newSub = new Substitution(new Map([['V', new Variable('X23')], ['X23', new Symbol('c23')]]));
-        console.log(newSub.toString());
-        console.log("{\n\tV ⟶ X23, \n\tX23 ⟶ c23\n}");
         return newSub.toString() === "{\n\tV ⟶ X23, \n\tX23 ⟶ c23\n}";
     }, {});
     runTest("Subst-get-success", () => {
