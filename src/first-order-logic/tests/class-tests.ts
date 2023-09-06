@@ -67,10 +67,10 @@ function runDisjunctionTests() : void {
 function runConjunctionTests() : void {
     printTestingMessage_Start("Conjunction")
 
-    runTest("Conjunction-empty-warning", () => {
+    runTest("Conjunction-empty-success", () => {
         let c1 : Conjunction = new Conjunction([]);
-        return c1.toString() === '()'&& 
-        c1.conjuncts.length === 0;
+        return c1.toString() === '(true())'&& 
+        c1.conjuncts.length === 1;
     },{});
 
     runTest("Conjunction-unit-success", () => {

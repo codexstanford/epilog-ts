@@ -1,7 +1,9 @@
+import { TRUE_LITERAL } from "./Formula.js";
 class Conjunction {
     constructor(conjuncts) {
+        // If the empty conjunction, set it to the list containing the 'true' literal
         if (conjuncts.length === 0) {
-            console.warn("Warning: created the empty conjunction");
+            conjuncts = [TRUE_LITERAL];
         }
         this.conjuncts = conjuncts;
     }
