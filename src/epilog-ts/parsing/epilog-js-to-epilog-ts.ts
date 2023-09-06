@@ -12,7 +12,7 @@ import { Ruleset } from "../classes/Ruleset.js";
 
 
 namespace EpilogJSToTS {
-    type EpilogJSConstant = string;
+    export type EpilogJSConstant = string;
 
     type EpilogJSSymbol = EpilogJSConstant;
     type EpilogJSConstructor = EpilogJSConstant;
@@ -33,15 +33,15 @@ namespace EpilogJSToTS {
 
     type EpilogJSLiteral =  EpilogJSReadError| EpilogJSAtom | ["not", EpilogJSAtom];
 
-    type EpilogJSRule = EpilogJSReadError | EpilogJSPredicate | ["rule", EpilogJSAtom, ...EpilogJSLiteral[]] | EpilogJSAtom;
+    export type EpilogJSRule = EpilogJSReadError | EpilogJSPredicate | ["rule", EpilogJSAtom, ...EpilogJSLiteral[]] | EpilogJSAtom;
 
-    type EpilogJSDataset = EpilogJSAtom[];
+    export type EpilogJSDataset = EpilogJSAtom[];
 
     type EpilogJSRuleset_Clean = EpilogJSRule[];
 
     // Assuming something about the structure of definitions here, but for now only care that "definition" is the first element
     type EpilogJSDefinition = ["definition", EpilogJSAtom, ...EpilogJSAtom[]];
-    type EpilogJSRuleset = EpilogJSRuleset_Clean | Array<EpilogJSRule | EpilogJSDefinition>;
+    export type EpilogJSRuleset = EpilogJSRuleset_Clean | Array<EpilogJSRule | EpilogJSDefinition>;
 
     function parseCompoundTerm(epilogJSCompoundTerm: EpilogJSCompoundTerm) : CompoundTerm {
 
