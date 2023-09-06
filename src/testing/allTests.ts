@@ -8,6 +8,8 @@ import { runTests as runTests_Containment_Testing } from "../tests/containment-t
 
 import { runTests as runTests_Utils } from "../epilog-ts/tests/util-tests.js";
 
+import { runTests as runTests_FoL} from "../first-order-logic/tests/class-tests.js";
+
 // Test the testing function
 function runMetaTests() : void {
     // Should print via console.error
@@ -89,6 +91,11 @@ const TEST_COLLECTION_LIST : TestCollection[] = [
         testSubjectName: "Utils",
         doRunTest: true,
         testCollectionRunner: runTests_Utils
+    },
+    {
+        testSubjectName: "FoL Classes",
+        doRunTest: true,
+        testCollectionRunner: runTests_FoL
     },
 ];
 

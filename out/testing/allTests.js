@@ -3,6 +3,7 @@ import { runTests as runTests_EpilogTS_Classes } from "../epilog-ts/tests/class-
 import { runTests as runTests_EpilogTS_Parsing } from "../epilog-ts/tests/parse-tests.js";
 import { runTests as runTests_Containment_Testing } from "../tests/containment-testers.js";
 import { runTests as runTests_Utils } from "../epilog-ts/tests/util-tests.js";
+import { runTests as runTests_FoL } from "../first-order-logic/tests/class-tests.js";
 // Test the testing function
 function runMetaTests() {
     // Should print via console.error
@@ -71,6 +72,11 @@ const TEST_COLLECTION_LIST = [
         testSubjectName: "Utils",
         doRunTest: true,
         testCollectionRunner: runTests_Utils
+    },
+    {
+        testSubjectName: "FoL Classes",
+        doRunTest: true,
+        testCollectionRunner: runTests_FoL
     },
 ];
 function runAllTests() {
