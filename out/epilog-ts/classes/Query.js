@@ -40,7 +40,7 @@ class ConjunctiveQuery {
         // TODO: Check for interpreted predicates
         this.rule = rule;
         // Warn if the query predicate doesn't match the rule head
-        if (this.queryPred.toString() !== this.rule.head.pred.toString()) {
+        if (this.queryPred.name !== this.rule.head.pred.name) {
             console.warn("Query predicate", this.queryPred.toString(), "doesn't appear in query:", this.rule.toString());
         }
     }
@@ -56,7 +56,7 @@ class ArbitraryQuery {
         // Check whether the query predicate doesn't match any rule head
         let queryPredMatchesHead = false;
         for (let rule of this.rules) {
-            if (this.queryPred.toString() === rule.head.pred.toString()) {
+            if (this.queryPred.name === rule.head.pred.name) {
                 queryPredMatchesHead = true;
                 break;
             }
