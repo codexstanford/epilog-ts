@@ -11,7 +11,7 @@ import { Atom } from "../../epilog-ts/classes/Atom.js";
 import { Predicate } from "../../epilog-ts/classes/Predicate.js";
 
 
-type Formula = Literal | Negation  | Conjunction | Disjunction | Implication | Biconditional | QuantifiedFormula;
+type Formula = Literal | Negation | Conjunction | Disjunction | Implication | Biconditional | QuantifiedFormula;
 
 const ERROR_FORMULA = ERROR_LITERAL;
 

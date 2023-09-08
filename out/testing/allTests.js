@@ -1,9 +1,10 @@
 import { runTest, FailPriorityLevel } from "./testing.js";
 import { runTests as runTests_EpilogTS_Classes } from "../epilog-ts/tests/class-tests.js";
-import { runTests as runTests_EpilogTS_Parsing } from "../epilog-ts/tests/epilog-js-to-ts-parse-tests.js";
+import { runTests as runTests_EpilogJS_to_TS_Parsing } from "../epilog-ts/tests/epilog-js-to-ts-parse-tests.js";
 import { runTests as runTests_Containment_Testing } from "../tests/containment-testers.js";
 import { runTests as runTests_Utils } from "../epilog-ts/tests/util-tests.js";
 import { runTests as runTests_FoL } from "../first-order-logic/tests/class-tests.js";
+import { runTests as runTests_FoL_Transformations } from "../first-order-logic/tests/transformations.js";
 // Test the testing function
 function runMetaTests() {
     // Should print via console.error
@@ -61,7 +62,7 @@ const TEST_COLLECTION_LIST = [
     {
         testSubjectName: "epilog.js to Epilog-ts parsing",
         doRunTest: true,
-        testCollectionRunner: runTests_EpilogTS_Parsing
+        testCollectionRunner: runTests_EpilogJS_to_TS_Parsing
     },
     {
         testSubjectName: "Containment Testers",
@@ -77,6 +78,11 @@ const TEST_COLLECTION_LIST = [
         testSubjectName: "FoL Classes",
         doRunTest: true,
         testCollectionRunner: runTests_FoL
+    },
+    {
+        testSubjectName: "FoL Transformations",
+        doRunTest: true,
+        testCollectionRunner: runTests_FoL_Transformations
     },
 ];
 function runAllTests() {
