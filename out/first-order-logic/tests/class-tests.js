@@ -22,8 +22,8 @@ function runDisjunctionTests() {
     printTestingMessage_Start("Disjunction");
     runTest("Disjunction-empty-success", () => {
         let d1 = new Disjunction([]);
-        return d1.toString() === '()' &&
-            d1.disjuncts.length === 0;
+        return d1.toString() === '(false())' &&
+            d1.disjuncts.length === 1;
     }, {});
     runTest("Disjunction-unit-success", () => {
         let atom1 = new Atom(new Predicate("p"), []);

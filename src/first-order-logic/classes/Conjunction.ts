@@ -1,4 +1,5 @@
-import { Formula, TRUE_LITERAL } from "./Formula.js";
+import { TRUE_LITERAL } from "../../epilog-ts/classes/Literal.js";
+import { Formula } from "./Formula.js";
 
 class Conjunction {
 

@@ -1,4 +1,5 @@
 import { Atom, ERROR_ATOM } from "./Atom.js";
+import { Predicate } from "./Predicate.js";
 import { Substitution } from "./Substitution.js";
 
 class Literal {
@@ -37,10 +38,17 @@ class Literal {
     
 }
 
+const TRUE_LITERAL = new Literal(new Atom(new Predicate('true'), []), false);
+const FALSE_LITERAL = new Literal(new Atom(new Predicate('false'), []), false);
+
 const ERROR_LITERAL = new Literal(ERROR_ATOM, false);
+
 
 export { 
     Literal,
 
-    ERROR_LITERAL
+    TRUE_LITERAL,
+    FALSE_LITERAL,
+
+    ERROR_LITERAL,
 }

@@ -25,8 +25,8 @@ function runDisjunctionTests() : void {
 
     runTest("Disjunction-empty-success", () => {
         let d1 : Disjunction = new Disjunction([]);
-        return d1.toString() === '()' && 
-        d1.disjuncts.length === 0;
+        return d1.toString() === '(false())' && 
+        d1.disjuncts.length === 1;
     },{});
 
     runTest("Disjunction-unit-success", () => {

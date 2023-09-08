@@ -15,12 +15,7 @@ type Formula = Literal | Negation  | Conjunction | Disjunction | Implication | B
 
 const ERROR_FORMULA = ERROR_LITERAL;
 
-
-const TRUE_LITERAL = new Literal(new Atom(new Predicate('true'), []), false);
-
 export {
     Formula,
-    ERROR_FORMULA,
-
-    TRUE_LITERAL
+    ERROR_FORMULA
 };

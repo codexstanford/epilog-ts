@@ -1,4 +1,5 @@
 import { Atom, ERROR_ATOM } from "./Atom.js";
+import { Predicate } from "./Predicate.js";
 class Literal {
     constructor(atom, negated) {
         this.atom = atom;
@@ -24,6 +25,8 @@ class Literal {
         return new Literal(Atom.applySub(sub, literal.atom), literal.isNegated());
     }
 }
+const TRUE_LITERAL = new Literal(new Atom(new Predicate('true'), []), false);
+const FALSE_LITERAL = new Literal(new Atom(new Predicate('false'), []), false);
 const ERROR_LITERAL = new Literal(ERROR_ATOM, false);
-export { Literal, ERROR_LITERAL };
+export { Literal, TRUE_LITERAL, FALSE_LITERAL, ERROR_LITERAL, };
 //# sourceMappingURL=Literal.js.map
