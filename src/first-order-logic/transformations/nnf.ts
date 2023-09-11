@@ -68,7 +68,7 @@ function rewriteWithoutBiconditionalsAndImplications(initialFormula: Formula) : 
         return new Disjunction([new Negation(rewrittenAntecedent), rewrittenConsequent]);
     }
 
-    console.error("Formula is not a valid type:",initialFormula);
+    console.error("Trying to rewrite a Formula that is not a valid type:",initialFormula);
     return ERROR_FORMULA;
 
 }
@@ -119,7 +119,7 @@ function makeNegationsAtomic(initialFormula : Formula) : Formula {
             if (target.quantifier === Quantifier.Existential) {
                 return new QuantifiedFormula(Quantifier.Universal, target.variable, makeNegationsAtomic(new Negation(target.formula)));
             }
-            console.log("Negated QuantifiedFormula had invalid Quantifier:",initialFormula);
+            console.error("Trying to make negations atomic, but negated QuantifiedFormula does not have a valid Quantifier:",initialFormula);
             return ERROR_FORMULA;
         }
 
@@ -146,7 +146,7 @@ function makeNegationsAtomic(initialFormula : Formula) : Formula {
             return new Conjunction(negatedConjuncts);
         }
 
-        console.error("Negated formula is not a valid type:",initialFormula);
+        console.error("Trying to make negations atomic, but negated Formula is not a valid type:",initialFormula);
         return ERROR_FORMULA;
     }
 
@@ -192,7 +192,7 @@ function makeNegationsAtomic(initialFormula : Formula) : Formula {
         return new Disjunction(simplifiedDisjuncts);
     }
 
-    console.error("Formula is not a valid type:",initialFormula);
+    console.error("Trying to make negations atomic on a Formula that is not a valid type:",initialFormula);
     return ERROR_FORMULA;
 }
 

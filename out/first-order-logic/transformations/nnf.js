@@ -48,7 +48,7 @@ function rewriteWithoutBiconditionalsAndImplications(initialFormula) {
         let rewrittenConsequent = rewriteWithoutBiconditionalsAndImplications(initialFormula.consequent);
         return new Disjunction([new Negation(rewrittenAntecedent), rewrittenConsequent]);
     }
-    console.error("Formula is not a valid type:", initialFormula);
+    console.error("Trying to rewrite a Formula that is not a valid type:", initialFormula);
     return ERROR_FORMULA;
 }
 // Push negations inward using DeMorgan's laws until all negations only apply to literals, removing double negations along the way.
@@ -88,7 +88,7 @@ function makeNegationsAtomic(initialFormula) {
             if (target.quantifier === Quantifier.Existential) {
                 return new QuantifiedFormula(Quantifier.Universal, target.variable, makeNegationsAtomic(new Negation(target.formula)));
             }
-            console.log("Negated QuantifiedFormula had invalid Quantifier:", initialFormula);
+            console.error("Trying to make negations atomic, but negated QuantifiedFormula does not have a valid Quantifier:", initialFormula);
             return ERROR_FORMULA;
         }
         // DeMorgan's Laws
@@ -108,7 +108,7 @@ function makeNegationsAtomic(initialFormula) {
             }
             return new Conjunction(negatedConjuncts);
         }
-        console.error("Negated formula is not a valid type:", initialFormula);
+        console.error("Trying to make negations atomic, but negated Formula is not a valid type:", initialFormula);
         return ERROR_FORMULA;
     }
     if (initialFormula instanceof Literal) {
@@ -141,7 +141,7 @@ function makeNegationsAtomic(initialFormula) {
         }
         return new Disjunction(simplifiedDisjuncts);
     }
-    console.error("Formula is not a valid type:", initialFormula);
+    console.error("Trying to make negations atomic on a Formula that is not a valid type:", initialFormula);
     return ERROR_FORMULA;
 }
 function toNNF(initialFormula) {

@@ -56,6 +56,10 @@ class Substitution {
         }
         this.varMap.set(varName, varSub);
     }
+    // Should check whether a sub exists with hasSub() before calling getSub(), unless it is known to exist.
+    deleteSub(varName) {
+        this.varMap.delete(varName);
+    }
     hasSub(varName) {
         return this.varMap.has(varName);
     }
