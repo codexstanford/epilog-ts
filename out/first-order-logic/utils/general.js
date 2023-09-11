@@ -6,6 +6,39 @@ import { Disjunction } from "../classes/Disjunction.js";
 import { Implication } from "../classes/Implication.js";
 import { Negation } from "../classes/Negation.js";
 import { QuantifiedFormula, Quantifier } from "../classes/QuantifiedFormula.js";
+// Computes the order in which quantifiers appear in the input formula, primarily for use when converting to prefix form, or when skolemizing.
+// Traverses the formula in DFS order.
+// Returns a list of pairs of (i) Quantifiers and (ii) Variables.
+function getQuantifiersInOrder(formula) {
+    if (formula instanceof Literal) {
+        return [];
+    }
+    if (formula instanceof Negation) {
+        return getQuantifiersInOrder(formula.target);
+    }
+    if (formula instanceof Conjunction) {
+        let quantifiersList = [];
+        for (let conjunct of formula.conjuncts) {
+            quantifiersList = [...quantifiersList, ...getQuantifiersInOrder(conjunct)];
+        }
+        return quantifiersList;
+    }
+    if (formula instanceof Disjunction) {
+        let quantifiersList = [];
+        for (let disjunct of formula.disjuncts) {
+            quantifiersList = [...quantifiersList, ...getQuantifiersInOrder(disjunct)];
+        }
+        return quantifiersList;
+    }
+    if (formula instanceof Implication || formula instanceof Biconditional) {
+        return [...getQuantifiersInOrder(formula.antecedent), ...getQuantifiersInOrder(formula.consequent)];
+    }
+    if (formula instanceof QuantifiedFormula) {
+        return [[formula.quantifier, formula.variable], ...getQuantifiersInOrder(formula.formula)];
+    }
+    console.error("Tried to get quantifiers in order of Formula without a valid type:", formula);
+    return [];
+}
 function getFreeVars_helper(formula, boundVars) {
     let freeVars = new Set();
     // Literals can contain free vars, if they aren't bound by a quantifier above it
@@ -65,5 +98,5 @@ function bindFreeVars(formula) {
     }
     return resultFormula;
 }
-export { getFreeVars, bindFreeVars };
+export { getQuantifiersInOrder, getFreeVars, bindFreeVars };
 //# sourceMappingURL=general.js.map

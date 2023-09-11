@@ -9,6 +9,52 @@ import { Implication } from "../classes/Implication.js";
 import { Negation } from "../classes/Negation.js";
 import { QuantifiedFormula, Quantifier } from "../classes/QuantifiedFormula.js";
 
+// Computes the order in which quantifiers appear in the input formula, primarily for use when converting to prefix form, or when skolemizing.
+// Traverses the formula in DFS order.
+// Returns a list of pairs of (i) Quantifiers and (ii) Variables.
+function getQuantifiersInOrder(formula : Formula) : [Quantifier, Variable][] {
+
+    if (formula instanceof Literal) { 
+        return [];
+    }
+
+    if (formula instanceof Negation) { 
+        return getQuantifiersInOrder(formula.target);
+    }
+
+    if (formula instanceof Conjunction) { 
+        let quantifiersList : [Quantifier, Variable][] = [];
+
+        for (let conjunct of formula.conjuncts) {
+            quantifiersList = [...quantifiersList, ...getQuantifiersInOrder(conjunct)];
+        }
+
+        return quantifiersList;
+    }
+
+    if (formula instanceof Disjunction) { 
+        let quantifiersList : [Quantifier, Variable][] = [];
+
+        for (let disjunct of formula.disjuncts) {
+            quantifiersList = [...quantifiersList, ...getQuantifiersInOrder(disjunct)];
+        }
+
+        return quantifiersList;
+    }
+
+    if (formula instanceof Implication || formula instanceof Biconditional) { 
+        return [...getQuantifiersInOrder(formula.antecedent), ...getQuantifiersInOrder(formula.consequent)];
+    }
+
+    if (formula instanceof QuantifiedFormula) {
+        return [[formula.quantifier, formula.variable], ...getQuantifiersInOrder(formula.formula)];
+    }
+
+    console.error("Tried to get quantifiers in order of Formula without a valid type:",formula);
+    return [];
+}
+
+
 function getFreeVars_helper(formula : Formula, boundVars : Set<string>) : Set<string> {
 
     let freeVars : Set<string> = new Set();
@@ -94,6 +140,8 @@ function bindFreeVars(formula : Formula) : Formula {
 }
 
 export {
+    getQuantifiersInOrder,
+
     getFreeVars,
 
     bindFreeVars
