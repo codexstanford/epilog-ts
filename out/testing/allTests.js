@@ -4,7 +4,9 @@ import { runTests as runTests_EpilogJS_to_TS_Parsing } from "../epilog-ts/tests/
 import { runTests as runTests_Containment_Testing } from "../tests/containment-testers.js";
 import { runTests as runTests_Utils } from "../epilog-ts/tests/util-tests.js";
 import { runTests as runTests_FoL } from "../first-order-logic/tests/class-tests.js";
-import { runTests as runTests_FoL_Transformations } from "../first-order-logic/tests/transformations.js";
+import { runTests as runTests_EpilogTS_to_FoL_Parsing } from "../epilog-ts/tests/epilog-ts-to-fol-parse-tests.js";
+import { runTests as runTests_FoL_Transformations } from "../first-order-logic/tests/transformations-tests.js";
+import { runTests as runTests_FoL_Utils } from "../first-order-logic/tests/utils-tests.js";
 // Test the testing function
 function runMetaTests() {
     // Should print via console.error
@@ -80,9 +82,19 @@ const TEST_COLLECTION_LIST = [
         testCollectionRunner: runTests_FoL
     },
     {
+        testSubjectName: "Epilog-ts to FoL parsing",
+        doRunTest: true,
+        testCollectionRunner: runTests_EpilogTS_to_FoL_Parsing
+    },
+    {
         testSubjectName: "FoL Transformations",
         doRunTest: true,
         testCollectionRunner: runTests_FoL_Transformations
+    },
+    {
+        testSubjectName: "FoL Utils",
+        doRunTest: true,
+        testCollectionRunner: runTests_FoL_Utils
     },
 ];
 function runAllTests() {

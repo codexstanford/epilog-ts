@@ -12,7 +12,9 @@ import { runTests as runTests_FoL} from "../first-order-logic/tests/class-tests.
 
 import { runTests as runTests_EpilogTS_to_FoL_Parsing } from "../epilog-ts/tests/epilog-ts-to-fol-parse-tests.js";
 
-import { runTests as runTests_FoL_Transformations } from "../first-order-logic/tests/transformations.js";
+import { runTests as runTests_FoL_Transformations } from "../first-order-logic/tests/transformations-tests.js";
+
+import { runTests as runTests_FoL_Utils } from "../first-order-logic/tests/utils-tests.js";
 
 // Test the testing function
 function runMetaTests() : void {
@@ -110,6 +112,11 @@ const TEST_COLLECTION_LIST : TestCollection[] = [
         testSubjectName: "FoL Transformations",
         doRunTest: true,
         testCollectionRunner: runTests_FoL_Transformations
+    },
+    {
+        testSubjectName: "FoL Utils",
+        doRunTest: true,
+        testCollectionRunner: runTests_FoL_Utils
     },
 ];
 
