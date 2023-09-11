@@ -54,7 +54,6 @@ function getQuantifiersInOrder(formula : Formula) : [Quantifier, Variable][] {
     return [];
 }
 
-
 function getFreeVars_helper(formula : Formula, boundVars : Set<string>) : Set<string> {
 
     let freeVars : Set<string> = new Set();
@@ -122,27 +121,8 @@ function getFreeVars(formula : Formula) : Set<string> {
     return getFreeVars_helper(formula, new Set());
 }
 
-// Returns the original formula prefixed with universal quantifiers for each of its free variables 
-function bindFreeVars(formula : Formula) : Formula {
-    let freeVarSet : Set<string> = getFreeVars(formula);
-    
-    let resultFormula = formula;
-    
-    // Sorts the list and traverses it in reverse order to result in free variables quantified in alphabetical order.
-        // Done purely for reasons of preference. Others should feel free to remove/edit this process.
-    let alphSortedFreeVars : string[] = [...freeVarSet].sort();
-    for (let i = alphSortedFreeVars.length-1; i >= 0; i--) {
-        let freeVarName : string = alphSortedFreeVars[i];
-        resultFormula = new QuantifiedFormula(Quantifier.Universal, new Variable(freeVarName), resultFormula);
-    }
-    
-    return resultFormula;
-}
-
 export {
     getQuantifiersInOrder,
 
-    getFreeVars,
-
-    bindFreeVars
+    getFreeVars
 }

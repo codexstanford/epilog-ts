@@ -10,7 +10,7 @@ import { ERROR_FORMULA, Formula } from "../classes/Formula.js";
 import { Implication } from "../classes/Implication.js";
 import { Negation } from "../classes/Negation.js";
 import { QuantifiedFormula, Quantifier } from "../classes/QuantifiedFormula.js";
-import { bindFreeVars } from "../utils/general.js";
+import { bindFreeVars } from "../transformations/general.js";
 import { standardizeVarNames } from "../utils/standardize.js";
 
 // Unit tests for {first-order-log/utils} files

@@ -1,11 +1,10 @@
 import { Literal } from "../../epilog-ts/classes/Literal.js";
-import { Variable } from "../../epilog-ts/classes/Term.js";
 import { Biconditional } from "../classes/Biconditional.js";
 import { Conjunction } from "../classes/Conjunction.js";
 import { Disjunction } from "../classes/Disjunction.js";
 import { Implication } from "../classes/Implication.js";
 import { Negation } from "../classes/Negation.js";
-import { QuantifiedFormula, Quantifier } from "../classes/QuantifiedFormula.js";
+import { QuantifiedFormula } from "../classes/QuantifiedFormula.js";
 // Computes the order in which quantifiers appear in the input formula, primarily for use when converting to prefix form, or when skolemizing.
 // Traverses the formula in DFS order.
 // Returns a list of pairs of (i) Quantifiers and (ii) Variables.
@@ -85,18 +84,5 @@ function getFreeVars_helper(formula, boundVars) {
 function getFreeVars(formula) {
     return getFreeVars_helper(formula, new Set());
 }
-// Returns the original formula prefixed with universal quantifiers for each of its free variables 
-function bindFreeVars(formula) {
-    let freeVarSet = getFreeVars(formula);
-    let resultFormula = formula;
-    // Sorts the list and traverses it in reverse order to result in free variables quantified in alphabetical order.
-    // Done purely for reasons of preference. Others should feel free to remove/edit this process.
-    let alphSortedFreeVars = [...freeVarSet].sort();
-    for (let i = alphSortedFreeVars.length - 1; i >= 0; i--) {
-        let freeVarName = alphSortedFreeVars[i];
-        resultFormula = new QuantifiedFormula(Quantifier.Universal, new Variable(freeVarName), resultFormula);
-    }
-    return resultFormula;
-}
-export { getQuantifiersInOrder, getFreeVars, bindFreeVars };
+export { getQuantifiersInOrder, getFreeVars };
 //# sourceMappingURL=general.js.map
