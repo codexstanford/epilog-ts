@@ -6,17 +6,21 @@ import { printTestingMessage_Start, runTest } from "../../testing/testing.js";
 import { Biconditional } from "../classes/Biconditional.js";
 import { Conjunction } from "../classes/Conjunction.js";
 import { Disjunction } from "../classes/Disjunction.js";
-import { Formula } from "../classes/Formula.js";
+import { ERROR_FORMULA, Formula } from "../classes/Formula.js";
 import { Implication } from "../classes/Implication.js";
 import { Negation } from "../classes/Negation.js";
 import { QuantifiedFormula, Quantifier } from "../classes/QuantifiedFormula.js";
 import { makeNegationsAtomic, rewriteWithoutBiconditionalsAndImplications } from "../transformations/nnf.js";
 import { Symbol } from "../../epilog-ts/classes/Term.js";
+import { standardizeVarNames } from "../utils/standardize.js";
+import { bindFreeVars } from "../transformations/general.js";
+import { skolemize } from "../transformations/skolemize.js";
 
 // Unit tests for {first-order-log/transformations} files
 function runTests() : void {
     runNNFTests();
 
+    runSkolemizeTests();
 }
 
 function runNNFTests() : void {
@@ -398,24 +402,6 @@ function runMakeNegationsAtomicTests() : void {
 function runNNFIntegrationTests() : void {
     printTestingMessage_Start("NNF Integration");
 
-    let a1 = new Atom(new Predicate("a1"), []);
-    let a2 = new Atom(new Predicate("a2"), []);
-    let a3 = new Atom(new Predicate("a3"), []);
-
-    let l1 = new Literal(a1, false);
-    let l2 = new Literal(a2, false);
-    let l3 = new Literal(a3, false);
-
-    let n1 = new Literal(a1, true);
-    let n2 = new Literal(a2, true);
-    let n3 = new Literal(a3, true);
-
-    let b1 = new Biconditional(l1, l2);
-    let impl1 = new Implication(l1, l2);
-
-    let not_true = new Negation(TRUE_LITERAL);
-    let not_false = new Negation(FALSE_LITERAL);
-
     let x_var = new Variable('X');
     let y_var = new Variable('Y');
     let z_var = new Variable('Z');
@@ -435,6 +421,101 @@ function runNNFIntegrationTests() : void {
 
         return result.toString() === "(∀X.(∀Y.((¬p(X, Y) ∨ ¬p(X, Z)))) ∨ ∃Y.(p(X, Y)))";
     },{});
+}
+
+function runSkolemizeTests() : void {
+    printTestingMessage_Start("Skolemize");
+
+    let x_var = new Variable('X');
+    let y_var = new Variable('Y');
+
+    let p_pred = new Predicate('p');
+    let q_pred = new Predicate('q');
+    let p_x = new Literal(new Atom(p_pred, [x_var]), false);
+    let p_y = new Literal(new Atom(p_pred, [y_var]), true);
+    let q_x = new Literal(new Atom(q_pred, [x_var]), false);
+
+    let f2 = standardizeVarNames(bindFreeVars(new Conjunction([q_x, new QuantifiedFormula(Quantifier.Existential, x_var, p_x)])));
+    let f3 = standardizeVarNames(bindFreeVars(new Disjunction([p_y, new QuantifiedFormula(Quantifier.Existential, x_var, p_x)])));
+    let f4 = standardizeVarNames(bindFreeVars(new QuantifiedFormula(Quantifier.Universal, y_var, new Disjunction([p_y, new QuantifiedFormula(Quantifier.Existential, x_var, p_x)]))));
+    let f5 = standardizeVarNames(bindFreeVars(new QuantifiedFormula(Quantifier.Universal, y_var, new Disjunction([new QuantifiedFormula(Quantifier.Existential, x_var, p_x), new QuantifiedFormula(Quantifier.Existential, x_var, p_x)]))));
+    let f6 = standardizeVarNames(new QuantifiedFormula(Quantifier.Universal, x_var, new Implication(f5, f2)));
+    let f7 = standardizeVarNames(new QuantifiedFormula(Quantifier.Universal, x_var, new Biconditional(f2, f5)));
+
+    let f8 = standardizeVarNames(new QuantifiedFormula(Quantifier.Universal, x_var, new Conjunction([new QuantifiedFormula(Quantifier.Existential, y_var, p_y), f2])));
+
+    let nf4 = new Negation(f4);
+
+    runTest("skolemize-free vars-failure", () => {
+        let initialFormula : Formula = p_x;
+        let result : Formula = skolemize(initialFormula);
+
+        return result.toString() === ERROR_FORMULA.toString();
+    },{});
+
+    runTest("skolemize-name collisions-failure", () => {
+        let initialFormula : Formula = bindFreeVars(new Conjunction([p_x, bindFreeVars(p_x)]));
+        let result : Formula = skolemize(initialFormula);
+
+        return result.toString() === ERROR_FORMULA.toString();
+    },{});
+
+    runTest("skolemize-free vars and name collisions-failure", () => {
+        let initialFormula : Formula = new Conjunction([p_x, bindFreeVars(p_x)]);
+        let result : Formula = skolemize(initialFormula);
+
+        return result.toString() === ERROR_FORMULA.toString();
+    },{});
+
+    runTest("skolemize-simple-skolem constant-success", () => {
+        let initialFormula : Formula = new QuantifiedFormula(Quantifier.Existential, x_var, p_x);
+        let result : Formula = skolemize(initialFormula);
+
+        return result.toString() === "p(skolemfunc0())";
+    },{});
+
+    runTest("skolemize-complex-1-universal and disjunction-success", () => {
+        let initialFormula : Formula = f3;
+        let result : Formula = skolemize(initialFormula);
+
+        return result.toString() === "∀V0.((~p(V0) ∨ p(skolemfunc0(V0))))";
+    },{});
+
+    runTest("skolemize-complex-2-negation, universal, and disjunction-success", () => {
+        let initialFormula : Formula = nf4;
+        let result : Formula = skolemize(initialFormula);
+
+        return result.toString() === "¬∀V0.((~p(V0) ∨ p(skolemfunc0(V0))))";
+    },{});
+
+    runTest("skolemize-complex-3-multiple existential-success", () => {
+        let initialFormula : Formula = f5;
+        let result : Formula = skolemize(initialFormula);
+
+        return result.toString() === "∀V0.((p(skolemfunc0(V0)) ∨ p(skolemfunc1(V0))))";
+    },{});
+
+    runTest("skolemize-complex-4-implication, conjunction, disjunction, nested and branching universals, with existentials in each branch-success", () => {
+        let initialFormula : Formula = f6;
+        let result : Formula = skolemize(initialFormula);
+
+        return result.toString() === "∀V0.((∀V1.((p(skolemfunc0(V0, V1)) ∨ p(skolemfunc1(V0, V1)))) ⇒ ∀V4.((q(V4) ∧ p(skolemfunc2(V0, V4))))))";
+    },{});
+
+    runTest("skolemize-complex-5-biconditional, conjunction, disjunction, nested and branching universals (with flipped order), with existentials in each branch-success", () => {
+        let initialFormula : Formula = f7;
+        let result : Formula = skolemize(initialFormula);
+
+        return result.toString() === "∀V0.((∀V1.((q(V1) ∧ p(skolemfunc0(V0, V1)))) ⇔ ∀V3.((p(skolemfunc1(V0, V3)) ∨ p(skolemfunc2(V0, V3))))))";
+    },{});
+
+    runTest("skolemize-complex-6-alternating quantifier types, and function arity-success", () => {
+        let initialFormula : Formula = new QuantifiedFormula(Quantifier.Existential, x_var, new Conjunction([f8, p_x]));
+        let result : Formula = skolemize(initialFormula);
+
+        return result.toString() === "(∀V0.((~p(skolemfunc1(V0)) ∧ ∀V2.((q(V2) ∧ p(skolemfunc2(V0, V2)))))) ∧ p(skolemfunc0()))";
+    },{});
+
 }
 
 export {
