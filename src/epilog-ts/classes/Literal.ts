@@ -11,7 +11,7 @@ class Literal {
         this.negated = negated;
     }
 
-    toString() : string {
+    toString() {
         if (this.negated) {
             return "~" + this.atom.toString();
         }
