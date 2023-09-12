@@ -38,6 +38,17 @@ class Disjunction {
     isEmpty() : boolean {
         return this.disjuncts.length === 0;
     }
+
+    getVars() : Set<string> {
+        let varList : string[] = [];
+
+        for (let disjunct of this.disjuncts) {
+            varList = varList.concat([...disjunct.getVars()]);
+        }
+        
+        let varSet : Set<string> = new Set(varList);
+        return varSet;
+    }
 }
 
 

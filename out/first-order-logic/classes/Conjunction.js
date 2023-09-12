@@ -19,6 +19,14 @@ class Conjunction {
         str += ")";
         return str;
     }
+    getVars() {
+        let varList = [];
+        for (let conjunct of this.conjuncts) {
+            varList = varList.concat([...conjunct.getVars()]);
+        }
+        let varSet = new Set(varList);
+        return varSet;
+    }
 }
 export { Conjunction };
 //# sourceMappingURL=Conjunction.js.map

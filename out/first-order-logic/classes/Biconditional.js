@@ -6,6 +6,9 @@ class Biconditional {
     toString() {
         return "(" + this.antecedent.toString() + " ⇔ " + this.consequent.toString() + ")";
     }
+    getVars() {
+        return new Set([...this.antecedent.getVars(), ...this.consequent.getVars()]);
+    }
 }
 export { Biconditional };
 //# sourceMappingURL=Biconditional.js.map

@@ -88,5 +88,22 @@ function hasFreeVars(formula) {
     let freeVarSet = getFreeVars(formula);
     return freeVarSet.size !== 0;
 }
-export { getQuantifiersInOrder, getFreeVars, hasFreeVars };
+// Requires the formula be closed (have no free variables)
+function hasVarNameCollisions(formula) {
+    if (hasFreeVars(formula)) {
+        console.error("Formula must have no free variables to determine whether variable name collisions are present:", getFreeVars(formula));
+        return false;
+    }
+    let quantifierList = getQuantifiersInOrder(formula);
+    let varNameSet = new Set();
+    for (let [quantifier, currVar] of quantifierList) {
+        let varName = currVar.name;
+        if (varNameSet.has(varName)) {
+            return true;
+        }
+        varNameSet.add(varName);
+    }
+    return false;
+}
+export { getQuantifiersInOrder, getFreeVars, hasFreeVars, hasVarNameCollisions };
 //# sourceMappingURL=general.js.map

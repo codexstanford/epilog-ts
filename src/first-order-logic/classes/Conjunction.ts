@@ -32,6 +32,17 @@ class Conjunction {
         return str;
 
     }
+
+    getVars() : Set<string> {
+        let varList : string[] = [];
+
+        for (let conjunct of this.conjuncts) {
+            varList = varList.concat([...conjunct.getVars()]);
+        }
+        
+        let varSet : Set<string> = new Set(varList);
+        return varSet;
+    }
 }
 
 

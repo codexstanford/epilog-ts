@@ -11,6 +11,10 @@ class Negation {
     toString() {
         return "¬" + this.target.toString();
     }
+
+    getVars() : Set<string> {
+        return this.target.getVars();
+    }
 }
 
 

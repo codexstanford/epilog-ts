@@ -5,6 +5,9 @@ class Negation {
     toString() {
         return "¬" + this.target.toString();
     }
+    getVars() {
+        return this.target.getVars();
+    }
 }
 export { Negation };
 //# sourceMappingURL=Negation.js.map

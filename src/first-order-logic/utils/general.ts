@@ -127,9 +127,34 @@ function hasFreeVars(formula : Formula) : boolean {
     return freeVarSet.size !== 0;
 }
 
+// Requires the formula be closed (have no free variables)
+function hasVarNameCollisions(formula : Formula) : boolean {
+    if (hasFreeVars(formula)) { 
+        console.error("Formula must have no free variables to determine whether variable name collisions are present:", getFreeVars(formula));
+        return false;
+    }
+
+    let quantifierList : [Quantifier, Variable][] = getQuantifiersInOrder(formula);
+
+    let varNameSet : Set<string> = new Set();
+
+    for (let [quantifier, currVar] of quantifierList) {
+        let varName : string = currVar.name;
+        if (varNameSet.has(varName)) {
+            return true;
+        }
+
+        varNameSet.add(varName);
+    }
+
+    return false;
+}
+
 export {
     getQuantifiersInOrder,
 
     getFreeVars,
-    hasFreeVars
+    hasFreeVars,
+
+    hasVarNameCollisions
 }

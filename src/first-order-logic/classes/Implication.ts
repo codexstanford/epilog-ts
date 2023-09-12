@@ -13,6 +13,10 @@ class Implication {
     toString() {
         return "(" + this.antecedent.toString() + " ⇒ " + this.consequent.toString() + ")";
     }
+
+    getVars() : Set<string> {
+        return new Set([...this.antecedent.getVars(), ...this.consequent.getVars()]);
+    }
 }
 
 

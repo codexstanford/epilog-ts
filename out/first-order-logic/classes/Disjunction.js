@@ -22,6 +22,14 @@ class Disjunction {
     isEmpty() {
         return this.disjuncts.length === 0;
     }
+    getVars() {
+        let varList = [];
+        for (let disjunct of this.disjuncts) {
+            varList = varList.concat([...disjunct.getVars()]);
+        }
+        let varSet = new Set(varList);
+        return varSet;
+    }
 }
 export { Disjunction };
 //# sourceMappingURL=Disjunction.js.map

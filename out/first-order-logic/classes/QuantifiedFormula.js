@@ -30,6 +30,10 @@ class QuantifiedFormula {
         let str = quantifierToString(this.quantifier);
         return str + this.variable.toString() + ".(" + this.formula.toString() + ")";
     }
+    // Doesn't include the quantified variable; only includes those that actually appear in a Literal
+    getVars() {
+        return this.formula.getVars();
+    }
 }
 export { QuantifiedFormula, Quantifier };
 //# sourceMappingURL=QuantifiedFormula.js.map
