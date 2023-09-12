@@ -84,5 +84,9 @@ function getFreeVars_helper(formula, boundVars) {
 function getFreeVars(formula) {
     return getFreeVars_helper(formula, new Set());
 }
-export { getQuantifiersInOrder, getFreeVars };
+function hasFreeVars(formula) {
+    let freeVarSet = getFreeVars(formula);
+    return freeVarSet.size !== 0;
+}
+export { getQuantifiersInOrder, getFreeVars, hasFreeVars };
 //# sourceMappingURL=general.js.map

@@ -121,8 +121,15 @@ function getFreeVars(formula : Formula) : Set<string> {
     return getFreeVars_helper(formula, new Set());
 }
 
+function hasFreeVars(formula : Formula) : boolean {
+    let freeVarSet : Set<string> = getFreeVars(formula);
+
+    return freeVarSet.size !== 0;
+}
+
 export {
     getQuantifiersInOrder,
 
-    getFreeVars
+    getFreeVars,
+    hasFreeVars
 }

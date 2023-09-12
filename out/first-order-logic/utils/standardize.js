@@ -8,7 +8,7 @@ import { ERROR_FORMULA } from "../classes/Formula.js";
 import { Implication } from "../classes/Implication.js";
 import { Negation } from "../classes/Negation.js";
 import { QuantifiedFormula } from "../classes/QuantifiedFormula.js";
-import { getFreeVars } from "./general.js";
+import { getFreeVars, hasFreeVars } from "./general.js";
 // Recursive function to rename variables in a formula that may have name collisions. Requires the formula to have no free variables.
 // Parses the formula in DFS order
 // Returns a pair containing (i) the substituted formula and (ii) the number of distinct variables that have been parsed.
@@ -84,9 +84,8 @@ function standardizeVarNames_helper(initialFormula, varCounter, sub) {
 // Rename each variable to have a unique name of the form "V{num}".
 // Requires that the input formula be closed (have no free variables).
 function standardizeVarNames(initialFormula) {
-    let freeVarSet = getFreeVars(initialFormula);
-    if (freeVarSet.size !== 0) {
-        console.error("Cannot standardize the variable names of a formula with free variables:", initialFormula, freeVarSet);
+    if (hasFreeVars(initialFormula)) {
+        console.error("Cannot standardize the variable names of a formula with free variables:", initialFormula.toString(), getFreeVars(initialFormula));
         return ERROR_FORMULA;
     }
     let emptySub = new Substitution();

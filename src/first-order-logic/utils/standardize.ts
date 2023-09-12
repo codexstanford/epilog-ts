@@ -8,7 +8,7 @@ import { ERROR_FORMULA, Formula } from "../classes/Formula.js";
 import { Implication } from "../classes/Implication.js";
 import { Negation } from "../classes/Negation.js";
 import { QuantifiedFormula, Quantifier } from "../classes/QuantifiedFormula.js";
-import { getFreeVars } from "./general.js";
+import { getFreeVars, hasFreeVars } from "./general.js";
 
 
 
@@ -115,10 +115,9 @@ function standardizeVarNames_helper(initialFormula : Formula, varCounter : numbe
 // Rename each variable to have a unique name of the form "V{num}".
 // Requires that the input formula be closed (have no free variables).
 function standardizeVarNames(initialFormula : Formula) : Formula {
-    let freeVarSet : Set<string> = getFreeVars(initialFormula);
 
-    if (freeVarSet.size !== 0) {
-        console.error("Cannot standardize the variable names of a formula with free variables:", initialFormula, freeVarSet);
+    if (hasFreeVars(initialFormula)) {
+        console.error("Cannot standardize the variable names of a formula with free variables:", initialFormula.toString(), getFreeVars(initialFormula));
         return ERROR_FORMULA;
     }
 
