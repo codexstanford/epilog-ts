@@ -19,7 +19,7 @@ const ERROR_CONJUNCTION = new Conjunction([ERROR_FORMULA]);
 // Internal nodes must know the tseitinvars corresponding to their children to ensure proper reformulation
 // Note: since our Disjunctions and Conjunctions are flat (i.e. they are n-ary connectives, not just binary), 
 // we use the more efficient CNF encoding mentioned on page 13 of Decision Procedures - Kroening and Strichman: https://link.springer.com/content/pdf/10.1007/978-3-540-74105-3.pdf.
-// For conjunction (resp. disjunction) with n conjuncts (resp. disjuncts), this allows us to encode it with one tseitinvar and n+1 clauses, rather than n-1 tseitinvars and 3(n-1) clauses.
+// For a conjunction (resp. disjunction) with n conjuncts (resp. disjuncts), this allows us to encode it with one tseitinvar and n+1 clauses, rather than n-1 tseitinvars and 3(n-1) clauses.
 function toCNF_helper(formula, tseitinPropVarForFormula, tseitinVarCounter) {
     // Internal node - Conjunction
     if (formula instanceof Conjunction) {
