@@ -11,10 +11,57 @@ import { Implication } from "../classes/Implication.js";
 import { Negation } from "../classes/Negation.js";
 import { QuantifiedFormula, Quantifier } from "../classes/QuantifiedFormula.js";
 import { bindFreeVars } from "../transformations/general.js";
+import { isInNNF } from "../utils/general.js";
 import { standardizeVarNames } from "../utils/standardize.js";
 // Unit tests for {first-order-log/utils} files
 function runTests() {
+    runGeneralTests();
     runStandardizeTests();
+}
+function runGeneralTests() {
+    printTestingMessage_Start("General Utils");
+    runIsInNNFTests();
+}
+function runIsInNNFTests() {
+    let x_var = new Variable('X');
+    let y_var = new Variable('Y');
+    let p_pred = new Predicate('p');
+    let q_pred = new Predicate('q');
+    let p_x = new Literal(new Atom(p_pred, [x_var]), false);
+    let p_y = new Literal(new Atom(p_pred, [y_var]), true);
+    let q_x = new Literal(new Atom(q_pred, [x_var]), false);
+    let f2 = bindFreeVars(new Conjunction([q_x, new QuantifiedFormula(Quantifier.Existential, x_var, p_x)]));
+    let f5 = bindFreeVars(new QuantifiedFormula(Quantifier.Universal, y_var, new Disjunction([new QuantifiedFormula(Quantifier.Existential, x_var, p_x), new QuantifiedFormula(Quantifier.Existential, x_var, p_x)])));
+    runTest("isInNNF-positive Literal-success", () => {
+        return isInNNF(p_x);
+    }, {});
+    runTest("isInNNF-negative Literal-success", () => {
+        return isInNNF(p_y);
+    }, {});
+    runTest("isInNNF-negated negative Literal-failure", () => {
+        return !isInNNF(new Negation(p_y));
+    }, {});
+    runTest("isInNNF-negated positive Literal-success", () => {
+        return isInNNF(new Negation(p_x));
+    }, {});
+    runTest("isInNNF-negated Conjunction-failure", () => {
+        return !isInNNF(new Negation(new Conjunction([q_x, new QuantifiedFormula(Quantifier.Existential, x_var, p_x)])));
+    }, {});
+    runTest("isInNNF-Conjunction-success", () => {
+        return isInNNF(new Conjunction([q_x, new QuantifiedFormula(Quantifier.Existential, x_var, p_x)]));
+    }, {});
+    runTest("isInNNF-Disjunction-success", () => {
+        return isInNNF(new Disjunction([q_x, new QuantifiedFormula(Quantifier.Existential, x_var, p_x)]));
+    }, {});
+    runTest("isInNNF-QuantifiedFormula-success", () => {
+        return isInNNF(new QuantifiedFormula(Quantifier.Universal, x_var, (new Conjunction([q_x, new QuantifiedFormula(Quantifier.Existential, x_var, p_x)]))));
+    }, {});
+    runTest("isInNNF-Implication-failure", () => {
+        return !isInNNF(new Implication(f5, f2));
+    }, {});
+    runTest("isInNNF-Biconditional-failure", () => {
+        return !isInNNF(new Biconditional(f5, f2));
+    }, {});
 }
 function runStandardizeTests() {
     printTestingMessage_Start("Standardize");
