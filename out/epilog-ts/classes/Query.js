@@ -14,7 +14,7 @@ function makeQuery(queryPred, rules) {
             return defaultQuery;
         }
     }
-    // TODO: Check for interpreted predicates
+    // NOTE: Should also check for interpreted predicates, once they are distinguished
     return new ConjunctiveQuery(queryPred, rules[0]);
 }
 // =============== Classification functions ===============
@@ -37,7 +37,7 @@ class ConjunctiveQuery {
                 return;
             }
         }
-        // TODO: Check for interpreted predicates
+        // NOTE: Should also check for interpreted predicates, once they are distinguished
         this.rule = rule;
         // Warn if the query predicate doesn't match the rule head
         if (this.queryPred.name !== this.rule.head.pred.name) {

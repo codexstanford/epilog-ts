@@ -27,7 +27,7 @@ function makeQuery(queryPred: Predicate, rules: Rule[]) : Query {
         }
     }
 
-    // TODO: Check for interpreted predicates
+    // NOTE: Should also check for interpreted predicates, once they are distinguished
 
     return new ConjunctiveQuery(queryPred, rules[0]);
 }
@@ -67,7 +67,7 @@ class ConjunctiveQuery implements Query {
             }
         }
 
-        // TODO: Check for interpreted predicates
+        // NOTE: Should also check for interpreted predicates, once they are distinguished
 
         this.rule = rule;
 
