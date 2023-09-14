@@ -1,7 +1,7 @@
 import { FALSE_LITERAL } from "../../epilog-ts/classes/Literal.js";
 class Disjunction {
     constructor(disjuncts) {
-        // If the empty disjunction, set it to the list containing the 'true' literal
+        // If the empty disjunction, set it to the list containing the 'false' literal
         if (disjuncts.length === 0) {
             disjuncts = [FALSE_LITERAL];
         }

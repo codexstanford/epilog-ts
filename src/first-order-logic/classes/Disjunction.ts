@@ -9,7 +9,7 @@ class Disjunction {
     readonly disjuncts: Formula[];
 
     constructor(disjuncts: Formula[]) {
-        // If the empty disjunction, set it to the list containing the 'true' literal
+        // If the empty disjunction, set it to the list containing the 'false' literal
         if (disjuncts.length === 0) {
             disjuncts = [FALSE_LITERAL];
         }
