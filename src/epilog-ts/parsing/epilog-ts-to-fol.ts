@@ -28,6 +28,7 @@ namespace EpilogTSToFOL {
     export function parseRuleList(epilogTSRules: Rule[]) : Formula {
 
         if (epilogTSRules.length === 0) { 
+            // Empty conjunction created because rule is true by default, and therefore does not impose additional constraints
             return new Conjunction([]);
         }
 

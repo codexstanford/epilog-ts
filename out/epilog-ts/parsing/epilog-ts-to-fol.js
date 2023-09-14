@@ -22,6 +22,7 @@ var EpilogTSToFOL;
     // Note: currently assumes arity agreement. Once Schema are added, this will be explicitly checked.
     function parseRuleList(epilogTSRules) {
         if (epilogTSRules.length === 0) {
+            // Empty conjunction created because rule is true by default, and therefore does not impose additional constraints
             return new Conjunction([]);
         }
         let definedViewPred = epilogTSRules[0].head.pred;
