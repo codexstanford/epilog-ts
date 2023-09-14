@@ -150,11 +150,62 @@ function hasVarNameCollisions(formula : Formula) : boolean {
     return false;
 }
 
+// Determines whether the formula is in NNF (i.e. a formula where the only logical connectives are ∧, ∨, and ¬)
+function isInNNF(formula : Formula) : boolean {
+    if (formula instanceof Literal) {
+        return true;
+    }
+
+    // Implications and Biconditionals cannot appear in an NNF formula.
+    if (formula instanceof Implication || formula instanceof Biconditional) {
+        return false;
+    }
+
+    // Negations must target non-negated literals.
+    if (formula instanceof Negation) {
+        if (formula.target instanceof Literal) {
+            return !formula.target.isNegated();
+        }
+
+        return false;
+    }
+
+    // Conjunctions are in NNF iff each of its conjuncts is.
+    if (formula instanceof Conjunction) {
+        for (let conjunct of formula.conjuncts) {
+            if (!isInNNF(conjunct)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Disjunctions are in NNF iff each of its disjuncts is.
+    if (formula instanceof Disjunction) {
+        for (let disjunct of formula.disjuncts) {
+            if (!isInNNF(disjunct)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // A QuantifiedFormula is in NNF iff the scope of its quantification is.
+    if (formula instanceof QuantifiedFormula) {
+        return isInNNF(formula.formula);
+    }
+
+    console.error("Trying to determine whether Formula is in NNF, but formula is not a valid type:",formula);
+    return false;
+}
+
 export {
     getQuantifiersInOrder,
 
     getFreeVars,
     hasFreeVars,
 
-    hasVarNameCollisions
+    hasVarNameCollisions,
+
+    isInNNF
 }
