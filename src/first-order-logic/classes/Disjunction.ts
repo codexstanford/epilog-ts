@@ -1,9 +1,6 @@
 import { FALSE_LITERAL } from "../../epilog-ts/classes/Literal.js";
 import { Formula } from "./Formula.js";
 
-
-type Clause = Disjunction;
-
 class Disjunction {
 
     readonly disjuncts: Formula[];
@@ -53,6 +50,5 @@ class Disjunction {
 
 
 export {
-    Disjunction,
-    Clause
+    Disjunction
 }

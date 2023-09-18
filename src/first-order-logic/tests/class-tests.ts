@@ -4,6 +4,7 @@ import { Predicate } from "../../epilog-ts/classes/Predicate.js";
 import { Variable } from "../../epilog-ts/classes/Term.js";
 import { printTestingMessage_Start, runTest } from "../../testing/testing.js";
 import { Biconditional } from "../classes/Biconditional.js";
+import { Clause } from "../classes/Clause.js";
 import { Conjunction } from "../classes/Conjunction.js";
 import { Disjunction } from "../classes/Disjunction.js";
 import { Implication } from "../classes/Implication.js";
@@ -18,6 +19,8 @@ function runTests() : void {
     runImplicationTests();
     runBiconditionalTests();
     runQuantifiedFormulaTests();
+
+    runClauseTests();
 }
 
 function runDisjunctionTests() : void {
@@ -303,6 +306,78 @@ function runQuantifiedFormulaTests() : void {
         return u1.toString() === '∃Var23.(((¬~p() ⇒ ((p() ∨ ~q()) ∧ (~p() ∧ q()))) ⇔ ((p() ∨ ~q()) ∧ (~p() ∧ q()))))' && 
         u1.formula === b1;
     },{});
+}
+
+function runClauseTests() : void {
+    printTestingMessage_Start("Clause");
+
+    let x_var = new Variable('X');
+    let y_var = new Variable('Y');
+
+    let p_pred = new Predicate('p');
+    let q_pred = new Predicate('q');
+    let s_pred = new Predicate('s');
+
+    let p_x = new Literal(new Atom(p_pred, [x_var]), false);
+    let q_x = new Literal(new Atom(q_pred, [x_var]), false);
+    let s_xy = new Literal(new Atom(s_pred, [x_var, y_var]), false);
+    let neg_s_xy = new Literal(new Atom(s_pred, [x_var, y_var]), true);
+    let neg_s_xy_repeat = new Literal(new Atom(s_pred, [x_var, y_var]), true);
+
+    runTest("Clause-empty-success", () => {
+        let c1 : Clause = new Clause([]);
+        return c1.toString() === '{}' && 
+        c1.literals.length === 0;
+    },{});
+
+    runTest("Clause-single non-Literal-failure", () => {
+        let c1 : Clause = new Clause([new Negation(p_x)]);
+        return c1.toString() === '{error()}' && 
+        c1.literals.length === 1;
+    },{});
+
+    runTest("Clause-Literal and non-Literal-failure", () => {
+        let c1 : Clause = new Clause([p_x, new Negation(p_x)]);
+        return c1.toString() === '{error()}' && 
+        c1.literals.length === 1;
+    },{});
+
+    runTest("Clause-single literal-success", () => {
+        let c1 : Clause = new Clause([p_x]);
+        return c1.toString() === '{p(X)}' && 
+        c1.literals.length === 1;
+    },{});
+
+    runTest("Clause-single repeat literal-success", () => {
+        let c1 : Clause = new Clause([p_x, p_x]);
+        return c1.toString() === '{p(X)}' && 
+        c1.literals.length === 1;
+    },{});
+
+    runTest("Clause-multiple literal sorted-success", () => {
+        let c1 : Clause = new Clause([p_x, q_x]);
+        return c1.toString() === '{p(X), q(X)}' && 
+        c1.literals.length === 2;
+    },{});
+
+    runTest("Clause-multiple literal unsorted-success", () => {
+        let c1 : Clause = new Clause([q_x, p_x]);
+        return c1.toString() === '{p(X), q(X)}' && 
+        c1.literals.length === 2;
+    },{});
+
+    runTest("Clause-multiple literal repeat unsorted-success", () => {
+        let c1 : Clause = new Clause([p_x, q_x, p_x]);
+        return c1.toString() === '{p(X), q(X)}' && 
+        c1.literals.length === 2;
+    },{});
+
+    runTest("Clause-complex-success", () => {
+        let c1 : Clause = new Clause([neg_s_xy, s_xy, p_x, neg_s_xy_repeat, p_x, q_x, p_x]);
+        return c1.toString() === '{~s(X, Y), p(X), q(X), s(X, Y)}' && 
+        c1.literals.length === 4;
+    },{});
+
 }
 
 export {
