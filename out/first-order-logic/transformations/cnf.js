@@ -10,6 +10,7 @@ import { Negation } from "../classes/Negation.js";
 import { QuantifiedFormula } from "../classes/QuantifiedFormula.js";
 import { getQuantifiersInOrder, isInNNF } from "../utils/general.js";
 const ERROR_CONJUNCTION = new Conjunction([ERROR_FORMULA]);
+const TSEITIN_VAR_PREFIX = "tseitinvar";
 // Recursive helper function
 // Expects the following inputs:
 // (i) formula: a quantifier-free NNF formula to convert to CNF form, 
@@ -64,7 +65,7 @@ function toCNF_helper(formula, tseitinPropVarForFormula, tseitinVarCounter) {
             }
             // --- By this point, the conjunct must be a Conjunction or a Disjunction, and so should be assigned a tseitinvar.
             // Create a tseitinvar for the internal node that is the conjunct.
-            let newTseitinVar = new Atom(new Predicate("tseitinvar" + tseitinVarCounter), []);
+            let newTseitinVar = new Atom(new Predicate(TSEITIN_VAR_PREFIX + tseitinVarCounter), []);
             tseitinVarCounter++;
             // Convert to CNF.
             let currConjunctInCNF = ERROR_CONJUNCTION;
@@ -122,7 +123,7 @@ function toCNF_helper(formula, tseitinPropVarForFormula, tseitinVarCounter) {
             }
             // --- By this point, the disjunct must be a Conjunction or a Disjunction, and so should be assigned a tseitinvar.
             // Create a tseitinvar for the internal node that is the disjunct.
-            let newTseitinVar = new Atom(new Predicate("tseitinvar" + tseitinVarCounter), []);
+            let newTseitinVar = new Atom(new Predicate(TSEITIN_VAR_PREFIX + tseitinVarCounter), []);
             tseitinVarCounter++;
             // Convert to CNF.
             let currDisjunctInCNF = ERROR_CONJUNCTION;
@@ -169,6 +170,7 @@ function toCNF_helper(formula, tseitinPropVarForFormula, tseitinVarCounter) {
     return [ERROR_CONJUNCTION, 0];
 }
 // Converts a quantifier-free, NNF Formula into an equisatisfiable Formula in CNF form using Tseitin's transformation
+// Based on the algorithm provided in lecture notes for Stanford's Autumn 2022 course, CS 257: Automated Reasoning, with improvements from Decision Procedures - Kroening and Strichman: https://link.springer.com/content/pdf/10.1007/978-3-540-74105-3.pdf
 function toCNF(initialFormula) {
     if (getQuantifiersInOrder(initialFormula).length !== 0) {
         console.error("Formula must be quantifier-free to convert to CNF", initialFormula.toString(), "\nYou may want the toPCNF function instead.");
@@ -183,7 +185,7 @@ function toCNF(initialFormula) {
         return new Conjunction([initialFormula]);
     }
     // We must assert that the unit clause containing just the tseitinvar corresponding to the root of the Formula is true.
-    let topTseitinVar = new Atom(new Predicate("tseitinvar0"), []);
+    let topTseitinVar = new Atom(new Predicate(TSEITIN_VAR_PREFIX + "0"), []);
     let cnfFormula = toCNF_helper(initialFormula, topTseitinVar, 1)[0];
     return new Conjunction([new Literal(topTseitinVar, false), ...cnfFormula.conjuncts]);
 }

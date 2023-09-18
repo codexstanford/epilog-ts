@@ -10,35 +10,35 @@ import { QuantifiedFormula, Quantifier } from "../classes/QuantifiedFormula.js";
 import { getFreeVars } from "../utils/general.js";
 // Removes all quantifiers from the input formula.
 // The Quantifiers and Variables of QuantifiedFormulae are removed, but their "formula" properties remain part of the formula. 
-function stripQuantifiers(formula) {
+function removeQuantifiers(formula) {
     if (formula instanceof Literal) {
         return formula;
     }
     if (formula instanceof Negation) {
-        return new Negation(stripQuantifiers(formula.target));
+        return new Negation(removeQuantifiers(formula.target));
     }
     if (formula instanceof Conjunction) {
         let strippedConjuncts = [];
         for (let conjunct of formula.conjuncts) {
-            strippedConjuncts.push(stripQuantifiers(conjunct));
+            strippedConjuncts.push(removeQuantifiers(conjunct));
         }
         return new Conjunction(strippedConjuncts);
     }
     if (formula instanceof Disjunction) {
         let strippedDisjuncts = [];
         for (let disjunct of formula.disjuncts) {
-            strippedDisjuncts.push(stripQuantifiers(disjunct));
+            strippedDisjuncts.push(removeQuantifiers(disjunct));
         }
         return new Disjunction(strippedDisjuncts);
     }
     if (formula instanceof Implication) {
-        return new Implication(stripQuantifiers(formula.antecedent), stripQuantifiers(formula.consequent));
+        return new Implication(removeQuantifiers(formula.antecedent), removeQuantifiers(formula.consequent));
     }
     if (formula instanceof Biconditional) {
-        return new Biconditional(stripQuantifiers(formula.antecedent), stripQuantifiers(formula.consequent));
+        return new Biconditional(removeQuantifiers(formula.antecedent), removeQuantifiers(formula.consequent));
     }
     if (formula instanceof QuantifiedFormula) {
-        return stripQuantifiers(formula.formula);
+        return removeQuantifiers(formula.formula);
     }
     console.error("Tried to strip quantifiers from a Formula without a valid type:", formula);
     return ERROR_FORMULA;
@@ -56,5 +56,5 @@ function bindFreeVars(formula) {
     }
     return resultFormula;
 }
-export { stripQuantifiers, bindFreeVars };
+export { removeQuantifiers, bindFreeVars };
 //# sourceMappingURL=general.js.map
