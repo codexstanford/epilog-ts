@@ -2,7 +2,7 @@ import { ERROR_LITERAL, Literal } from "../../epilog-ts/classes/Literal.js";
 // Conceptually a Disjunction, but imposes the following constraints
 // its disjuncts must all be Literals
 // its disjuncts are made unique w.r.t. toString (i.e. repeats will be excluded in the constructor)
-// its disjuncts are sorted alphabetically w.r.t. toString (i.e. the list of Literals will be sorted in the constructor)
+// its disjuncts are sorted in ascending alphabetical order w.r.t. toString (i.e. the list of Literals will be sorted in the constructor)
 class Clause {
     constructor(literals) {
         this.literalSet = new Set();
