@@ -102,7 +102,7 @@ var EpilogTSToFOL;
         let headAntecedent = new Literal(standardizedHead, false);
         let overallBiconditional = new Biconditional(headAntecedent, relationDisjunction);
         let finalFormula = overallBiconditional;
-        // --- Eniversally quantify the variables in the head
+        // --- Universally quantify the variables in the head
         for (let univVar of standardizedHeadArgs) {
             finalFormula = new QuantifiedFormula(Quantifier.Universal, univVar, finalFormula);
         }

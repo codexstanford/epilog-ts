@@ -130,7 +130,7 @@ namespace EpilogTSToFOL {
 
         let finalFormula : Formula = overallBiconditional;
 
-        // --- Eniversally quantify the variables in the head
+        // --- Universally quantify the variables in the head
         for (let univVar of standardizedHeadArgs) {
             finalFormula = new QuantifiedFormula(Quantifier.Universal, univVar, finalFormula);
         }
