@@ -58,6 +58,15 @@ namespace EpilogJSToTS {
         return new CompoundTerm(constr, argList);
     }
 
+    export function parseConstant(epilogJSConstant: EpilogJSConstant) : Symbol {
+        if (isEpilogConstant(epilogJSConstant)) {
+            return new Symbol(epilogJSConstant);
+        }
+
+        console.error("Parse error - could not parse epilog.js constant. Is not a symbol:", epilogJSConstant);
+        return new Symbol('error');
+    }
+
     function parseTerm(epilogJSTerm: EpilogJSTerm) : Term {
         // Is a compound term
         if (typeof epilogJSTerm === "object" ) {

@@ -18,6 +18,14 @@ var EpilogJSToTS;
         }
         return new CompoundTerm(constr, argList);
     }
+    function parseConstant(epilogJSConstant) {
+        if (isEpilogConstant(epilogJSConstant)) {
+            return new Symbol(epilogJSConstant);
+        }
+        console.error("Parse error - could not parse epilog.js constant. Is not a symbol:", epilogJSConstant);
+        return new Symbol('error');
+    }
+    EpilogJSToTS.parseConstant = parseConstant;
     function parseTerm(epilogJSTerm) {
         // Is a compound term
         if (typeof epilogJSTerm === "object") {
