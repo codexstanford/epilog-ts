@@ -15,6 +15,10 @@ import { standardizeRuleHead, standardizeRuleVars } from "../utils/standardize.j
 
 namespace EpilogTSToFOL { 
 
+    export function parseAtom(epilogTSAtom : Atom) : Literal {
+        return new Literal(epilogTSAtom, false);
+    }
+
     function parseSubgoal(epilogTSSubgoal : Atom | Literal) : Literal {
         if (epilogTSSubgoal instanceof Literal) {
             return epilogTSSubgoal;  

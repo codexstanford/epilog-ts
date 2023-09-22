@@ -9,6 +9,10 @@ import { Variable } from "../classes/Term.js";
 import { standardizeRuleHead } from "../utils/standardize.js";
 var EpilogTSToFOL;
 (function (EpilogTSToFOL) {
+    function parseAtom(epilogTSAtom) {
+        return new Literal(epilogTSAtom, false);
+    }
+    EpilogTSToFOL.parseAtom = parseAtom;
     function parseSubgoal(epilogTSSubgoal) {
         if (epilogTSSubgoal instanceof Literal) {
             return epilogTSSubgoal;
