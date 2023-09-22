@@ -5,11 +5,8 @@ import { ERROR_FORMULA } from "../../first-order-logic/classes/Formula.js";
 import { QuantifiedFormula, Quantifier } from "../../first-order-logic/classes/QuantifiedFormula.js";
 import { Atom } from "../classes/Atom.js";
 import { Literal } from "../classes/Literal.js";
-import { Predicate } from "../classes/Predicate.js";
-import { Rule } from "../classes/Rule.js";
-import { Substitution } from "../classes/Substitution.js";
 import { Variable } from "../classes/Term.js";
-import { standardizeRuleVars } from "../utils/standardize.js";
+import { standardizeRuleHead } from "../utils/standardize.js";
 var EpilogTSToFOL;
 (function (EpilogTSToFOL) {
     function parseSubgoal(epilogTSSubgoal) {
@@ -33,6 +30,7 @@ var EpilogTSToFOL;
                 return ERROR_FORMULA;
             }
         }
+        // --- Create the standardized list of head args, such that each head argument is a distinct variable as from standardizeRuleVars: V0, V1, ... 
         let definedViewArity = epilogTSRules[0].head.args.length;
         let standardizedHeadArgs = [];
         for (let i = 0; i < definedViewArity; i++) {
@@ -42,36 +40,7 @@ var EpilogTSToFOL;
         // --- Standardize the rules such that their heads are identical, and each head arg is a unique variable 
         let standardizedRules = [];
         for (let rule of epilogTSRules) {
-            // Rename the head vars to be 'V{num}' and the existentially-quantified vars to be 'EV{num}'
-            let standardizedRule = standardizeRuleVars(rule);
-            //console.log(standardizedRule.toString());
-            let headVarSub = new Substitution();
-            let equalityPred = new Predicate('equal');
-            let equalityConstraints = [];
-            // Substitute each argument in the head of the rule with the corresponding standardizedHeadArg, 
-            // and add 'same' constraints to the body for each replaced constant
-            for (let i = 0; i < definedViewArity; i++) {
-                let currHeadArg = standardizedRule.head.args[i];
-                // Substitute for vars
-                if (currHeadArg instanceof Variable) {
-                    // If a variable appears more than once in the head, the first applicable substitution is used, and an additional equality constraint is added between the replacing variables.
-                    // Though we don't update the headVarSub in this case, don't have to worry about the head variable because we only use standardizedHead in the final formula.
-                    if (headVarSub.hasSub(currHeadArg.name)) {
-                        equalityConstraints.push(new Atom(equalityPred, [headVarSub.getSub(currHeadArg.name), standardizedHeadArgs[i]]));
-                        continue;
-                    }
-                    headVarSub.setSub(currHeadArg.name, standardizedHeadArgs[i]);
-                    continue;
-                }
-                // Add constraints for non-variable head args
-                equalityConstraints.push(new Atom(equalityPred, [standardizedHeadArgs[i], currHeadArg]));
-            }
-            //console.log(headVarSub.toString());
-            //console.log(equalityConstraints);
-            standardizedRule = Rule.applySub(headVarSub, standardizedRule);
-            standardizedRule = new Rule(standardizedHead, [...standardizedRule.body, ...equalityConstraints]);
-            //console.log("Rule:",standardizedRule.toString());
-            standardizedRules.push(standardizedRule);
+            standardizedRules.push(standardizeRuleHead(rule));
         }
         // --- Convert the rule bodies into formulas, where each body is a conjunction with 0 or more existentially quantified variables
         let bodyFormulas = [];
@@ -102,7 +71,9 @@ var EpilogTSToFOL;
         let overallBiconditional = new Biconditional(headAntecedent, relationDisjunction);
         let finalFormula = overallBiconditional;
         // --- Universally quantify the variables in the head
-        for (let univVar of standardizedHeadArgs) {
+        // By preference, do so such that the quantifiers read left-to-right from the first head arg to the last. 
+        for (let i = definedViewArity - 1; i >= 0; i--) {
+            let univVar = standardizedHeadArgs[i];
             finalFormula = new QuantifiedFormula(Quantifier.Universal, univVar, finalFormula);
         }
         return finalFormula;
