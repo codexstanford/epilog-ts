@@ -2,14 +2,14 @@
 import { ContainmentTester } from "./containment-tester.js";
 
 
-import { CQ, ConjunctiveQuery, Query, isCQ } from "./epilog-ts/classes/Query.js";
+import { CQ, ConjunctiveQuery, Query, isCQ } from "../epilog-ts/classes/Query.js";
 
-import { Term, Symbol } from "./epilog-ts/classes/Term.js";
-import { Rule } from "./epilog-ts/classes/Rule.js";
-import { Substitution } from "./epilog-ts/classes/Substitution.js";
-import { Dataset } from "./epilog-ts/classes/Dataset.js";
-import { Atom } from "./epilog-ts/classes/Atom.js";
-import { EpilogJSToTS } from "./epilog-ts/parsing/epilog-js-to-epilog-ts.js";
+import { Term, Symbol } from "../epilog-ts/classes/Term.js";
+import { Rule } from "../epilog-ts/classes/Rule.js";
+import { Substitution } from "../epilog-ts/classes/Substitution.js";
+import { Dataset } from "../epilog-ts/classes/Dataset.js";
+import { Atom } from "../epilog-ts/classes/Atom.js";
+import { EpilogJSToTS } from "../epilog-ts/parsing/epilog-js-to-epilog-ts.js";
 
 function freezeCQ(cq : CQ) : CQ {
     // Get the variables of cq

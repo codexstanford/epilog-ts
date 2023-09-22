@@ -1,4 +1,4 @@
-import { Query } from "./epilog-ts/classes/Query";
+import { Query } from "../epilog-ts/classes/Query.js";
 
 
 interface ContainmentTester {

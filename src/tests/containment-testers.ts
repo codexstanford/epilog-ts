@@ -1,4 +1,4 @@
-import { CQContainmentTester } from "../cq-containment.js";
+import { CQContainmentTester } from "../containment-testers/cq-containment.js";
 import { Predicate } from "../epilog-ts/classes/Predicate.js";
 import { CQ, ConjunctiveQuery } from "../epilog-ts/classes/Query.js";
 import { StrToTS } from "../epilog-ts/parsing/string-to-epilog-ts.js";
