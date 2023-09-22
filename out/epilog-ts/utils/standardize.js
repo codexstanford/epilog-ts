@@ -50,7 +50,7 @@ function standardizeRuleHead(rule) {
         newHeadArgs.push(newHeadVar);
         currUnivVarNum++;
         // Add equality constraint between the new head Variable and the old non-Variable arg
-        argEqualitySubgoals.push(new Atom(EQUALITY_PRED, [arg, newHeadVar]));
+        argEqualitySubgoals.push(new Atom(EQUALITY_PRED, [newHeadVar, arg]));
     }
     return standardizeRuleVars(new Rule(new Atom(new Predicate(rule.head.pred.name), newHeadArgs), [...rule.body, ...argEqualitySubgoals]));
 }

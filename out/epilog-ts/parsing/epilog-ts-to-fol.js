@@ -33,7 +33,6 @@ var EpilogTSToFOL;
                 return ERROR_FORMULA;
             }
         }
-        // --- Create the standardized list of head args, such that each head argument is a distinct variable: V0, V1, ... 
         let definedViewArity = epilogTSRules[0].head.args.length;
         let standardizedHeadArgs = [];
         for (let i = 0; i < definedViewArity; i++) {
