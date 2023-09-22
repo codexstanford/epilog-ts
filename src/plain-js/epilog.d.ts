@@ -9,5 +9,3 @@ declare const grindem: Function;
 declare const definemorefacts: Function;
 
 declare const compfinds: Function;
-
-declare const flatten: Function;
