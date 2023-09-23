@@ -5,6 +5,8 @@ import { ERROR_RULE, Rule } from "./Rule.js";
 interface Query {
     readonly queryPred: Predicate;
     readonly rules: Rule[];
+
+    getPredNames(): Set<string>;
 }
 
 // ============================== General Query functions ==============================
@@ -76,10 +78,15 @@ class ConjunctiveQuery implements Query {
             console.warn("Query predicate", this.queryPred.toString(), "doesn't appear in query:",this.rule.toString());
         }
     }
+    
+    getPredNames(): Set<string> {
+        return this.rule.getPredNames();
+    }
 
     toString() : string {
         return this.rule.toString();
     }
+
 }
 
 // Every query can be an ArbitraryQuery - this is the most general class of query.
@@ -104,6 +111,16 @@ class ArbitraryQuery implements Query {
         if (!queryPredMatchesHead) {
             console.warn("Query predicate", this.queryPred.toString(), "doesn't appear in query:",this.toString());
         }
+    }
+
+    getPredNames(): Set<string> {
+        let predNameList: string[] = [];
+
+        for (let rule of this.rules) {
+            predNameList = [...predNameList, ...rule.getPredNames()];
+        }
+
+        return new Set(predNameList);
     }
 
     toString() : string {

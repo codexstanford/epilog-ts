@@ -44,6 +44,9 @@ class ConjunctiveQuery {
             console.warn("Query predicate", this.queryPred.toString(), "doesn't appear in query:", this.rule.toString());
         }
     }
+    getPredNames() {
+        return this.rule.getPredNames();
+    }
     toString() {
         return this.rule.toString();
     }
@@ -65,6 +68,13 @@ class ArbitraryQuery {
         if (!queryPredMatchesHead) {
             console.warn("Query predicate", this.queryPred.toString(), "doesn't appear in query:", this.toString());
         }
+    }
+    getPredNames() {
+        let predNameList = [];
+        for (let rule of this.rules) {
+            predNameList = [...predNameList, ...rule.getPredNames()];
+        }
+        return new Set(predNameList);
     }
     toString() {
         let str = "{\n";
