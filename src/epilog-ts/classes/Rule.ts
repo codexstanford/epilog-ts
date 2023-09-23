@@ -114,6 +114,25 @@ class Rule {
 
         return new Rule(subbedHead, subbedBody);
     }
+
+    static renamePredicate(oldPredName : string, newPredName : string, rule: Rule) : Rule {
+        let renamedHead : Atom = Atom.renamePredicate(oldPredName, newPredName, rule.head);
+
+        let renamedSubgoals : Subgoal[] = [];
+        for (let subgoal of rule.body) {
+            if (subgoal instanceof Atom) {
+                renamedSubgoals.push(Atom.renamePredicate(oldPredName, newPredName, subgoal));
+                continue;
+            }
+
+            if (subgoal instanceof Literal) {
+                renamedSubgoals.push(Literal.renamePredicate(oldPredName, newPredName, subgoal));
+                continue;
+            }
+        }
+
+        return new Rule(renamedHead, renamedSubgoals);
+    }
 }
 
 const ERROR_RULE = new Rule(ERROR_ATOM, [ERROR_ATOM]);

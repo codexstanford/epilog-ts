@@ -1,3 +1,4 @@
+import { Rule } from "./Rule.js";
 class Ruleset {
     constructor(rules) {
         this.rules = rules;
@@ -18,6 +19,13 @@ class Ruleset {
         }
         str = str.slice(0, -1);
         return str;
+    }
+    static renamePredicate(oldPredName, newPredName, ruleset) {
+        let renamedRules = [];
+        for (let rule of ruleset.rules) {
+            renamedRules.push(Rule.renamePredicate(oldPredName, newPredName, rule));
+        }
+        return new Ruleset(renamedRules);
     }
 }
 export { Ruleset };

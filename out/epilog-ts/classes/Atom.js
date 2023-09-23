@@ -55,6 +55,9 @@ class Atom {
         }
         return new Atom(new Predicate(atom.pred.name), subbedTermList);
     }
+    static renamePredicate(oldPredName, newPredName, atom) {
+        return new Atom(Predicate.renamePredicate(oldPredName, newPredName, atom.pred), atom.args);
+    }
 }
 const ERROR_ATOM = new Atom(new Predicate("error"), []);
 export { Atom, ERROR_ATOM };

@@ -16,6 +16,10 @@ class ClosedLogicProgram {
     toString() : string {
         return "Dataset: " + this.dataset.toString() + "\n" + "Ruleset: " + this.ruleset.toString();
     }
+
+    static renamePredicate(oldPredName: string, newPredName: string, clp : ClosedLogicProgram) : ClosedLogicProgram {
+        return new ClosedLogicProgram(Dataset.renamePredicate(oldPredName, newPredName, clp.dataset), Ruleset.renamePredicate(oldPredName, newPredName, clp.ruleset))
+    }
 }
 
 export {

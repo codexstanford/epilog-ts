@@ -1,4 +1,4 @@
-import { ERROR_ATOM } from "./Atom.js";
+import { Atom, ERROR_ATOM } from "./Atom.js";
 class Dataset {
     constructor(factList) {
         // A dataset must only contain ground atoms
@@ -38,6 +38,13 @@ class Dataset {
         }
         str = str.slice(0, -1);
         return str;
+    }
+    static renamePredicate(oldPredName, newPredName, dataset) {
+        let renamedFacts = [];
+        for (let fact of dataset.factList) {
+            renamedFacts.push(Atom.renamePredicate(oldPredName, newPredName, fact));
+        }
+        return new Dataset(renamedFacts);
     }
 }
 export { Dataset };

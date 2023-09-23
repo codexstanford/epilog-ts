@@ -24,6 +24,9 @@ class Literal {
     static applySub(sub, literal) {
         return new Literal(Atom.applySub(sub, literal.atom), literal.isNegated());
     }
+    static renamePredicate(oldPredName, newPredName, literal) {
+        return new Literal(Atom.renamePredicate(oldPredName, newPredName, literal.atom), literal.isNegated());
+    }
 }
 const TRUE_LITERAL = new Literal(new Atom(new Predicate('true'), []), false);
 const FALSE_LITERAL = new Literal(new Atom(new Predicate('false'), []), false);

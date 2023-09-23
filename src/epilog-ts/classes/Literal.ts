@@ -35,6 +35,10 @@ class Literal {
     static applySub(sub: Substitution, literal: Literal) : Literal {
         return new Literal(Atom.applySub(sub, literal.atom), literal.isNegated());
     }
+
+    static renamePredicate(oldPredName : string, newPredName : string, literal: Literal) : Literal {
+        return new Literal(Atom.renamePredicate(oldPredName, newPredName, literal.atom), literal.isNegated());
+    }
     
 }
 

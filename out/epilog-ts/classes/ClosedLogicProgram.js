@@ -1,3 +1,5 @@
+import { Dataset } from "./Dataset.js";
+import { Ruleset } from "./Ruleset.js";
 class ClosedLogicProgram {
     constructor(dataset, ruleset) {
         this.dataset = dataset;
@@ -5,6 +7,9 @@ class ClosedLogicProgram {
     }
     toString() {
         return "Dataset: " + this.dataset.toString() + "\n" + "Ruleset: " + this.ruleset.toString();
+    }
+    static renamePredicate(oldPredName, newPredName, clp) {
+        return new ClosedLogicProgram(Dataset.renamePredicate(oldPredName, newPredName, clp.dataset), Ruleset.renamePredicate(oldPredName, newPredName, clp.ruleset));
     }
 }
 export { ClosedLogicProgram };

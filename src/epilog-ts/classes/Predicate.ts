@@ -16,6 +16,14 @@ class Predicate {
     toString() : string {
         return this.name;
     }
+
+    static renamePredicate(oldPredName: string, newPredName: string, pred : Predicate) : Predicate {
+        if (oldPredName === pred.name) {
+            return new Predicate(newPredName);
+        }
+
+        return new Predicate(pred.name);
+    }
 }
 
 export {

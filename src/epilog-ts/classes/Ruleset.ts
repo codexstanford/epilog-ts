@@ -32,6 +32,16 @@ class Ruleset {
         return str;
     }
 
+    static renamePredicate(oldPredName : string, newPredName : string, ruleset: Ruleset) {
+        let renamedRules : Rule[] = [];
+
+        for (let rule of ruleset.rules) {
+            renamedRules.push(Rule.renamePredicate(oldPredName, newPredName, rule));
+        }
+
+        return new Ruleset(renamedRules);
+    }
+
 }
 
 export { Ruleset }

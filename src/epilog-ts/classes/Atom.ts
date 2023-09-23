@@ -78,6 +78,9 @@ class Atom {
         return new Atom(new Predicate(atom.pred.name), subbedTermList);
     }
 
+    static renamePredicate(oldPredName: string, newPredName: string, atom : Atom) : Atom {
+        return new Atom(Predicate.renamePredicate(oldPredName, newPredName, atom.pred), atom.args);
+    } 
 
 }
 

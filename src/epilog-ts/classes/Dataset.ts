@@ -58,6 +58,17 @@ class Dataset {
 
         return str;
     }
+
+    static renamePredicate(oldPredName: string, newPredName: string, dataset: Dataset) : Dataset {
+        let renamedFacts : Atom[] = [];
+
+        for (let fact of dataset.factList) {
+            renamedFacts.push(Atom.renamePredicate(oldPredName, newPredName, fact));
+        }
+
+
+        return new Dataset(renamedFacts);
+    }
 }
 
 
