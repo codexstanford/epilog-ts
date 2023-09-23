@@ -5,6 +5,9 @@ class ClosedLogicProgram {
         this.dataset = dataset;
         this.ruleset = ruleset;
     }
+    getPredNames() {
+        return new Set([...this.dataset.getPredNames(), ...this.ruleset.getPredNames()]);
+    }
     toString() {
         return "Dataset: " + this.dataset.toString() + "\n" + "Ruleset: " + this.ruleset.toString();
     }

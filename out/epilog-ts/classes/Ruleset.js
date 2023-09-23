@@ -3,6 +3,13 @@ class Ruleset {
     constructor(rules) {
         this.rules = rules;
     }
+    getPredNames() {
+        let predNameList = [];
+        for (let rule of this.rules) {
+            predNameList = [...predNameList, ...rule.getPredNames()];
+        }
+        return new Set(predNameList);
+    }
     toString() {
         let str = "{";
         for (let rule of this.rules) {

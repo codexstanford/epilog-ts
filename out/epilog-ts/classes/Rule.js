@@ -62,6 +62,13 @@ class Rule {
         let existentialVarSet = new Set(existentialVarList);
         return existentialVarSet;
     }
+    getPredNames() {
+        let predNameList = [...this.head.getPredNames()];
+        for (let subgoal of this.body) {
+            predNameList = [...predNameList, ...subgoal.getPredNames()];
+        }
+        return new Set(predNameList);
+    }
     // Builds a new Rule to which the substitution has been applied
     static applySub(sub, rule) {
         let subbedHead = Atom.applySub(sub, rule.head);

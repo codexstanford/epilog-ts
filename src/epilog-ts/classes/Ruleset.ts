@@ -7,6 +7,16 @@ class Ruleset {
         this.rules = rules;
     }
 
+    getPredNames() : Set<string> {
+        let predNameList : string[] = [];
+
+        for (let rule of this.rules) {
+            predNameList = [...predNameList, ...rule.getPredNames()];
+        }
+
+        return new Set(predNameList);
+    }
+
     toString() : string {
         let str = "{";
 

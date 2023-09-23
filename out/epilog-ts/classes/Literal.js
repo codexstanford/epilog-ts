@@ -20,6 +20,9 @@ class Literal {
     getVars() {
         return this.atom.getVars();
     }
+    getPredNames() {
+        return this.atom.getPredNames();
+    }
     // Builds a new Literal to which the substitution has been applied
     static applySub(sub, literal) {
         return new Literal(Atom.applySub(sub, literal.atom), literal.isNegated());

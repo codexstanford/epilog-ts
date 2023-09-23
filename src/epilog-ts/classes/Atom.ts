@@ -54,6 +54,10 @@ class Atom {
 
     }
 
+    getPredNames() : Set<string> {
+        return new Set([this.pred.name]);
+    }
+
     // Builds a new Atom to which the substitution has been applied
     static applySub(sub: Substitution, atom: Atom) : Atom {
         let subbedTermList : Term[] = []; 

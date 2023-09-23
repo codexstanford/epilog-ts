@@ -33,6 +33,16 @@ class Dataset {
         this.factList = factList;
     }
 
+    getPredNames() : Set<string> {
+        let predNameList : string[] = [];
+
+        for (let fact of this.factList) {
+            predNameList = [...predNameList, ...fact.getPredNames()];
+        }
+
+        return new Set(predNameList);
+    }
+
     toString() : string {
         let str = "[";
 

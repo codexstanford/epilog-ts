@@ -92,6 +92,16 @@ class Rule {
         return existentialVarSet;
     }
 
+    getPredNames() : Set<string> {
+        let predNameList : string[] = [...this.head.getPredNames()];
+
+        for (let subgoal of this.body) {
+            predNameList = [...predNameList, ...subgoal.getPredNames()];
+        }
+
+        return new Set(predNameList);
+    }
+
     // Builds a new Rule to which the substitution has been applied
     static applySub(sub: Substitution, rule: Rule) : Rule {
         
