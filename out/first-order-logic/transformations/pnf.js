@@ -9,7 +9,8 @@ import { toCNF } from "./cnf.js";
 // Based on
 // (i) the algorithm on page 52 of the Calculus of Computation textbook by Bradley and Manna: https://community.wvu.edu/~krsubramani/courses/backupcourses/dm2Spr2013/coursetext/CalcofComp.pdf
 // (ii) the algorithm provided in lecture notes for Stanford's Autumn 2022 course, CS 257: Automated Reasoning
-function toPCNF(initialFormula) {
+// If includePrefix is false, does not add the prefix that universally quantifies the variables in the main formula.
+function toPCNF(initialFormula, includePrefix = true) {
     // Convert to NNF
     let resultFormula = toNNF(initialFormula);
     // Bind all free variables
@@ -24,7 +25,11 @@ function toPCNF(initialFormula) {
     resultFormula = removeQuantifiers(resultFormula);
     // Convert into clausal form via Tseitin's
     resultFormula = toCNF(resultFormula);
-    // Re-add all quantifiers under Scoping constraints. After skolemization, should all be Universal.
+    // Just include the target of the universal quantifier prefix
+    if (!includePrefix) {
+        return resultFormula;
+    }
+    // Otherwise, re-add all quantifiers under Scoping constraints. After skolemization, should all be Universal.
     let currQuantifier = Quantifier.Existential;
     let currVariable;
     for (let i = quantifiersInOrder.length - 1; i >= 0; i--) {
