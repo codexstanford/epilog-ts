@@ -23,7 +23,7 @@ function toPCNF(initialFormula, includePrefix = true) {
     let quantifiersInOrder = getQuantifiersInOrder(resultFormula);
     // Remove all Quantifiers
     resultFormula = removeQuantifiers(resultFormula);
-    // Convert into clausal form via Tseitin's
+    // Convert into cnf via Tseitin's
     resultFormula = toCNF(resultFormula);
     // Just include the target of the universal quantifier prefix
     if (!includePrefix) {
