@@ -5,7 +5,7 @@ import { Formula } from "./Formula.js";
 // Conceptually a Disjunction, but imposes the following constraints
     // its disjuncts must all be Literals
     // its disjuncts are made unique w.r.t. toString (i.e. repeats will be excluded in the constructor)
-    // its disjuncts are sorted in ascending alphabetical order w.r.t. toString (i.e. the list of Literals will be sorted in the constructor)
+    // its disjuncts are sorted in ascending alphabetical order w.r.t. toString (i.e. the constructor will sort the list of Literals alphabetically)
 class Clause {
     private literalSet : Set<string>;
     readonly literals : Literal[];
@@ -34,7 +34,11 @@ class Clause {
 
         // Sort the literals list
         this.literals = this.literals.sort((a, b) => {
-            return a.toString().localeCompare(b.toString());
+            if (a.toString() === b.toString()) {
+                return 0;
+            }
+
+            return a.toString() < b.toString() ? -1 : 1;
         });
     }
 
