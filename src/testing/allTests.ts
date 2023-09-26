@@ -6,7 +6,7 @@ import { runTests as runTests_EpilogJS_to_TS_Parsing } from "../epilog-ts/tests/
 
 import { runTests as runTests_Containment_Testing } from "../tests/containment-testers.js";
 
-import { runTests as runTests_Utils } from "../epilog-ts/tests/util-tests.js";
+import { runTests as runTests_Utils } from "../epilog-ts/tests/utils-tests.js";
 
 import { runTests as runTests_FoL} from "../first-order-logic/tests/class-tests.js";
 

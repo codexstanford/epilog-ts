@@ -372,9 +372,9 @@ function runClauseTests() : void {
         c1.literals.length === 2;
     },{});
 
-    runTest("Clause-complex-success", () => {
+    runTest("Clause-complex and sorting-success", () => {
         let c1 : Clause = new Clause([neg_s_xy, s_xy, p_x, neg_s_xy_repeat, p_x, q_x, p_x]);
-        return c1.toString() === '{~s(X, Y), p(X), q(X), s(X, Y)}' && 
+        return c1.toString() === '{p(X), q(X), s(X, Y), ~s(X, Y)}' && 
         c1.literals.length === 4;
     },{});
 

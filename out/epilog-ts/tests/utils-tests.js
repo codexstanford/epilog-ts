@@ -223,6 +223,14 @@ function runUnifyTests() {
         let result2 = tryGetMGU(p_Y_Y, p_X_fX);
         return result1 === false && result2 === false;
     }, {});
+    // Terms and Literals cannot be unified with one another
+    runTest("Unification-term and literal-failure", () => {
+        let result1 = tryGetMGU(sym1, p_c1);
+        let result1_b = tryGetMGU(sym1, p_c1);
+        let result2 = tryGetMGU(q_Z_hc1gc2, compoundTerm12);
+        let result2_b = tryGetMGU(q_Z_hc1gc2, compoundTerm12);
+        return result1 === false && result1_b === false && result2 === false && result2_b === false;
+    }, {});
 }
 export { runTests };
-//# sourceMappingURL=util-tests.js.map
+//# sourceMappingURL=utils-tests.js.map
