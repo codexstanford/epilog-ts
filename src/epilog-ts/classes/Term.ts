@@ -178,6 +178,25 @@ class CompoundTerm {
     }
 }
 
+// Apply a substitution to a Term with an unknown type.
+function applySubtoTerm(sub: Substitution, term: Term) : Term {
+    if (term instanceof Symbol) {
+        return Symbol.applySub(sub, term);
+    }
+
+    if (term instanceof Variable) {
+        return Variable.applySub(sub, term);
+    }
+
+    if (term instanceof CompoundTerm) {
+        return CompoundTerm.applySub(sub, term);
+    }
+
+    console.error("Cannot apply a Substitution to a Term with an invalid type:", term);
+    return ERROR_TERM;
+}
+
+
 const ERROR_TERM = new Symbol("error");
 
 export {
@@ -185,6 +204,8 @@ export {
     Variable, 
     CompoundTerm, 
     Term,
+
+    applySubtoTerm,
 
     ERROR_TERM
 }

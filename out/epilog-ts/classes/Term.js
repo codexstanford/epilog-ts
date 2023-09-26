@@ -127,6 +127,20 @@ class CompoundTerm {
         return new CompoundTerm(new Constructor(compoundTerm.constr.name), subbedTermList);
     }
 }
+// Apply a substitution to a Term with an unknown type.
+function applySubtoTerm(sub, term) {
+    if (term instanceof Symbol) {
+        return Symbol.applySub(sub, term);
+    }
+    if (term instanceof Variable) {
+        return Variable.applySub(sub, term);
+    }
+    if (term instanceof CompoundTerm) {
+        return CompoundTerm.applySub(sub, term);
+    }
+    console.error("Cannot apply a Substitution to a Term with an invalid type:", term);
+    return ERROR_TERM;
+}
 const ERROR_TERM = new Symbol("error");
-export { Symbol, Variable, CompoundTerm, ERROR_TERM };
+export { Symbol, Variable, CompoundTerm, applySubtoTerm, ERROR_TERM };
 //# sourceMappingURL=Term.js.map
