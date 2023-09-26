@@ -43,7 +43,7 @@ namespace EpilogJSToTS {
     type EpilogJSDefinition = ["definition", EpilogJSAtom, ...EpilogJSAtom[]];
     export type EpilogJSRuleset = EpilogJSRuleset_Clean | Array<EpilogJSRule | EpilogJSDefinition>;
 
-    function parseCompoundTerm(epilogJSCompoundTerm: EpilogJSCompoundTerm) : CompoundTerm {
+    export function parseCompoundTerm(epilogJSCompoundTerm: EpilogJSCompoundTerm) : CompoundTerm {
 
         let constr = new Constructor(epilogJSCompoundTerm[0]);
 

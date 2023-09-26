@@ -18,6 +18,7 @@ var EpilogJSToTS;
         }
         return new CompoundTerm(constr, argList);
     }
+    EpilogJSToTS.parseCompoundTerm = parseCompoundTerm;
     function parseConstant(epilogJSConstant) {
         if (isEpilogConstant(epilogJSConstant)) {
             return new Symbol(epilogJSConstant);
