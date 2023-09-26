@@ -43,6 +43,11 @@ class Literal {
     static renamePredicate(oldPredName : string, newPredName : string, literal: Literal) : Literal {
         return new Literal(Atom.renamePredicate(oldPredName, newPredName, literal.atom), literal.isNegated());
     }
+
+    // Flips the polarity of the Literal
+    static complement(lit : Literal) : Literal {
+        return new Literal(lit.atom, !lit.isNegated());
+    }
     
 }
 

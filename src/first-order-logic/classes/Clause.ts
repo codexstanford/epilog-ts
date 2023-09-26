@@ -1,4 +1,5 @@
 import { ERROR_LITERAL, Literal } from "../../epilog-ts/classes/Literal.js";
+import { Substitution } from "../../epilog-ts/classes/Substitution.js";
 import { Formula } from "./Formula.js";
 
 
@@ -42,6 +43,34 @@ class Clause {
         });
     }
 
+    getVars() : Set<string> {
+        let varNameList : string[] = [];
+
+        for (let lit of this.literals) {
+            varNameList.push(...lit.getVars());
+        }
+
+        return new Set<string>(varNameList);
+    }
+
+    // Computes whether the clause contains complementary Literals
+    isTautology() : boolean {
+        for (let i = 0; i < this.literals.length; i++) {
+            let lit1Complement: Literal = Literal.complement(this.literals[i]); 
+            
+            for (let j = 0; j < this.literals.length; j++) {
+                if (i === j) {
+                    continue;
+                }
+    
+                if (lit1Complement.toString() === this.literals[j].toString()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     toString() {
         if (this.literals.length === 0) {
             return "{}";
@@ -57,6 +86,16 @@ class Clause {
         str += "}";
 
         return str;
+    }
+
+    static applySub(sub: Substitution, clause: Clause) {
+        let literalList : Literal[] = [];
+
+        for (let literal of clause.literals) {
+            literalList.push(Literal.applySub(sub, literal));
+        }
+
+        return new Clause(literalList);
     }
 }
 

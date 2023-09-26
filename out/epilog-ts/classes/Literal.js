@@ -30,6 +30,10 @@ class Literal {
     static renamePredicate(oldPredName, newPredName, literal) {
         return new Literal(Atom.renamePredicate(oldPredName, newPredName, literal.atom), literal.isNegated());
     }
+    // Flips the polarity of the Literal
+    static complement(lit) {
+        return new Literal(lit.atom, !lit.isNegated());
+    }
 }
 const TRUE_LITERAL = new Literal(new Atom(new Predicate('true'), []), false);
 const FALSE_LITERAL = new Literal(new Atom(new Predicate('false'), []), false);

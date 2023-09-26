@@ -29,6 +29,28 @@ class Clause {
             return a.toString() < b.toString() ? -1 : 1;
         });
     }
+    getVars() {
+        let varNameList = [];
+        for (let lit of this.literals) {
+            varNameList.push(...lit.getVars());
+        }
+        return new Set(varNameList);
+    }
+    // Computes whether the clause contains complementary Literals
+    isTautology() {
+        for (let i = 0; i < this.literals.length; i++) {
+            let lit1Complement = Literal.complement(this.literals[i]);
+            for (let j = 0; j < this.literals.length; j++) {
+                if (i === j) {
+                    continue;
+                }
+                if (lit1Complement.toString() === this.literals[j].toString()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     toString() {
         if (this.literals.length === 0) {
             return "{}";
@@ -40,6 +62,13 @@ class Clause {
         str = str.slice(0, -2);
         str += "}";
         return str;
+    }
+    static applySub(sub, clause) {
+        let literalList = [];
+        for (let literal of clause.literals) {
+            literalList.push(Literal.applySub(sub, literal));
+        }
+        return new Clause(literalList);
     }
 }
 export { Clause };
