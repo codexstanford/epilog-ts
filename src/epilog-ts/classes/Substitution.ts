@@ -1,6 +1,6 @@
 import { isEpilogVariable } from "../utils/string-utils.js";
 
-import { ERROR_TERM, Term } from "./Term.js";
+import { ERROR_TERM, Term, applySubtoTerm } from "./Term.js";
 
 
 
@@ -88,10 +88,10 @@ class Substitution {
 
     // Get the set of strings mapped from by the substitution
     getDomain() : Set<string> {
-        return new Set(...this.varMap.keys());
+        return new Set(this.varMap.keys());
     }
 
-    // Get the set of strings corresponding to object mapped to by the substitution
+    // Get the set of strings corresponding to objects mapped to by the substitution
     getRange() : Set<string> {
         let rangeSet : Set<string> = new Set();
 
@@ -100,6 +100,29 @@ class Substitution {
         }
 
         return rangeSet;
+    }
+
+    // Returns the composition of sub1 with sub2. 
+    // Applying the result is equivalent to applying sub1, then sub2.
+    static compose(sub1 : Substitution, sub2 : Substitution) : Substitution {
+        let newMap : Map<string, Term> = new Map<string, Term>();
+
+        // Apply sub2 to the range of sub1
+        for (let sub1DomainElem of sub1.getDomain()) {
+            newMap.set(sub1DomainElem, applySubtoTerm(sub2, sub1.getSub(sub1DomainElem)));
+        }
+
+        // Add subs from sub2 that don't conflict in their domain elements with subs in sub1
+        for (let sub2DomainElem of sub2.getDomain()) {
+            // sub1 would already replace the term before sub2 could be applied
+            if (sub1.hasSub(sub2DomainElem)) {
+                continue;
+            }
+
+            newMap.set(sub2DomainElem, sub2.getSub(sub2DomainElem));
+        }
+
+        return new Substitution(newMap);
     }
 }
 

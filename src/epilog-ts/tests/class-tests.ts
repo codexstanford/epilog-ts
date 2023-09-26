@@ -119,7 +119,7 @@ function runSubstitutionTests() : void {
         return newSub.toString() === "{\n\tV ⟶ X\n}";
     },{});
 
-    runTest("Subst-single-sub-var-2-success", () => {
+    runTest("Subst-single-sub-var-2-warning", () => {
         let newSub = new Substitution(new Map([['V', new Variable('V')]]));
         return newSub.toString() === "{\n\tV ⟶ V\n}";
     },{});
