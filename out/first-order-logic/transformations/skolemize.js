@@ -10,6 +10,7 @@ import { Implication } from "../classes/Implication.js";
 import { Negation } from "../classes/Negation.js";
 import { QuantifiedFormula, Quantifier } from "../classes/QuantifiedFormula.js";
 import { getFreeVars, hasFreeVars, hasVarNameCollisions } from "../utils/general.js";
+let skolemCounter = 0;
 // Strictly a helper for skolemize
 // Returns 
 // (i) the formula with existential quantifiers removed and its existentially-quantified variables replaced with skolem function terms with constructors of the form "skolemfunc{num}", and 
@@ -93,7 +94,8 @@ function skolemize(formula) {
         return ERROR_FORMULA;
     }
     // Replace existentially-quantified variables with skolem function terms, and remove existential quantifiers
-    let resultFormula = skolemize_helper(formula, 0, new Substitution(), [])[0];
+    let resultFormula = ERROR_FORMULA;
+    [resultFormula, skolemCounter] = skolemize_helper(formula, skolemCounter, new Substitution(), []);
     return resultFormula;
 }
 export { skolemize };
