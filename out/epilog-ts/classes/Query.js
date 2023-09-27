@@ -47,6 +47,9 @@ class ConjunctiveQuery {
     getPredNames() {
         return this.rule.getPredNames();
     }
+    getQueryPredRules() {
+        return [this.rule];
+    }
     toString() {
         return this.rule.toString();
     }
@@ -75,6 +78,16 @@ class ArbitraryQuery {
             predNameList = [...predNameList, ...rule.getPredNames()];
         }
         return new Set(predNameList);
+    }
+    // Returns a list containing all of the query's Rules that have the query predicate in the head of the Rule. There should always be at least one such Rule.
+    getQueryPredRules() {
+        let queryPredRuleList = [];
+        for (let rule of this.rules) {
+            if (rule.head.pred.name === this.queryPred.name) {
+                queryPredRuleList.push(rule);
+            }
+        }
+        return queryPredRuleList;
     }
     toString() {
         let str = "{\n";

@@ -7,6 +7,8 @@ interface Query {
     readonly rules: Rule[];
 
     getPredNames(): Set<string>;
+    getQueryPredRules() : Rule[]; // Should return a list containing all of the query's Rules that have the query predicate in the head of the Rule. There should always be at least one such Rule.
+
 }
 
 // ============================== General Query functions ==============================
@@ -82,6 +84,10 @@ class ConjunctiveQuery implements Query {
     getPredNames(): Set<string> {
         return this.rule.getPredNames();
     }
+    
+    getQueryPredRules(): Rule[] {
+        return [this.rule];
+    }
 
     toString() : string {
         return this.rule.toString();
@@ -121,6 +127,19 @@ class ArbitraryQuery implements Query {
         }
 
         return new Set(predNameList);
+    }
+
+    // Returns a list containing all of the query's Rules that have the query predicate in the head of the Rule. There should always be at least one such Rule.
+    getQueryPredRules(): Rule[] {
+        let queryPredRuleList: Rule[] = [];
+
+        for (let rule of this.rules) {
+            if (rule.head.pred.name === this.queryPred.name) {
+                queryPredRuleList.push(rule);
+            }
+        }
+        return queryPredRuleList;
+        
     }
 
     toString() : string {
