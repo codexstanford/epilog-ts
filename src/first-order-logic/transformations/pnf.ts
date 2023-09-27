@@ -19,6 +19,8 @@ function toPCNF(initialFormula: Formula, includePrefix: boolean = true, cnfOptio
     // Convert to NNF
     let resultFormula = toNNF(initialFormula);
 
+    //console.log("NNF:",resultFormula.toString());
+
     // Bind all free variables
     resultFormula = bindFreeVars(resultFormula);
 
@@ -27,6 +29,8 @@ function toPCNF(initialFormula: Formula, includePrefix: boolean = true, cnfOptio
 
     // Skolemize
     resultFormula = skolemize(resultFormula);
+
+    //console.log("Skolemized:",resultFormula.toString());
 
     // Compute the scoping constraints for each quantifier (just a list of quantifier-variable pairs, gathered in DFS order)
     let quantifiersInOrder : [Quantifier, Variable][] = getQuantifiersInOrder(resultFormula);

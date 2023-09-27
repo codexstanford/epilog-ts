@@ -15,12 +15,14 @@ import { toCNF } from "./cnf.js";
 function toPCNF(initialFormula, includePrefix = true, cnfOptions = { algorithm: "tseitins" }) {
     // Convert to NNF
     let resultFormula = toNNF(initialFormula);
+    //console.log("NNF:",resultFormula.toString());
     // Bind all free variables
     resultFormula = bindFreeVars(resultFormula);
     // Rename all distinct variables
     resultFormula = standardizeVarNames(resultFormula);
     // Skolemize
     resultFormula = skolemize(resultFormula);
+    //console.log("Skolemized:",resultFormula.toString());
     // Compute the scoping constraints for each quantifier (just a list of quantifier-variable pairs, gathered in DFS order)
     let quantifiersInOrder = getQuantifiersInOrder(resultFormula);
     // Remove all Quantifiers
