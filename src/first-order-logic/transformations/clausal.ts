@@ -4,6 +4,7 @@ import { Conjunction } from "../classes/Conjunction.js";
 import { Disjunction } from "../classes/Disjunction.js";
 import { Formula } from "../classes/Formula.js";
 import { Negation } from "../classes/Negation.js";
+import { CNFOptions } from "./cnf.js";
 import { toPCNF } from "./pnf.js";
 
 // Normalize input via the following:
@@ -39,8 +40,8 @@ function normalizeNegationForClause(negation : Negation) : Literal {
     // Also converts negations of literals into literals with negative polarity.
         // Normalization simplifies resolution by ensuring that only Literals occur in Clauses, and that only TRUE_LITERAL and its negated form will occur, never FALSE_LITERAL.
         // Because of this, the only derived clause that indicates refutation is the empty clause.
-function toClausal(initialFormula: Formula) : Clause[] {
-    let cnfFormula = toPCNF(initialFormula, false);
+function toClausal(initialFormula: Formula, cnfOptions : CNFOptions = {algorithm: "tseitins"}) : Clause[] {
+    let cnfFormula = toPCNF(initialFormula, false, cnfOptions);
 
     if (!(cnfFormula instanceof Conjunction)) {
         console.error("Could not convert formula to clausal form. toPCNF did not return a prefix-free cnf formula:",cnfFormula.toString());

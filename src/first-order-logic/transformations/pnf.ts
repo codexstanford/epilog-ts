@@ -6,14 +6,16 @@ import { bindFreeVars, removeQuantifiers } from "./general.js";
 import { standardizeVarNames } from "../utils/standardize.js";
 import { toNNF } from "./nnf.js";
 import { skolemize } from "./skolemize.js";
-import { toCNF } from "./cnf.js";
+import { CNFOptions, toCNF } from "./cnf.js";
 
 // Converts input formula into prenex CNF
     // Based on
         // (i) the algorithm on page 52 of the Calculus of Computation textbook by Bradley and Manna: https://community.wvu.edu/~krsubramani/courses/backupcourses/dm2Spr2013/coursetext/CalcofComp.pdf
         // (ii) the algorithm provided in lecture notes for Stanford's Autumn 2022 course, CS 257: Automated Reasoning
     // If includePrefix is false, does not add the prefix that universally quantifies the variables in the main formula.
-function toPCNF(initialFormula: Formula, includePrefix: boolean = true) : Formula {
+    // options allows the user to specify the following:
+        // algorithm: The algorithm that toCNF will use to convert the input formula to CNF. Either Tseitin's algorithm, or the standard algorithm can be used
+function toPCNF(initialFormula: Formula, includePrefix: boolean = true, cnfOptions : CNFOptions = {algorithm: "tseitins"} ) : Formula {
     // Convert to NNF
     let resultFormula = toNNF(initialFormula);
 
@@ -33,7 +35,7 @@ function toPCNF(initialFormula: Formula, includePrefix: boolean = true) : Formul
     resultFormula = removeQuantifiers(resultFormula);
 
     // Convert into cnf via Tseitin's
-    resultFormula = toCNF(resultFormula);
+    resultFormula = toCNF(resultFormula, cnfOptions);
 
     // Just include the target of the universal quantifier prefix
     if (!includePrefix) {

@@ -21,7 +21,7 @@ const TSEITIN_VAR_PREFIX = "tseitinvar";
 // Note: since our Disjunctions and Conjunctions are flat (i.e. they are n-ary connectives, not just binary), 
 // we use the more efficient CNF encoding mentioned on page 13 of Decision Procedures - Kroening and Strichman: https://link.springer.com/content/pdf/10.1007/978-3-540-74105-3.pdf.
 // For a conjunction (resp. disjunction) with n conjuncts (resp. disjuncts), this allows us to encode it with one tseitinvar and n+1 clauses, rather than n-1 tseitinvars and 3(n-1) clauses.
-function toCNF_helper(formula, tseitinPropVarForFormula, tseitinVarCounter) {
+function toCNF_helper_Tseitins(formula, tseitinPropVarForFormula, tseitinVarCounter) {
     // Internal node - Conjunction
     if (formula instanceof Conjunction) {
         // The empty Conjunction should never appear, as the Conjunction constructor adds the TRUE_LITERAL when given an empty list of conjuncts.
@@ -69,7 +69,7 @@ function toCNF_helper(formula, tseitinPropVarForFormula, tseitinVarCounter) {
             tseitinVarCounter++;
             // Convert to CNF.
             let currConjunctInCNF = ERROR_CONJUNCTION;
-            [currConjunctInCNF, tseitinVarCounter] = toCNF_helper(currConjunct, newTseitinVar, tseitinVarCounter);
+            [currConjunctInCNF, tseitinVarCounter] = toCNF_helper_Tseitins(currConjunct, newTseitinVar, tseitinVarCounter);
             // Accumulate the conjuncts.
             conjunctInCNFAccumulator = [...conjunctInCNFAccumulator, ...currConjunctInCNF.conjuncts];
             // Add the two-literal clause for this conjunct.
@@ -127,7 +127,7 @@ function toCNF_helper(formula, tseitinPropVarForFormula, tseitinVarCounter) {
             tseitinVarCounter++;
             // Convert to CNF.
             let currDisjunctInCNF = ERROR_CONJUNCTION;
-            [currDisjunctInCNF, tseitinVarCounter] = toCNF_helper(currDisjunct, newTseitinVar, tseitinVarCounter);
+            [currDisjunctInCNF, tseitinVarCounter] = toCNF_helper_Tseitins(currDisjunct, newTseitinVar, tseitinVarCounter);
             // Accumulate the conjuncts.
             disjunctInCNFAccumulator = [...disjunctInCNFAccumulator, ...currDisjunctInCNF.conjuncts];
             // Add the two-literal clause for this disjunct.
@@ -169,9 +169,64 @@ function toCNF_helper(formula, tseitinPropVarForFormula, tseitinVarCounter) {
     console.error("Cannot perform Tseitin's transformation on a Formula without a valid type:", formula);
     return [ERROR_CONJUNCTION, 0];
 }
-// Converts a quantifier-free, NNF Formula into an equisatisfiable Formula in CNF form using Tseitin's transformation
-// Based on the algorithm provided in lecture notes for Stanford's Autumn 2022 course, CS 257: Automated Reasoning, with improvements from Decision Procedures - Kroening and Strichman: https://link.springer.com/content/pdf/10.1007/978-3-540-74105-3.pdf
-function toCNF(initialFormula) {
+// Recursive helper function to compute an equivalent CNF formula
+// Expects formula to be a quantifier-free NNF formula
+function toCNF_helper_standard(formula) {
+    if (formula instanceof Conjunction) {
+        let conjunctDisjunctions = [];
+        // Convert each conjunct to CNF, then accumulate its conjuncts, which are disjunctions of literals
+        for (let conjunct of formula.conjuncts) {
+            let cnfResult = toCNF_helper_standard(conjunct);
+            conjunctDisjunctions = [...conjunctDisjunctions, ...cnfResult.conjuncts];
+        }
+        return new Conjunction(conjunctDisjunctions);
+    }
+    if (formula instanceof Disjunction) {
+        let cnfDisjuncts = [];
+        // Accumulate the disjuncts in CNF.
+        for (let disjunct of formula.disjuncts) {
+            let cnfResult = toCNF_helper_standard(disjunct);
+            cnfDisjuncts.push(cnfResult);
+        }
+        // --- Compute all clauses that can be created by taking one conjunct from each CNF formula
+        let distributedCNFDisjuncts = [[]];
+        for (let cnfFormula of cnfDisjuncts) {
+            let tempCNFDisjuncts = [];
+            // For each list of accumulated disjuncts from prior Formulas, add one of the conjuncts from the current cnfFormula
+            for (let partialDisjunctList of distributedCNFDisjuncts) {
+                for (let clause of cnfFormula.conjuncts) {
+                    if (clause instanceof Literal || clause instanceof Negation) {
+                        tempCNFDisjuncts.push([...partialDisjunctList, clause]);
+                        continue;
+                    }
+                    if (clause instanceof Disjunction) {
+                        tempCNFDisjuncts.push([...partialDisjunctList, ...clause.disjuncts]);
+                        continue;
+                    }
+                    console.error("Could not convert to CNF - produced a clause that was not a Literal, Negation, or Disjunction:", clause.toString());
+                    return ERROR_CONJUNCTION;
+                }
+            }
+            distributedCNFDisjuncts = [...tempCNFDisjuncts];
+        }
+        // Convert the list of disjuncts into a CNF formula
+        let cnfClauses = [];
+        for (let completeDisjunctList of distributedCNFDisjuncts) {
+            cnfClauses.push(new Disjunction(completeDisjunctList));
+        }
+        return new Conjunction(cnfClauses);
+    }
+    if (formula instanceof Literal || formula instanceof Negation) {
+        return new Conjunction([formula]);
+    }
+    console.error("Cannot convert a Formula that isn't in NNF:", formula.toString());
+    return ERROR_CONJUNCTION;
+}
+// Converts a quantifier-free, NNF Formula into an equisatisfiable Formula in CNF form
+// Can specify in "options" which conversion algorithm to use.
+// Tseitin's transformation is used by default, but can specify that the standard algorithm be used instead, which produces an asymptotically larger CNF formula, but it is equivalent rather than equisatisfiable, and contains no new propositional variables.
+// This implementation of Tseitin's transformation is based on the algorithm provided in lecture notes for Stanford's Autumn 2022 course, CS 257: Automated Reasoning, with improvements from Decision Procedures - Kroening and Strichman: https://link.springer.com/content/pdf/10.1007/978-3-540-74105-3.pdf
+function toCNF(initialFormula, options = { algorithm: "tseitins" }) {
     if (getQuantifiersInOrder(initialFormula).length !== 0) {
         console.error("Formula must be quantifier-free to convert to CNF", initialFormula.toString(), "\nYou may want the toPCNF function instead.");
         return ERROR_CONJUNCTION;
@@ -184,10 +239,17 @@ function toCNF(initialFormula) {
     if (initialFormula instanceof Literal) {
         return new Conjunction([initialFormula]);
     }
-    // We must assert that the unit clause containing just the tseitinvar corresponding to the root of the Formula is true.
-    let topTseitinVar = new Atom(new Predicate(TSEITIN_VAR_PREFIX + "0"), []);
-    let cnfFormula = toCNF_helper(initialFormula, topTseitinVar, 1)[0];
-    return new Conjunction([new Literal(topTseitinVar, false), ...cnfFormula.conjuncts]);
+    if (options.algorithm === "tseitins") {
+        // We must assert that the unit clause containing just the tseitinvar corresponding to the root of the Formula is true.
+        let topTseitinVar = new Atom(new Predicate(TSEITIN_VAR_PREFIX + "0"), []);
+        let cnfFormula = toCNF_helper_Tseitins(initialFormula, topTseitinVar, 1)[0];
+        return new Conjunction([new Literal(topTseitinVar, false), ...cnfFormula.conjuncts]);
+    }
+    if (options.algorithm === "standard") {
+        return toCNF_helper_standard(initialFormula);
+    }
+    console.error("Invalid algorithm for conversion to CNF:", options.algorithm);
+    return ERROR_CONJUNCTION;
 }
 export { toCNF };
 //# sourceMappingURL=cnf.js.map

@@ -29,8 +29,8 @@ function normalizeNegationForClause(negation) {
 // Also converts negations of literals into literals with negative polarity.
 // Normalization simplifies resolution by ensuring that only Literals occur in Clauses, and that only TRUE_LITERAL and its negated form will occur, never FALSE_LITERAL.
 // Because of this, the only derived clause that indicates refutation is the empty clause.
-function toClausal(initialFormula) {
-    let cnfFormula = toPCNF(initialFormula, false);
+function toClausal(initialFormula, cnfOptions = { algorithm: "tseitins" }) {
+    let cnfFormula = toPCNF(initialFormula, false, cnfOptions);
     if (!(cnfFormula instanceof Conjunction)) {
         console.error("Could not convert formula to clausal form. toPCNF did not return a prefix-free cnf formula:", cnfFormula.toString());
         return [];

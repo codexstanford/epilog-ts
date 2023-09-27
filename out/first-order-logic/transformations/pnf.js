@@ -10,7 +10,9 @@ import { toCNF } from "./cnf.js";
 // (i) the algorithm on page 52 of the Calculus of Computation textbook by Bradley and Manna: https://community.wvu.edu/~krsubramani/courses/backupcourses/dm2Spr2013/coursetext/CalcofComp.pdf
 // (ii) the algorithm provided in lecture notes for Stanford's Autumn 2022 course, CS 257: Automated Reasoning
 // If includePrefix is false, does not add the prefix that universally quantifies the variables in the main formula.
-function toPCNF(initialFormula, includePrefix = true) {
+// options allows the user to specify the following:
+// algorithm: The algorithm that toCNF will use to convert the input formula to CNF. Either Tseitin's algorithm, or the standard algorithm can be used
+function toPCNF(initialFormula, includePrefix = true, cnfOptions = { algorithm: "tseitins" }) {
     // Convert to NNF
     let resultFormula = toNNF(initialFormula);
     // Bind all free variables
@@ -24,7 +26,7 @@ function toPCNF(initialFormula, includePrefix = true) {
     // Remove all Quantifiers
     resultFormula = removeQuantifiers(resultFormula);
     // Convert into cnf via Tseitin's
-    resultFormula = toCNF(resultFormula);
+    resultFormula = toCNF(resultFormula, cnfOptions);
     // Just include the target of the universal quantifier prefix
     if (!includePrefix) {
         return resultFormula;
