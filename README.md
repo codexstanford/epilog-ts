@@ -1,5 +1,5 @@
-# containment-testing-ts
-A TypeScript implemention of containment testing algorithms for use with epilog.js.
+# epilog-ts
+A TypeScript wrapper around the epilog.js interpreter, with additional high-level functionality.
 
 
 # Running the code

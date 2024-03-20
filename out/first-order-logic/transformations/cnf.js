@@ -1,6 +1,6 @@
-import { Atom } from "../../epilog-ts/classes/Atom.js";
-import { Literal } from "../../epilog-ts/classes/Literal.js";
-import { Predicate } from "../../epilog-ts/classes/Predicate.js";
+import { Atom } from "../../epilog-ts-core/classes/Atom.js";
+import { Literal } from "../../epilog-ts-core/classes/Literal.js";
+import { Predicate } from "../../epilog-ts-core/classes/Predicate.js";
 import { Biconditional } from "../classes/Biconditional.js";
 import { Conjunction } from "../classes/Conjunction.js";
 import { Disjunction } from "../classes/Disjunction.js";

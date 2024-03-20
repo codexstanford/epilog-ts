@@ -1,1 +1,1 @@
-{"version":3,"file":"Formula.js","sourceRoot":"","sources":["../../../src/first-order-logic/classes/Formula.ts"],"names":[],"mappings":"AAAA,oHAAoH;AAEpH,OAAO,EAAE,aAAa,EAAW,MAAM,oCAAoC,CAAC;AAa5E,MAAM,aAAa,GAAG,aAAa,CAAC;AAEpC,OAAO,EAEH,aAAa,EAChB,CAAC"}
+{"version":3,"file":"Formula.js","sourceRoot":"","sources":["../../../src/first-order-logic/classes/Formula.ts"],"names":[],"mappings":"AAAA,oHAAoH;AAEpH,OAAO,EAAE,aAAa,EAAW,MAAM,yCAAyC,CAAC;AAajF,MAAM,aAAa,GAAG,aAAa,CAAC;AAEpC,OAAO,EAEH,aAAa,EAChB,CAAC"}

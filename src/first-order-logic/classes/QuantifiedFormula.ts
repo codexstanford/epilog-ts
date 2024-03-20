@@ -1,4 +1,4 @@
-import { Variable } from "../../epilog-ts/classes/Term.js";
+import { Variable } from "../../epilog-ts-core/classes/Term.js";
 import { Formula } from "./Formula.js";
 
 enum Quantifier {

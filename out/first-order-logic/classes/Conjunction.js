@@ -1,4 +1,4 @@
-import { TRUE_LITERAL } from "../../epilog-ts/classes/Literal.js";
+import { TRUE_LITERAL } from "../../epilog-ts-core/classes/Literal.js";
 class Conjunction {
     constructor(conjuncts) {
         // If the empty conjunction, set it to the list containing the 'true' literal

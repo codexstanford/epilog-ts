@@ -1,7 +1,7 @@
-import { Atom, ERROR_ATOM } from "../../epilog-ts/classes/Atom.js";
-import { ERROR_LITERAL, FALSE_LITERAL, Literal, TRUE_LITERAL } from "../../epilog-ts/classes/Literal.js";
-import { Predicate } from "../../epilog-ts/classes/Predicate.js";
-import { Variable } from "../../epilog-ts/classes/Term.js";
+import { Atom, ERROR_ATOM } from "../../epilog-ts-core/classes/Atom.js";
+import { ERROR_LITERAL, FALSE_LITERAL, Literal, TRUE_LITERAL } from "../../epilog-ts-core/classes/Literal.js";
+import { Predicate } from "../../epilog-ts-core/classes/Predicate.js";
+import { Variable } from "../../epilog-ts-core/classes/Term.js";
 import { Biconditional } from "../classes/Biconditional.js";
 import { Conjunction } from "../classes/Conjunction.js";
 import { Disjunction } from "../classes/Disjunction.js";

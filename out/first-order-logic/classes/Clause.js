@@ -1,4 +1,4 @@
-import { ERROR_LITERAL, Literal } from "../../epilog-ts/classes/Literal.js";
+import { ERROR_LITERAL, Literal } from "../../epilog-ts-core/classes/Literal.js";
 // Conceptually a Disjunction, but imposes the following constraints
 // its disjuncts must all be Literals
 // its disjuncts are made unique w.r.t. toString (i.e. repeats will be excluded in the constructor)

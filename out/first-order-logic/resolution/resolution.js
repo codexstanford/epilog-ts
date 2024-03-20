@@ -1,7 +1,7 @@
-import { Literal } from "../../epilog-ts/classes/Literal.js";
-import { Substitution } from "../../epilog-ts/classes/Substitution.js";
-import { Variable } from "../../epilog-ts/classes/Term.js";
-import { tryGetMGU } from "../../epilog-ts/utils/unify.js";
+import { Literal } from "../../epilog-ts-core/classes/Literal.js";
+import { Substitution } from "../../epilog-ts-core/classes/Substitution.js";
+import { Variable } from "../../epilog-ts-core/classes/Term.js";
+import { tryGetMGU } from "../../epilog-ts-core/utils/unify.js";
 import { Clause } from "../classes/Clause.js";
 // Renames the Variables in each Clause such that the sets of Variables in each are disjoint.  
 function makeVarNamesDisjoint(c1, c2) {

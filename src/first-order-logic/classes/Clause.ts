@@ -1,5 +1,5 @@
-import { ERROR_LITERAL, Literal } from "../../epilog-ts/classes/Literal.js";
-import { Substitution } from "../../epilog-ts/classes/Substitution.js";
+import { ERROR_LITERAL, Literal } from "../../epilog-ts-core/classes/Literal.js";
+import { Substitution } from "../../epilog-ts-core/classes/Substitution.js";
 import { Formula } from "./Formula.js";
 
 

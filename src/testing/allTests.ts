@@ -1,16 +1,14 @@
 import { runTest, FailPriorityLevel } from "./testing.js";
 
-import { runTests as runTests_EpilogTS_Classes } from "../epilog-ts/tests/class-tests.js";
+import { runTests as runTests_EpilogTS_Classes } from "../epilog-ts-core/tests/class-tests.js";
 
-import { runTests as runTests_EpilogJS_to_TS_Parsing } from "../epilog-ts/tests/epilog-js-to-ts-parse-tests.js";
+import { runTests as runTests_EpilogJS_to_TS_Parsing } from "../epilog-ts-core/tests/epilog-js-to-ts-parse-tests.js";
 
-import { runTests as runTests_Containment_Testing } from "../tests/containment-testers.js";
-
-import { runTests as runTests_Utils } from "../epilog-ts/tests/utils-tests.js";
+import { runTests as runTests_Utils } from "../epilog-ts-core/tests/utils-tests.js";
 
 import { runTests as runTests_FoL} from "../first-order-logic/tests/class-tests.js";
 
-import { runTests as runTests_EpilogTS_to_FoL_Parsing } from "../epilog-ts/tests/epilog-ts-to-fol-parse-tests.js";
+import { runTests as runTests_EpilogTS_to_FoL_Parsing } from "../epilog-ts-core/tests/epilog-ts-to-fol-parse-tests.js";
 
 import { runTests as runTests_FoL_Transformations } from "../first-order-logic/tests/transformations-tests.js";
 
@@ -87,11 +85,6 @@ const TEST_COLLECTION_LIST : TestCollection[] = [
         testSubjectName: "epilog.js to Epilog-ts parsing",
         doRunTest: true,
         testCollectionRunner: runTests_EpilogJS_to_TS_Parsing
-    },
-    {
-        testSubjectName: "Containment Testers",
-        doRunTest: true,
-        testCollectionRunner: runTests_Containment_Testing
     },
     {
         testSubjectName: "Utils",

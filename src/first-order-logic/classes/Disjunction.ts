@@ -1,4 +1,4 @@
-import { FALSE_LITERAL } from "../../epilog-ts/classes/Literal.js";
+import { FALSE_LITERAL } from "../../epilog-ts-core/classes/Literal.js";
 import { Formula } from "./Formula.js";
 
 class Disjunction {

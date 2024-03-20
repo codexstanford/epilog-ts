@@ -1,5 +1,5 @@
-import { Literal } from "../../epilog-ts/classes/Literal.js";
-import { Variable } from "../../epilog-ts/classes/Term.js";
+import { Literal } from "../../epilog-ts-core/classes/Literal.js";
+import { Variable } from "../../epilog-ts-core/classes/Term.js";
 import { Biconditional } from "../classes/Biconditional.js";
 import { Conjunction } from "../classes/Conjunction.js";
 import { Disjunction } from "../classes/Disjunction.js";

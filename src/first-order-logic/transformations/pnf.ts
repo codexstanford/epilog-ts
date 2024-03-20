@@ -1,4 +1,4 @@
-import { ERROR_TERM, Variable } from "../../epilog-ts/classes/Term.js";
+import { ERROR_TERM, Variable } from "../../epilog-ts-core/classes/Term.js";
 import { ERROR_FORMULA, Formula } from "../classes/Formula.js";
 import { QuantifiedFormula, Quantifier } from "../classes/QuantifiedFormula.js";
 import { getFreeVars, getQuantifiersInOrder } from "../utils/general.js";

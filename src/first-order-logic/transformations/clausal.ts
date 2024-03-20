@@ -1,4 +1,4 @@
-import { ERROR_LITERAL, FALSE_LITERAL, Literal, TRUE_LITERAL } from "../../epilog-ts/classes/Literal.js";
+import { ERROR_LITERAL, FALSE_LITERAL, Literal, TRUE_LITERAL } from "../../epilog-ts-core/classes/Literal.js";
 import { Clause } from "../classes/Clause.js";
 import { Conjunction } from "../classes/Conjunction.js";
 import { Disjunction } from "../classes/Disjunction.js";
