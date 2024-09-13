@@ -82,6 +82,12 @@ namespace EpilogJSToTS {
             return new Variable(epilogJSTerm);
         }
 
+        // Handle the case when it is an anonymous variable, in the form used internally in epilog.js
+            // Internally in epilog.js, anonymous variables are represented as a string of length >= 1 beginning with "_" and ending in a number
+        if (epilogJSTerm.length >= 1 && epilogJSTerm[0] === "_") {
+            return new Variable("_");
+        }
+
         console.error("Parse error - could not parse epilog.js term. Is not a symbol, variable or compound term:", epilogJSTerm);
         return ERROR_TERM;
     }
