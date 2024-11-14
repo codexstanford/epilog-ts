@@ -198,6 +198,7 @@ function applySubtoTerm(sub: Substitution, term: Term) : Term {
 
 
 const ERROR_TERM = new Symbol("error");
+const ERROR_COMPOUND_TERM = new CompoundTerm(new Constructor("error"), []);
 
 export {
     Symbol, 
@@ -207,5 +208,6 @@ export {
 
     applySubtoTerm,
 
-    ERROR_TERM
+    ERROR_TERM,
+    ERROR_COMPOUND_TERM
 }

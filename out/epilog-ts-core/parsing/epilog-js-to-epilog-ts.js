@@ -1,4 +1,4 @@
-import { Symbol, Variable, CompoundTerm, ERROR_TERM } from "../classes/Term.js";
+import { Symbol, Variable, CompoundTerm, ERROR_TERM, ERROR_COMPOUND_TERM } from "../classes/Term.js";
 import { Constructor } from "../classes/Constructor.js";
 import { Predicate } from "../classes/Predicate.js";
 import { Atom, ERROR_ATOM } from "../classes/Atom.js";
@@ -10,6 +10,10 @@ import { Ruleset } from "../classes/Ruleset.js";
 var EpilogJSToTS;
 (function (EpilogJSToTS) {
     function parseCompoundTerm(epilogJSCompoundTerm) {
+        // Handle error case
+        if (typeof epilogJSCompoundTerm === "string" && epilogJSCompoundTerm === "error") {
+            return ERROR_COMPOUND_TERM;
+        }
         let constr = new Constructor(epilogJSCompoundTerm[0]);
         let argList = [];
         for (let i = 1; i < epilogJSCompoundTerm.length; i++) {

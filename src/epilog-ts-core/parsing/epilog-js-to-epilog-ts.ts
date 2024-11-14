@@ -1,4 +1,4 @@
-import { Symbol, Variable, CompoundTerm, Term, ERROR_TERM } from "../classes/Term.js";
+import { Symbol, Variable, CompoundTerm, Term, ERROR_TERM, ERROR_COMPOUND_TERM } from "../classes/Term.js";
 import { Constructor } from "../classes/Constructor.js";
 import { Predicate } from "../classes/Predicate.js";
 
@@ -22,28 +22,40 @@ namespace EpilogJSToTS {
 
     // Note: Recursive dependency between the Term and CompoundTerm
         // A list where a constructor is followed by 0 or more terms.
-    type EpilogJSCompoundTerm = [EpilogJSConstructor, ...EpilogJSTerm[]];
+    type EpilogJSCompoundTerm = EpilogJSReadError | [EpilogJSConstructor, ...EpilogJSTerm[]];
 
+    // The result of read
     type EpilogJSTerm = EpilogJSSymbol | EpilogJSVariable | EpilogJSCompoundTerm;
 
 
     type EpilogJSReadError = "error";
     // Either the error atom, or a list where the first element is a predicate, followed by 0 or more terms
+    // The result of read
     export type EpilogJSAtom = EpilogJSReadError | [EpilogJSPredicate, ...EpilogJSTerm[]] | EpilogJSPredicate;
 
+    // The result of read
     type EpilogJSLiteral =  EpilogJSReadError| EpilogJSAtom | ["not", EpilogJSAtom];
 
+    // The result of read
     export type EpilogJSRule = EpilogJSReadError | EpilogJSPredicate | ["rule", EpilogJSAtom, ...EpilogJSLiteral[]] | EpilogJSAtom;
 
+
+    // The result of readdata
     export type EpilogJSDataset = EpilogJSAtom[];
 
     type EpilogJSRuleset_Clean = EpilogJSRule[];
 
     // Assuming something about the structure of definitions here, but for now only care that "definition" is the first element
     type EpilogJSDefinition = ["definition", EpilogJSAtom, ...EpilogJSAtom[]];
+    // The result of readdata
     export type EpilogJSRuleset = EpilogJSRuleset_Clean | Array<EpilogJSRule | EpilogJSDefinition>;
 
     export function parseCompoundTerm(epilogJSCompoundTerm: EpilogJSCompoundTerm) : CompoundTerm {
+
+        // Handle error case
+        if (typeof epilogJSCompoundTerm === "string" && epilogJSCompoundTerm === "error") {
+            return ERROR_COMPOUND_TERM;
+        }
 
         let constr = new Constructor(epilogJSCompoundTerm[0]);
 

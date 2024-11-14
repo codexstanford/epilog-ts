@@ -142,5 +142,6 @@ function applySubtoTerm(sub, term) {
     return ERROR_TERM;
 }
 const ERROR_TERM = new Symbol("error");
-export { Symbol, Variable, CompoundTerm, applySubtoTerm, ERROR_TERM };
+const ERROR_COMPOUND_TERM = new CompoundTerm(new Constructor("error"), []);
+export { Symbol, Variable, CompoundTerm, applySubtoTerm, ERROR_TERM, ERROR_COMPOUND_TERM };
 //# sourceMappingURL=Term.js.map
