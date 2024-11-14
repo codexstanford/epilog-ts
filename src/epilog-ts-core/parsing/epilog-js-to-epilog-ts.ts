@@ -37,7 +37,7 @@ namespace EpilogJSToTS {
     type EpilogJSLiteral =  EpilogJSReadError| EpilogJSAtom | ["not", EpilogJSAtom];
 
     // The result of read
-    export type EpilogJSRule = EpilogJSReadError | EpilogJSPredicate | ["rule", EpilogJSAtom, ...EpilogJSLiteral[]] | EpilogJSAtom;
+    export type EpilogJSRule = EpilogJSReadError | EpilogJSPredicate | ["rule", EpilogJSAtom, EpilogJSLiteral, ...EpilogJSLiteral[]] | EpilogJSAtom;
 
 
     // The result of readdata
